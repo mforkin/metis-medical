@@ -1,0 +1,1 @@
+INSERT INTO public.specialty(name) values ('Specialty One');
