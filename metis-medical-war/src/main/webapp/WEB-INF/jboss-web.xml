@@ -1,0 +1,8 @@
+<jboss-web>
+    <resource-ref>
+        <res-ref-name>jdbc/MetisDS</res-ref-name>
+        <jndi-name>java:/MetisDS</jndi-name>
+        <res-type>javax.sql.DataSource</res-type>
+    </resource-ref>
+    <context-root>/</context-root>
+</jboss-web>

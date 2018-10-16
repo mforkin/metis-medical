@@ -1,0 +1,3 @@
+import com.greenleaf.services.StandaloneScalatraBootstrap
+
+class ScalatraBootstrap extends StandaloneScalatraBootstrap

@@ -1,0 +1,15 @@
+<Context path="/" reloadable="true">
+    <Resource name="jdbc/MetisDS" auth="Container" type="javax.sql.DataSource"
+              username="${db.username}"
+              password="${db.password}"
+              driverClassName="org.postgresql.Driver"
+              url="${db.url.base}/${db.name}"
+              maxTotal="15"
+              maxIdle="7"/>
+    <ResourceLink global="jdbc/MetisDS" name="jdbc/CoulterDS"
+                  type="javax.sql.DataSource"
+                  username="${db.username}" password="${db.password}"
+                  driverClassName="org.postgresql.Driver"
+                  url="${db.url.base}/${db.name}"
+                  maxTotal="15" maxIdle="7" />
+</Context>

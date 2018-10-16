@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<b:beans xmlns:s="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans
+                             http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                             http://www.springframework.org/schema/security
+                             http://www.springframework.org/schema/security/spring-security-4.1.xsd">
+    <b:bean id="bCryptPasswordEncoder"
+            class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <b:constructor-arg name="strength" value="6" />
+    </b:bean>
+
+    <b:bean id="coulterDS" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <b:property name="jndiName" value="java:comp/env/jdbc/MetisDS" />
+    </b:bean>
+
+    <b:bean id="userDetailsService" class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+        <b:property name="dataSource" ref="MetisDS" />
+        <b:property name="usersByUsernameQuery" value="select username, password, enabled from users where lower(username)=lower(?)" />
+    </b:bean>
+
+    <s:http>
+        <s:csrf disabled="true" />
+        <s:headers disabled="true" />
+        <s:intercept-url pattern="/spring_*" />
+        <s:intercept-url pattern="/j_spring_*" />
+        <s:intercept-url pattern="/font-awesome/**" access="permitAll()" />
+        <s:intercept-url pattern="/favicon.ico" access="permitAll()"/>
+        <s:intercept-url pattern="/login.html" access="permitAll()" />
+        <s:intercept-url pattern="/login.css" access="permitAll()" />
+        <s:intercept-url pattern="/styles.css" access="permitAll()" />
+        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="GET" />
+        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="PUT" />
+        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="POST" />
+        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="DELETE" />
+        <s:form-login
+                login-page="/login.html"
+                username-parameter="j_username"
+                password-parameter="j_password"
+                login-processing-url="/j_spring_security_check"
+                authentication-failure-url="/login.html?login_error=1" />
+        <s:logout logout-url="/j_spring_security_logout" logout-success-url="/" />
+    </s:http>
+
+    <s:authentication-manager>
+        <s:authentication-provider user-service-ref="userDetailsService">
+            <s:password-encoder ref="bCryptPasswordEncoder" />
+        </s:authentication-provider>
+    </s:authentication-manager>
+
+</b:beans>
