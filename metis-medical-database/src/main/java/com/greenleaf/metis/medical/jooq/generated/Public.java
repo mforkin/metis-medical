@@ -5,10 +5,12 @@ package com.greenleaf.metis.medical.jooq.generated;
 
 
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
+import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
 import com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
+import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
 import com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage;
 
@@ -37,7 +39,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -715845360;
+    private static final long serialVersionUID = 748719080;
 
     /**
      * The reference instance of <code>public</code>
@@ -48,6 +50,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.answer</code>.
      */
     public final Answer ANSWER = com.greenleaf.metis.medical.jooq.generated.tables.Answer.ANSWER;
+
+    /**
+     * The table <code>public.authorities</code>.
+     */
+    public final Authorities AUTHORITIES = com.greenleaf.metis.medical.jooq.generated.tables.Authorities.AUTHORITIES;
 
     /**
      * The table <code>public.question</code>.
@@ -68,6 +75,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.stage</code>.
      */
     public final Stage STAGE = com.greenleaf.metis.medical.jooq.generated.tables.Stage.STAGE;
+
+    /**
+     * The table <code>public.users</code>.
+     */
+    public final Users USERS = com.greenleaf.metis.medical.jooq.generated.tables.Users.USERS;
 
     /**
      * The table <code>public.vignette</code>.
@@ -121,10 +133,12 @@ public class Public extends SchemaImpl {
     private final List<Table<?>> getTables0() {
         return Arrays.<Table<?>>asList(
             Answer.ANSWER,
+            Authorities.AUTHORITIES,
             Question.QUESTION,
             QuestionAnswer.QUESTION_ANSWER,
             Specialty.SPECIALTY,
             Stage.STAGE,
+            Users.USERS,
             Vignette.VIGNETTE,
             VignetteStage.VIGNETTE_STAGE);
     }

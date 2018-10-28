@@ -5,10 +5,12 @@ package com.greenleaf.metis.medical.jooq.generated;
 
 
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
+import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
 import com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
+import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
 import com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage;
 
@@ -34,6 +36,11 @@ public class Tables {
     public static final Answer ANSWER = com.greenleaf.metis.medical.jooq.generated.tables.Answer.ANSWER;
 
     /**
+     * The table <code>public.authorities</code>.
+     */
+    public static final Authorities AUTHORITIES = com.greenleaf.metis.medical.jooq.generated.tables.Authorities.AUTHORITIES;
+
+    /**
      * The table <code>public.question</code>.
      */
     public static final Question QUESTION = com.greenleaf.metis.medical.jooq.generated.tables.Question.QUESTION;
@@ -52,6 +59,11 @@ public class Tables {
      * The table <code>public.stage</code>.
      */
     public static final Stage STAGE = com.greenleaf.metis.medical.jooq.generated.tables.Stage.STAGE;
+
+    /**
+     * The table <code>public.users</code>.
+     */
+    public static final Users USERS = com.greenleaf.metis.medical.jooq.generated.tables.Users.USERS;
 
     /**
      * The table <code>public.vignette</code>.

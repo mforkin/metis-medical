@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>Metis Medical</title>
+        <link type="text/css" rel="stylesheet" href="login.css">
+    </head>
+    <body class="login-background">
+        <div>
+            <form id="login-form" action="/j_spring_security_check" method="POST">
+                <input name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)">
+                <input type="password" name="j_password" placeholder="Password">
+            </form>
+            <button onclick="document.getElementById('login-form').submit()">
+                <span>LOGIN</span>
+            </button>
+        </div>
+    </body>
+</html>

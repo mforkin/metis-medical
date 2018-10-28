@@ -1,3 +1,22 @@
+CREATE TABLE public.users(
+    username varchar(100) NOT NULL,
+    password varchar(90) NOT NULL,
+    enabled boolean NOT NULL,
+    CONSTRAINT users_pk PRIMARY KEY (username)
+)
+WITH (OIDS=FALSE);
+
+CREATE TABLE public.authorities(
+    username varchar(100) NOT NULL,
+    authority varchar(50),
+    CONSTRAINT ix_auth_username UNIQUE (username, authority)
+)
+with (OIDS=FALSE);
+
+ALTER TABLE public.authorities ADD CONSTRAINT fk_auth_usr FOREIGN KEY (username)
+REFERENCES public.users (username) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
 CREATE TABLE public.specialty (
     id serial NOT NULL,
     name text NOT NULL,
