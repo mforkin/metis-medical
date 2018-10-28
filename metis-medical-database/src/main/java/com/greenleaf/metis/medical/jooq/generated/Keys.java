@@ -5,17 +5,21 @@ package com.greenleaf.metis.medical.jooq.generated;
 
 
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
+import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
 import com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
+import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
 import com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.AnswerRecord;
+import com.greenleaf.metis.medical.jooq.generated.tables.records.AuthoritiesRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.QuestionAnswerRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.QuestionRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.SpecialtyRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.StageRecord;
+import com.greenleaf.metis.medical.jooq.generated.tables.records.UsersRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.VignetteRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.VignetteStageRecord;
 
@@ -56,10 +60,12 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<AnswerRecord> QUESTION_ANSWER_PK = UniqueKeys0.QUESTION_ANSWER_PK;
+    public static final UniqueKey<AuthoritiesRecord> IX_AUTH_USERNAME = UniqueKeys0.IX_AUTH_USERNAME;
     public static final UniqueKey<QuestionRecord> QUESTION_PK = UniqueKeys0.QUESTION_PK;
     public static final UniqueKey<QuestionAnswerRecord> QA_PK = UniqueKeys0.QA_PK;
     public static final UniqueKey<SpecialtyRecord> SPECIALTY_PK = UniqueKeys0.SPECIALTY_PK;
     public static final UniqueKey<StageRecord> STAGE_PK = UniqueKeys0.STAGE_PK;
+    public static final UniqueKey<UsersRecord> USERS_PK = UniqueKeys0.USERS_PK;
     public static final UniqueKey<VignetteRecord> VIGNETTE_PK = UniqueKeys0.VIGNETTE_PK;
     public static final UniqueKey<VignetteStageRecord> VIGNETTE_STAGE_PK = UniqueKeys0.VIGNETTE_STAGE_PK;
 
@@ -67,6 +73,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final ForeignKey<AuthoritiesRecord, UsersRecord> AUTHORITIES__FK_AUTH_USR = ForeignKeys0.AUTHORITIES__FK_AUTH_USR;
     public static final ForeignKey<QuestionAnswerRecord, QuestionRecord> QUESTION_ANSWER__QUESTION_ANSWER_QUESTION_FK = ForeignKeys0.QUESTION_ANSWER__QUESTION_ANSWER_QUESTION_FK;
     public static final ForeignKey<QuestionAnswerRecord, AnswerRecord> QUESTION_ANSWER__QUESTION_ANSWER_ANSWER_FK = ForeignKeys0.QUESTION_ANSWER__QUESTION_ANSWER_ANSWER_FK;
     public static final ForeignKey<StageRecord, QuestionRecord> STAGE__STAGE_QUESTION_FK = ForeignKeys0.STAGE__STAGE_QUESTION_FK;
@@ -87,15 +94,18 @@ public class Keys {
 
     private static class UniqueKeys0 {
         public static final UniqueKey<AnswerRecord> QUESTION_ANSWER_PK = Internal.createUniqueKey(Answer.ANSWER, "question_answer_pk", Answer.ANSWER.ID);
+        public static final UniqueKey<AuthoritiesRecord> IX_AUTH_USERNAME = Internal.createUniqueKey(Authorities.AUTHORITIES, "ix_auth_username", Authorities.AUTHORITIES.USERNAME, Authorities.AUTHORITIES.AUTHORITY);
         public static final UniqueKey<QuestionRecord> QUESTION_PK = Internal.createUniqueKey(Question.QUESTION, "question_pk", Question.QUESTION.ID);
         public static final UniqueKey<QuestionAnswerRecord> QA_PK = Internal.createUniqueKey(QuestionAnswer.QUESTION_ANSWER, "qa_pk", QuestionAnswer.QUESTION_ANSWER.QUESTION_ID, QuestionAnswer.QUESTION_ANSWER.ANSWER_ID);
         public static final UniqueKey<SpecialtyRecord> SPECIALTY_PK = Internal.createUniqueKey(Specialty.SPECIALTY, "specialty_pk", Specialty.SPECIALTY.ID);
         public static final UniqueKey<StageRecord> STAGE_PK = Internal.createUniqueKey(Stage.STAGE, "stage_pk", Stage.STAGE.ID);
+        public static final UniqueKey<UsersRecord> USERS_PK = Internal.createUniqueKey(Users.USERS, "users_pk", Users.USERS.USERNAME);
         public static final UniqueKey<VignetteRecord> VIGNETTE_PK = Internal.createUniqueKey(Vignette.VIGNETTE, "vignette_pk", Vignette.VIGNETTE.ID);
         public static final UniqueKey<VignetteStageRecord> VIGNETTE_STAGE_PK = Internal.createUniqueKey(VignetteStage.VIGNETTE_STAGE, "vignette_stage_pk", VignetteStage.VIGNETTE_STAGE.VIGNETTE_ID, VignetteStage.VIGNETTE_STAGE.STAGE_ID);
     }
 
     private static class ForeignKeys0 {
+        public static final ForeignKey<AuthoritiesRecord, UsersRecord> AUTHORITIES__FK_AUTH_USR = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, Authorities.AUTHORITIES, "authorities__fk_auth_usr", Authorities.AUTHORITIES.USERNAME);
         public static final ForeignKey<QuestionAnswerRecord, QuestionRecord> QUESTION_ANSWER__QUESTION_ANSWER_QUESTION_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.QUESTION_PK, QuestionAnswer.QUESTION_ANSWER, "question_answer__question_answer_question_fk", QuestionAnswer.QUESTION_ANSWER.QUESTION_ID);
         public static final ForeignKey<QuestionAnswerRecord, AnswerRecord> QUESTION_ANSWER__QUESTION_ANSWER_ANSWER_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.QUESTION_ANSWER_PK, QuestionAnswer.QUESTION_ANSWER, "question_answer__question_answer_answer_fk", QuestionAnswer.QUESTION_ANSWER.ANSWER_ID);
         public static final ForeignKey<StageRecord, QuestionRecord> STAGE__STAGE_QUESTION_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.QUESTION_PK, Stage.STAGE, "stage__stage_question_fk", Stage.STAGE.QUESTION_ID);

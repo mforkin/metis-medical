@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>org.json4s</groupId>
-            <artifactId>json4s_jackson_${scala.abi.verison}</artifactId>
+            <artifactId>json4s-jackson_${scala.abi.verison}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scalatra</groupId>

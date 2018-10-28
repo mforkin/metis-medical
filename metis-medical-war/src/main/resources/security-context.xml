@@ -12,7 +12,7 @@
         <b:constructor-arg name="strength" value="6" />
     </b:bean>
 
-    <b:bean id="coulterDS" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <b:bean id="MetisDS" class="org.springframework.jndi.JndiObjectFactoryBean">
         <b:property name="jndiName" value="java:comp/env/jdbc/MetisDS" />
     </b:bean>
 
