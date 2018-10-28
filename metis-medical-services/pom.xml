@@ -32,6 +32,11 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.greenleaf</groupId>
+            <artifactId>metis-medical-database</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

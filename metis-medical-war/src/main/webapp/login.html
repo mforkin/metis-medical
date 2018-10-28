@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>SaniTracker</title>
+    <link type="text/css" rel="stylesheet" href="styles.css">
+    <link type="text/css" rel="stylesheet" href="login.css">
+    <style>
+        @import url(font-awesome/css/font-awesome.min.css);
+    </style>
+</head>
+<body class="login-background">
+<div class="ui-g-12 toolbar">
+    <md-toolbar class="mat-elevation-z2 mat-primary mat-toolbar" color="primary" role="toolbar">
+        <div class="mat-toolbar-layout">
+            <md-toolbar-row class="mat-toolbar-row">
+                    <span class="bug-wrapper">
+                        <i class="fa fa-bug"></i>
+                    </span>
+                <span>SaniTracker</span>
+            </md-toolbar-row>
+        </div>
+    </md-toolbar>
+</div>
+<div class="container"></div>
+<div class="push-down container">
+    <div class="login-cnt" fxLayout="row" fxLayoutAlign="space-around center">
+        <form id="login-form" action="/j_spring_security_check" method="POST">
+            <md-card class="login mat-card">
+                <md-card-header class="mat-card-header">
+                    <div class="mat-card-header-text">
+                        <md-card-title class="mat-card-title">Login to SaniTracker</md-card-title>
+                    </div>
+                </md-card-header>
+                <md-card-content class="mat-card-content">
+                    <div class="inputForm">
+                        <md-input-container class="mat-input-container">
+                            <div class="mat-input-wrapper">
+                                <div class="mat-input-table">
+                                    <div class="mat-input-infix">
+                                        <input class="mat-input-element" name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)">
+                                        <span class="mat-input-placeholder-wrapper">
+                                    <label class="mat-input mat-input-placeholder override-label">
+                                        UVA ID (e.g. mst3k)
+                                    </label>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="mat-input-container">
+                            <div class="mat-input-wrapper">
+                                <div class="mat-input-table">
+                                    <div class="mat-input-infix">
+                                        <input class="mat-input-element" type="password" name="j_password" placeholder="Password">
+                                        <span class="mat-input-placeholder-wrapper">
+                                    <label class="mat-input mat-input-placeholder override-label">
+                                        Password
+                                    </label>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </md-card-content>
+                <md-card-actions class="mat-card-actions">
+                    <button class="mat-raised-button mat-primary" onclick="document.getElementById('login-form').submit()">
+                        <span class="mat-button-wrapper">LOGIN</span>
+                        <div class="mat-button-ripple mat-ripple"></div>
+                        <div class="mat-button-focus-overlay"></div>
+                    </button>
+                </md-card-actions>
+            </md-card>
+        </form>
+    </div>
+</div>
+</body>
+</html>

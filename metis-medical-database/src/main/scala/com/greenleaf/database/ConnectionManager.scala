@@ -22,14 +22,14 @@ object ConnectionManager {
     config.setMaximumPoolSize(dbConfig.getInt("maximumPoolSize"))
 
     val ds = new HikariDataSource(config)
-    DSL.using(ds, SQLDialect.POSTGRES, settings)
+    db = DSL.using(ds, SQLDialect.POSTGRES, settings)
   }
 
-  def getJndiDBPool(dbConfig: Config) = {
+  def buildJndiDBPool(dbConfig: Config) = {
     val jndiLookup = dbConfig.getString("jndiLookupName")
     val ic = new InitialContext()
     val ds = ic.lookup(jndiLookup).asInstanceOf[DataSource]
 
-    DSL.using(ds, SQLDialect.POSTGRES, settings)
+    db = DSL.using(ds, SQLDialect.POSTGRES, settings)
   }
 }
