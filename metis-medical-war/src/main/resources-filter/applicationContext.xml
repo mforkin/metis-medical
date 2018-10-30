@@ -21,4 +21,5 @@
                            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
 
     <bean name="scalatraBootstrap" class="ScalatraBootstrap" init-method="init" />
+    <bean name="defaultServlet" class="com.greenleaf.servlet.DefaultServlet" scope="singleton" init-method="onStartUp"/>
 </beans>

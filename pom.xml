@@ -11,6 +11,7 @@
         <module>metis-medical-database</module>
         <module>metis-medical-services</module>
         <module>metis-medical-war</module>
+        <module>metis-medical-ui</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -51,6 +52,7 @@
         <sql-maven-plugin.version>1.5</sql-maven-plugin.version>
         <scala-maven-plugin.version>3.2.1</scala-maven-plugin.version>
         <maven-jetty.version>9.4.7.RC0</maven-jetty.version>
+        <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -175,6 +177,12 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.greenleaf</groupId>
+                <artifactId>metis-medical-ui</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
                 <groupId>com.typesafe</groupId>
                 <artifactId>config</artifactId>
                 <version>${typesafe.config.version}</version>
@@ -239,7 +247,10 @@
                         </systemProperties>
                     </configuration>
                 </plugin>
-
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 

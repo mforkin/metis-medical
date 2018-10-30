@@ -2,18 +2,44 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import logo from './logo.svg';
 import './App.css';
+import * as _ from 'lodash';
 
-const App = () => (
-  <Router>
-    <div>
-      <Header />
+class App extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+        specialties: []
+    }
+  }
 
-      <Route exact path="/" component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/topics" component={Topics} />
-    </div>
-  </Router>
-);
+  componentDidMount () {
+    fetch("specialty")
+        .then(res => res.json())
+        .then((result) => {
+            this.setState({
+                specialties: result
+            });
+        })
+  }
+
+  render () {
+     return (
+      <Router>
+        <div>
+          <Header />
+
+          <Route exact path="/" component={Home} />
+          <Route path="/about" component={About} />
+          <Route path="/topics" component={Topics} />
+
+          {_.values(this.state.specialties).map((n) => <div>{n}</div>)}
+        </div>
+      </Router>
+     );
+  }
+
+  
+};
 
 const Home = () => <h2>Home</h2>;
 const About = () => <h2>About</h2>;

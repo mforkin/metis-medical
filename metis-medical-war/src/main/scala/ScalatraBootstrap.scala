@@ -2,6 +2,7 @@ import java.util.ServiceLoader
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.services.api.API
+import com.greenleaf.servlet.DefaultServlet
 import com.typesafe.config.ConfigFactory
 import javax.servlet.ServletContext
 import org.scalatra.servlet.RichServletContext
@@ -24,6 +25,11 @@ class ScalatraBootstrap extends ApplicationContextAware with ServletContextAware
     val servlets = ServiceLoader.load(classOf[API]).asScala
     rootPath = Option(rootPath).getOrElse("")
     for (servlet <- servlets) {
+      richCtx.mount(servlet, s"$rootPath/${servlet.root}")
+    }
+
+    val springServlets = applicationContext.getBeansOfType(classOf[DefaultServlet]).asScala
+    for ((name, servlet) <- springServlets) {
       richCtx.mount(servlet, s"$rootPath/${servlet.root}")
     }
   }
