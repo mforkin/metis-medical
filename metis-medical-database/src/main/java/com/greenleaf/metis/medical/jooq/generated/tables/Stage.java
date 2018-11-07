@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Stage extends TableImpl<StageRecord> {
 
-    private static final long serialVersionUID = -859031340;
+    private static final long serialVersionUID = -1255790178;
 
     /**
      * The reference instance of <code>public.stage</code>
@@ -70,9 +70,9 @@ public class Stage extends TableImpl<StageRecord> {
     public final TableField<StageRecord, Short> SEQ = createField("seq", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
-     * The column <code>public.stage.question_id</code>.
+     * The column <code>public.stage.vignette_id</code>.
      */
-    public final TableField<StageRecord, Short> QUESTION_ID = createField("question_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<StageRecord, Short> VIGNETTE_ID = createField("vignette_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * Create a <code>public.stage</code> table reference
@@ -144,11 +144,11 @@ public class Stage extends TableImpl<StageRecord> {
      */
     @Override
     public List<ForeignKey<StageRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<StageRecord, ?>>asList(Keys.STAGE__STAGE_QUESTION_FK);
+        return Arrays.<ForeignKey<StageRecord, ?>>asList(Keys.STAGE__STAGE_VIG_FK);
     }
 
-    public Question question() {
-        return new Question(this, Keys.STAGE__STAGE_QUESTION_FK);
+    public Vignette vignette() {
+        return new Vignette(this, Keys.STAGE__STAGE_VIG_FK);
     }
 
     /**

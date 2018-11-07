@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Users extends TableImpl<UsersRecord> {
 
-    private static final long serialVersionUID = -698106926;
+    private static final long serialVersionUID = -1636456855;
 
     /**
      * The reference instance of <code>public.users</code>
@@ -67,6 +67,11 @@ public class Users extends TableImpl<UsersRecord> {
      * The column <code>public.users.enabled</code>.
      */
     public final TableField<UsersRecord, Boolean> ENABLED = createField("enabled", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>public.users.specialty_id</code>.
+     */
+    public final TableField<UsersRecord, Short> SPECIALTY_ID = createField("specialty_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * Create a <code>public.users</code> table reference
@@ -123,6 +128,18 @@ public class Users extends TableImpl<UsersRecord> {
     @Override
     public List<UniqueKey<UsersRecord>> getKeys() {
         return Arrays.<UniqueKey<UsersRecord>>asList(Keys.USERS_PK);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ForeignKey<UsersRecord, ?>> getReferences() {
+        return Arrays.<ForeignKey<UsersRecord, ?>>asList(Keys.USERS__FK_SPEC_USR);
+    }
+
+    public Specialty specialty() {
+        return new Specialty(this, Keys.USERS__FK_SPEC_USR);
     }
 
     /**

@@ -28,7 +28,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Record4<Integer, String, Short, Short> {
 
-    private static final long serialVersionUID = 563907736;
+    private static final long serialVersionUID = -1080925928;
 
     /**
      * Setter for <code>public.stage.id</code>.
@@ -73,16 +73,16 @@ public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Rec
     }
 
     /**
-     * Setter for <code>public.stage.question_id</code>.
+     * Setter for <code>public.stage.vignette_id</code>.
      */
-    public void setQuestionId(Short value) {
+    public void setVignetteId(Short value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>public.stage.question_id</code>.
+     * Getter for <code>public.stage.vignette_id</code>.
      */
-    public Short getQuestionId() {
+    public Short getVignetteId() {
         return (Short) get(3);
     }
 
@@ -147,7 +147,7 @@ public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Rec
      */
     @Override
     public Field<Short> field4() {
-        return Stage.STAGE.QUESTION_ID;
+        return Stage.STAGE.VIGNETTE_ID;
     }
 
     /**
@@ -179,7 +179,7 @@ public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Rec
      */
     @Override
     public Short component4() {
-        return getQuestionId();
+        return getVignetteId();
     }
 
     /**
@@ -211,7 +211,7 @@ public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Rec
      */
     @Override
     public Short value4() {
-        return getQuestionId();
+        return getVignetteId();
     }
 
     /**
@@ -246,7 +246,7 @@ public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Rec
      */
     @Override
     public StageRecord value4(Short value) {
-        setQuestionId(value);
+        setVignetteId(value);
         return this;
     }
 
@@ -276,12 +276,12 @@ public class StageRecord extends UpdatableRecordImpl<StageRecord> implements Rec
     /**
      * Create a detached, initialised StageRecord
      */
-    public StageRecord(Integer id, String name, Short seq, Short questionId) {
+    public StageRecord(Integer id, String name, Short seq, Short vignetteId) {
         super(Stage.STAGE);
 
         set(0, id);
         set(1, name);
         set(2, seq);
-        set(3, questionId);
+        set(3, vignetteId);
     }
 }

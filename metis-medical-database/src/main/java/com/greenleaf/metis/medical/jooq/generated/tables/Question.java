@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Question extends TableImpl<QuestionRecord> {
 
-    private static final long serialVersionUID = -607393124;
+    private static final long serialVersionUID = -1777898498;
 
     /**
      * The reference instance of <code>public.question</code>
@@ -58,6 +58,16 @@ public class Question extends TableImpl<QuestionRecord> {
      * The column <code>public.question.id</code>.
      */
     public final TableField<QuestionRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaultValue(org.jooq.impl.DSL.field("nextval('question_id_seq'::regclass)", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>public.question.stage_id</code>.
+     */
+    public final TableField<QuestionRecord, Short> STAGE_ID = createField("stage_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+
+    /**
+     * The column <code>public.question.seq</code>.
+     */
+    public final TableField<QuestionRecord, Short> SEQ = createField("seq", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * The column <code>public.question.question</code>.
@@ -127,6 +137,18 @@ public class Question extends TableImpl<QuestionRecord> {
     @Override
     public List<UniqueKey<QuestionRecord>> getKeys() {
         return Arrays.<UniqueKey<QuestionRecord>>asList(Keys.QUESTION_PK);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ForeignKey<QuestionRecord, ?>> getReferences() {
+        return Arrays.<ForeignKey<QuestionRecord, ?>>asList(Keys.QUESTION__QUES_STAG_FK);
+    }
+
+    public Stage stage() {
+        return new Stage(this, Keys.QUESTION__QUES_STAG_FK);
     }
 
     /**

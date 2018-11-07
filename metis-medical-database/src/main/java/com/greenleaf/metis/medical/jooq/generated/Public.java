@@ -12,7 +12,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
-import com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage;
+import com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +39,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 748719080;
+    private static final long serialVersionUID = -1722714008;
 
     /**
      * The reference instance of <code>public</code>
@@ -87,9 +87,9 @@ public class Public extends SchemaImpl {
     public final Vignette VIGNETTE = com.greenleaf.metis.medical.jooq.generated.tables.Vignette.VIGNETTE;
 
     /**
-     * The table <code>public.vignette_stage</code>.
+     * The table <code>public.vignette_specialty</code>.
      */
-    public final VignetteStage VIGNETTE_STAGE = com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage.VIGNETTE_STAGE;
+    public final VignetteSpecialty VIGNETTE_SPECIALTY = com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty.VIGNETTE_SPECIALTY;
 
     /**
      * No further instances allowed
@@ -140,6 +140,6 @@ public class Public extends SchemaImpl {
             Stage.STAGE,
             Users.USERS,
             Vignette.VIGNETTE,
-            VignetteStage.VIGNETTE_STAGE);
+            VignetteSpecialty.VIGNETTE_SPECIALTY);
     }
 }

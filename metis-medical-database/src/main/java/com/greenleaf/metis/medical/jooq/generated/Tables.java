@@ -12,7 +12,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
-import com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage;
+import com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty;
 
 import javax.annotation.Generated;
 
@@ -71,7 +71,7 @@ public class Tables {
     public static final Vignette VIGNETTE = com.greenleaf.metis.medical.jooq.generated.tables.Vignette.VIGNETTE;
 
     /**
-     * The table <code>public.vignette_stage</code>.
+     * The table <code>public.vignette_specialty</code>.
      */
-    public static final VignetteStage VIGNETTE_STAGE = com.greenleaf.metis.medical.jooq.generated.tables.VignetteStage.VIGNETTE_STAGE;
+    public static final VignetteSpecialty VIGNETTE_SPECIALTY = com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty.VIGNETTE_SPECIALTY;
 }

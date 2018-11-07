@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Answer extends TableImpl<AnswerRecord> {
 
-    private static final long serialVersionUID = 1786159248;
+    private static final long serialVersionUID = -705713207;
 
     /**
      * The reference instance of <code>public.answer</code>
@@ -78,6 +78,11 @@ public class Answer extends TableImpl<AnswerRecord> {
      * The column <code>public.answer.incorrect_text</code>.
      */
     public final TableField<AnswerRecord, String> INCORRECT_TEXT = createField("incorrect_text", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>public.answer.selected_text</code>.
+     */
+    public final TableField<AnswerRecord, String> SELECTED_TEXT = createField("selected_text", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>public.answer</code> table reference
