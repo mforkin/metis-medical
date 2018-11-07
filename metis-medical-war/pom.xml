@@ -80,7 +80,7 @@
                     <webApp>
                         <contextPath>/</contextPath>
                         <baseResource implementation="org.eclipse.jetty.util.resource.ResourceCollection">
-                            <resourcesAsCSV>${project.basedir}/src/main/webapp,${project.build.directory}/${project.artifactId}</resourcesAsCSV>
+                            <resourcesAsCSV>${project.basedir}/src/main/webapp,${project.build.directory}/${project.build.finalName}</resourcesAsCSV>
                         </baseResource>
                         <maxFormContentSize>1000000</maxFormContentSize>
                         <jettyEnvXml>${project.build.outputDirectory}/jetty-env.xml</jettyEnvXml>
@@ -100,13 +100,13 @@
                         <configuration>
                             <target>
                                 <echo>*** Packaging UI ***</echo>
-                                <copy todir="${project.build.directory}/metis-medical" failonerror="true">
+                                <copy todir="${project.build.directory}/${project.build.finalName}" failonerror="true">
                                     <fileset dir="${project.basedir}/../metis-medical-ui/metis-medical/build">
                                         <include name="**/*" />
                                         <exclude name="index.html" />
                                     </fileset>
                                 </copy>
-                                <copy file="${project.basedir}/../metis-medical-ui/metis-medical/build/index.html" tofile="${project.build.directory}/metis-medical/WEB-INF/views/index.ssp" failonerror="true" />
+                                <copy file="${project.basedir}/../metis-medical-ui/metis-medical/build/index.html" tofile="${project.build.directory}/${project.build.finalName}/WEB-INF/views/index.ssp" failonerror="true" />
                             </target>
                         </configuration>
                     </execution>
