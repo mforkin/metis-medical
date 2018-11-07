@@ -12,4 +12,30 @@
     <artifactId>metis-medical-ui</artifactId>
 
     <packaging>pom</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-ui</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>*** Packaging UI ***</echo>
+                                <exec dir="${project.basedir}/metis-medical" executable="yarn" failonerror="true">
+                                    <arg value="run"/>
+                                    <arg value="build"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -92,7 +92,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>build-ui</id>
+                        <id>package-ui</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>run</goal>
