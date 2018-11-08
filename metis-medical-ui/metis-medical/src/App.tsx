@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as React from 'react';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
@@ -20,21 +21,31 @@ class App extends React.Component {
     );
   }
 }
-
+let specialties = {};
+fetch("/api/specialty", {
+    headers: {
+        "accepts": "application/json"
+    }
+})
+    .then((resp) => resp.json())
+    .then((data) => {
+        specialties = data;
+    })
+console.log(specialties);
 const Home = () => <h2>Home</h2>;
 const About = () => <h2>About</h2>;
 const Topic = ({ match }) => <h3>Requested Param: {match.params.id}</h3>;
 const Topics = ({ match }) => (
   <div>
-    <h2>Topics</h2>
-
+    <h2>Specialties</h2>
     <ul>
-      <li>
-        <Link to={`${match.url}/components`}>Components</Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/props-v-state`}>Props v. State</Link>
-      </li>
+        {
+        _.map(specialties, (v, k) => (
+            <li>
+                <Link to={`${match.url}/${k}`}>{v}</Link>
+            </li>
+        ))
+        }
     </ul>
 
     <Route path={`${match.path}/:id`} component={Topic} />
