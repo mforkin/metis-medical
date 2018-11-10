@@ -31,10 +31,14 @@
         <s:intercept-url pattern="/login.html" access="permitAll()" />
         <s:intercept-url pattern="/login.css" access="permitAll()" />
         <s:intercept-url pattern="/styles.css" access="permitAll()" />
-        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="GET" />
-        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="PUT" />
-        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="POST" />
-        <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="DELETE" />
+        <!--<s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="GET" />-->
+        <!--<s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="PUT" />-->
+        <!--<s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="POST" />-->
+        <!--<s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER')" method="DELETE" />-->
+        <s:intercept-url pattern="/**" access="permitAll()" method="GET" />
+        <s:intercept-url pattern="/**" access="permitAll()" method="PUT" />
+        <s:intercept-url pattern="/**" access="permitAll()" method="POST" />
+        <s:intercept-url pattern="/**" access="permitAll()" method="DELETE" />
         <s:form-login
                 login-page="/login.html"
                 username-parameter="j_username"
