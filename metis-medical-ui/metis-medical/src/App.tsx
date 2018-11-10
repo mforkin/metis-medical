@@ -12,7 +12,7 @@ import './App.css';
 class App extends React.Component {
   public render() {
     return (
-        <Grid>
+        <Grid className="app">
             <Row className="header">
                 <Col xs={12} md={12}>
                     <Header />
