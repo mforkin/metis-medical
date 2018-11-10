@@ -1,6 +1,9 @@
 import * as _ from 'lodash';
 import * as React from 'react';
+import { Col, Grid, Row } from 'react-bootstrap';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import Header from './header/Header';
+import Sidebar from './sidebar/Sidebar';
 
 import './App.css';
 
@@ -9,15 +12,31 @@ import './App.css';
 class App extends React.Component {
   public render() {
     return (
-        <Router>
-            <div>
-              <Header />
+        <Grid>
+            <Row className="header">
+                <Col xs={12} md={12}>
+                    <Header />
+                </Col>
+            </Row>
+            <Row>
+                <Col xsHidden md={2}>
+                    <Sidebar />
+                </Col>
+                <Col xs={12} md={10}>
+                    <div className="content">
+                        <Router>
+                            <div>
+                              <Menu />
 
-              <Route exact={false} path="/" component={Home} />
-              <Route path="/about" component={About} />
-              <Route path="/topics" component={Topics} />
-            </div>
-        </Router>
+                              <Route exact={true} path="/" component={Home} />
+                              <Route path="/about" component={About} />
+                              <Route path="/topics" component={Topics} />
+                            </div>
+                        </Router>
+                    </div>
+                </Col>
+            </Row>
+        </Grid>
     );
   }
 }
@@ -41,7 +60,7 @@ const Topics = ({ match }) => (
     <ul>
         {
         _.map(specialties, (v, k) => (
-            <li>
+            <li key={k}>
                 <Link to={`${match.url}/${k}`}>{v}</Link>
             </li>
         ))
@@ -50,7 +69,7 @@ const Topics = ({ match }) => (
 
     <Route path={`${match.path}/:id`} component={Topic} />
     <Route
-      exact={false}
+      exact={true}
       path={match.path}
       render={test}
     />
@@ -59,7 +78,7 @@ const Topics = ({ match }) => (
 
 const test = () => <h3>Please select a topic.</h3>
 
-const Header = () => (
+const Menu = () => (
   <ul>
     <li>
       <Link to="/">Home</Link>
