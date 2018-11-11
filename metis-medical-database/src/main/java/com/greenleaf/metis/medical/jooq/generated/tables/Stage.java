@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Stage extends TableImpl<StageRecord> {
 
-    private static final long serialVersionUID = -1255790178;
+    private static final long serialVersionUID = -290077694;
 
     /**
      * The reference instance of <code>public.stage</code>
@@ -67,12 +67,12 @@ public class Stage extends TableImpl<StageRecord> {
     /**
      * The column <code>public.stage.seq</code>.
      */
-    public final TableField<StageRecord, Short> SEQ = createField("seq", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<StageRecord, Integer> SEQ = createField("seq", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.stage.vignette_id</code>.
      */
-    public final TableField<StageRecord, Short> VIGNETTE_ID = createField("vignette_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<StageRecord, Integer> VIGNETTE_ID = createField("vignette_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>public.stage</code> table reference

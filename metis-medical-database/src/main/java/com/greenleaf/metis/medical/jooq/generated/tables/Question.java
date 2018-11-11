@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Question extends TableImpl<QuestionRecord> {
 
-    private static final long serialVersionUID = -1777898498;
+    private static final long serialVersionUID = -471500172;
 
     /**
      * The reference instance of <code>public.question</code>
@@ -62,12 +62,12 @@ public class Question extends TableImpl<QuestionRecord> {
     /**
      * The column <code>public.question.stage_id</code>.
      */
-    public final TableField<QuestionRecord, Short> STAGE_ID = createField("stage_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<QuestionRecord, Integer> STAGE_ID = createField("stage_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.question.seq</code>.
      */
-    public final TableField<QuestionRecord, Short> SEQ = createField("seq", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<QuestionRecord, Integer> SEQ = createField("seq", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.question.question</code>.

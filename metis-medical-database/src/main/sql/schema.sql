@@ -2,7 +2,7 @@ CREATE TABLE public.users(
     username varchar(100) NOT NULL,
     password varchar(90) NOT NULL,
     enabled boolean NOT NULL,
-    specialty_id smallint NOT NULL,
+    specialty_id integer NOT NULL,
     CONSTRAINT users_pk PRIMARY KEY (username)
 )
 WITH (OIDS=FALSE);
@@ -37,8 +37,8 @@ CREATE TABLE public.vignette (
 WITH (OIDS=FALSE);
 
 CREATE TABLE public.vignette_specialty (
-    vignette_id smallint NOT NULL,
-    specialty_id smallint NOT NULL,
+    vignette_id integer NOT NULL,
+    specialty_id integer NOT NULL,
     CONSTRAINT "vignette_specialty_pk" PRIMARY KEY (specialty_id, vignette_id)
 )
 WITH (OIDS=FALSE);
@@ -54,8 +54,8 @@ ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 CREATE TABLE public.stage (
     id serial NOT NULL,
     name text NOT NULL,
-    seq smallint NOT NULL,
-    vignette_id smallint NOT NULL,
+    seq integer NOT NULL,
+    vignette_id integer NOT NULL,
     CONSTRAINT "stage_pk" PRIMARY KEY (id)
 )
 WITH (OIDS=FALSE);
@@ -66,8 +66,8 @@ ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 CREATE TABLE public.question (
     id serial NOT NULL,
-    stage_id smallint NOT NULL,
-    seq smallint NOT NULL,
+    stage_id integer NOT NULL,
+    seq integer NOT NULL,
     question text NOT NULL,
     CONSTRAINT "question_pk" PRIMARY KEY (id)
 )
@@ -79,27 +79,17 @@ ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 CREATE TABLE public.answer (
     id serial NOT NULL,
-    seq smallint NOT NULL,
+    seq integer NOT NULL,
     answer text NOT NULL,
     correct_text text NOT NULL,
     incorrect_text text NOT NULL,
     selected_text text,
+    is_correct boolean,
+    question_id integer NOT NULL,
     CONSTRAINT "question_answer_pk" PRIMARY KEY (id)
 )
 WITH (OIDS=FALSE);
 
-CREATE TABLE public.question_answer (
-    question_id smallint,
-    answer_id smallint,
-    CONSTRAINT "qa_pk" PRIMARY KEY (question_id, answer_id)
-)
-WITH (OIDS=FALSE);
-
-ALTER TABLE public.question_answer ADD CONSTRAINT question_answer_question_fk FOREIGN KEY (question_id)
+ALTER TABLE public.answer ADD CONSTRAINT ques_answer_fk FOREIGN KEY (question_id)
 REFERENCES public.question (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
-
-ALTER TABLE public.question_answer ADD CONSTRAINT question_answer_answer_fk FOREIGN KEY (answer_id)
-REFERENCES public.answer (id) MATCH FULL
-ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
-

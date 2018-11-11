@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class VignetteSpecialty extends TableImpl<VignetteSpecialtyRecord> {
 
-    private static final long serialVersionUID = -161361996;
+    private static final long serialVersionUID = -2047421830;
 
     /**
      * The reference instance of <code>public.vignette_specialty</code>
@@ -56,12 +56,12 @@ public class VignetteSpecialty extends TableImpl<VignetteSpecialtyRecord> {
     /**
      * The column <code>public.vignette_specialty.vignette_id</code>.
      */
-    public final TableField<VignetteSpecialtyRecord, Short> VIGNETTE_ID = createField("vignette_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<VignetteSpecialtyRecord, Integer> VIGNETTE_ID = createField("vignette_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.vignette_specialty.specialty_id</code>.
      */
-    public final TableField<VignetteSpecialtyRecord, Short> SPECIALTY_ID = createField("specialty_id", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<VignetteSpecialtyRecord, Integer> SPECIALTY_ID = createField("specialty_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>public.vignette_specialty</code> table reference

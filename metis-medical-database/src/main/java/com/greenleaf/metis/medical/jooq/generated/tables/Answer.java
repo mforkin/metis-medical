@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Answer extends TableImpl<AnswerRecord> {
 
-    private static final long serialVersionUID = -705713207;
+    private static final long serialVersionUID = 1488526088;
 
     /**
      * The reference instance of <code>public.answer</code>
@@ -62,7 +62,7 @@ public class Answer extends TableImpl<AnswerRecord> {
     /**
      * The column <code>public.answer.seq</code>.
      */
-    public final TableField<AnswerRecord, Short> SEQ = createField("seq", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<AnswerRecord, Integer> SEQ = createField("seq", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * The column <code>public.answer.answer</code>.
@@ -83,6 +83,16 @@ public class Answer extends TableImpl<AnswerRecord> {
      * The column <code>public.answer.selected_text</code>.
      */
     public final TableField<AnswerRecord, String> SELECTED_TEXT = createField("selected_text", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+    /**
+     * The column <code>public.answer.is_correct</code>.
+     */
+    public final TableField<AnswerRecord, Boolean> IS_CORRECT = createField("is_correct", org.jooq.impl.SQLDataType.BOOLEAN, this, "");
+
+    /**
+     * The column <code>public.answer.question_id</code>.
+     */
+    public final TableField<AnswerRecord, Integer> QUESTION_ID = createField("question_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>public.answer</code> table reference
@@ -147,6 +157,18 @@ public class Answer extends TableImpl<AnswerRecord> {
     @Override
     public List<UniqueKey<AnswerRecord>> getKeys() {
         return Arrays.<UniqueKey<AnswerRecord>>asList(Keys.QUESTION_ANSWER_PK);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<ForeignKey<AnswerRecord, ?>> getReferences() {
+        return Arrays.<ForeignKey<AnswerRecord, ?>>asList(Keys.ANSWER__QUES_ANSWER_FK);
+    }
+
+    public Question question() {
+        return new Question(this, Keys.ANSWER__QUES_ANSWER_FK);
     }
 
     /**

@@ -7,7 +7,6 @@ package com.greenleaf.metis.medical.jooq.generated;
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
-import com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
@@ -39,7 +38,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1722714008;
+    private static final long serialVersionUID = 695792622;
 
     /**
      * The reference instance of <code>public</code>
@@ -60,11 +59,6 @@ public class Public extends SchemaImpl {
      * The table <code>public.question</code>.
      */
     public final Question QUESTION = com.greenleaf.metis.medical.jooq.generated.tables.Question.QUESTION;
-
-    /**
-     * The table <code>public.question_answer</code>.
-     */
-    public final QuestionAnswer QUESTION_ANSWER = com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer.QUESTION_ANSWER;
 
     /**
      * The table <code>public.specialty</code>.
@@ -135,7 +129,6 @@ public class Public extends SchemaImpl {
             Answer.ANSWER,
             Authorities.AUTHORITIES,
             Question.QUESTION,
-            QuestionAnswer.QUESTION_ANSWER,
             Specialty.SPECIALTY,
             Stage.STAGE,
             Users.USERS,

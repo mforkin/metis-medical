@@ -7,7 +7,6 @@ package com.greenleaf.metis.medical.jooq.generated;
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
-import com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
@@ -44,11 +43,6 @@ public class Tables {
      * The table <code>public.question</code>.
      */
     public static final Question QUESTION = com.greenleaf.metis.medical.jooq.generated.tables.Question.QUESTION;
-
-    /**
-     * The table <code>public.question_answer</code>.
-     */
-    public static final QuestionAnswer QUESTION_ANSWER = com.greenleaf.metis.medical.jooq.generated.tables.QuestionAnswer.QUESTION_ANSWER;
 
     /**
      * The table <code>public.specialty</code>.
