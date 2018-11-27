@@ -10,12 +10,12 @@ class SpecialityAPI extends API {
   }
 
   post("/") {
-    val data = parsedBody.extract[CandidateSpecialty]
+    val data = readJsonFromBody(request.body).extract[CandidateSpecialty]
     SpecialtyService.create(data)
   }
 
   put("/:id") {
-    val data = parsedBody.extract[Specialty]
+    val data = readJsonFromBody(request.body).extract[Specialty]
     SpecialtyService.edit(data)
   }
 

@@ -11,13 +11,13 @@ class VignetteAPI extends API {
 
   post ("/") {
     VignetteService.create(
-      parsedBody.extract[Vignette]
+      readJsonFromBody(request.body).extract[Vignette]
     )
   }
 
   put ("/") {
     VignetteService.edit(
-      parsedBody.extract[Vignette]
+      readJsonFromBody(request.body).extract[Vignette]
     )
   }
 

@@ -43,6 +43,9 @@ class VignetteEditor extends React.Component {
         _.get(this.state, 'data.stages').map((d, i) => {
             if (i === stageIdx) {
                 d.data.question[qIdx].data.answers[aIdx].data[propName] = (propName === 'isCorrect' ? e.target.checked : e.target.value);
+                if (propName === 'seq') {
+                    d.data.question[qIdx].data.answers[aIdx].data[propName] = parseInt(d.data.question[qIdx].data.answers[aIdx].data[propName], 10);
+                }
             }
             return d;
         });
@@ -82,7 +85,7 @@ class VignetteEditor extends React.Component {
     public questionSeqChange (stageIdx, qIdx, e) {
         _.get(this.state, 'data.stages').map((d, i) => {
             if (i === stageIdx) {
-                d.data.question[qIdx].data.seq = e.target.value;
+                d.data.question[qIdx].data.seq = parseInt(e.target.value, 10);
             }
             return d;
         });
@@ -118,7 +121,7 @@ class VignetteEditor extends React.Component {
     public stageSeqChange (stageIdx, e) {
         _.get(this.state, 'data.stages').map((d, i) => {
             if (i === stageIdx) {
-                d.data.seq = e.target.value;
+                d.data.seq = parseInt(e.target.value, 10);
             }
             return d;
         });
@@ -235,7 +238,7 @@ class VignetteEditor extends React.Component {
                 ...this.state,
                 data: {
                     ..._.get(this.state, 'data'),
-                    specialtyId: e.target.value
+                    specialtyId: parseInt(e.target.value, 10)
                 }
             }
         );
