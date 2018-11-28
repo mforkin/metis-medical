@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import * as React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
@@ -30,6 +31,7 @@ class App extends React.Component {
                                 <div>
                                   <Route exact={true} path="/" component={Home} />
                                   <Route path="/edit" component={VignetteEditor} />
+                                  <Route path="/editSpecialties" component={SpecialtyEditor} />
                                   <Route path="/topics" component={Topics} />
                                 </div>
                             </div>

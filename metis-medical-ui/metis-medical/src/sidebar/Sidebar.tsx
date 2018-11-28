@@ -18,10 +18,13 @@ const Menu = () => (
       <Link to="/">Home</Link>
     </li>
     <li>
-      <Link to="/edit">Edit</Link>
+      <Link to="/edit">Manage Vignettes</Link>
     </li>
     <li>
-      <Link to="/topics">Specialities</Link>
+      <Link to="/editSpecialties">Manage Specialties</Link>
+    </li>
+    <li>
+      <Link to="/topics">Specialties</Link>
     </li>
   </ul>
 );
