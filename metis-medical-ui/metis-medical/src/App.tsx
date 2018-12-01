@@ -5,11 +5,17 @@ import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
 import Header from './header/Header';
-import Sidebar from './sidebar/Sidebar';
+import SidebarFactory from './sidebar/Sidebar';
 
 import './App.css';
 
+const stateObj = {};
 // import logo from './logo.svg';
+const HomeFactory = (so) => {
+    return () => <h2>{_.get(so, 'vId')}</h2>
+};
+const Sidebar = SidebarFactory(stateObj);
+const Home = HomeFactory(stateObj);
 
 class App extends React.Component {
   public render() {
@@ -54,7 +60,7 @@ fetch("/api/specialty", {
         specialties = data;
     })
 console.log(specialties);
-const Home = () => <h2>Home</h2>;
+
 const Topic = ({ match }) => <h3>Requested Param: {match.params.id}</h3>;
 const Topics = ({ match }) => (
   <div>
