@@ -1,6 +1,8 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import * as Actions from '../actions';
 
 import './specialtyEditor.css';
 
@@ -11,46 +13,21 @@ class SpecialtyEditor extends React.Component {
         this.handleSpecUpdate = this.handleSpecUpdate.bind(this);
         this.handleExistingSpecUpdate = this.handleExistingSpecUpdate.bind(this);
         this.submit = this.submit.bind(this);
-        this.state = {
-            data: {},
-            newSpec: ""
-        };
-
-        this.getSpecialties()
-
-    }
-
-    public getSpecialties () {
-        const me = this;
-        fetch("/api/specialty")
-            .then(r => r.json())
-            .then(d => me.setState({
-                ...me.state,
-                data: d
-            }))
     }
 
     public handleSpecUpdate (e) {
-        this.setState({
-            ...this.state,
-            newSpec: e.target.value
-        });
+        _.get(this.props, 'dispatch')(Actions.LOAD_EDITOR_SPEC(e.target.value));
     }
 
     public handleExistingSpecUpdate(k) {
         const me = this;
         return (e) => {
-            const d = _.get(me.state, 'data');
-            _.set(d, k, e.target.value);
-            me.setState({
-                ...me.state,
-                data: d,
-            });
+            _.get(me.props, 'dispatch')(Actions.LOAD_EDITOR_SPECIALTIES(k, e.target.value));
         };
     }
 
     public submit () {
-        const newSpec = _.get(this.state, 'newSpec');
+        const newSpec = _.get(this.props, 'newSpec');
         if (newSpec.length > 0) {
             fetch("/api/specialty/", {
                 body: JSON.stringify({
@@ -59,7 +36,7 @@ class SpecialtyEditor extends React.Component {
                 method: 'post'
             })
         }
-        _.map(_.get(this.state, 'data'), (v, k) => {
+        _.map(_.get(this.props, 'editorSpecialties'), (v, k) => {
             fetch("/api/specialty/" + k, {
                 body: JSON.stringify({
                     id: parseInt(k, 10),
@@ -81,7 +58,7 @@ class SpecialtyEditor extends React.Component {
                         <FormGroup controlId="specEdit">
                             <ControlLabel>Edit Specialties</ControlLabel>
                             {
-                                _.map(_.get(this.state, 'data'), (v, k) => (
+                                _.map(_.get(this.props, 'editorSpecialties'), (v, k) => (
                                     <FormControl
                                         type="text"
                                         placeholder="Update Specialty Name"
@@ -93,7 +70,7 @@ class SpecialtyEditor extends React.Component {
                             <FormControl
                                 type="text"
                                 placeholder="Enter Specialty Name to Create"
-                                value={_.get(this.state, 'newSpec')}
+                                value={_.get(this.props, 'newSpec')}
                                 onChange={this.handleSpecUpdate}
                             />
                         </FormGroup>
@@ -108,4 +85,8 @@ class SpecialtyEditor extends React.Component {
     }
 }
 
-export default SpecialtyEditor;
+const mapStateToProps = (state, ownProps) => {
+    return _.get(state, 'specialties');
+}
+
+export default connect(mapStateToProps)(SpecialtyEditor);

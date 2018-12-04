@@ -1,7 +1,9 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import * as Actions from './actions';
 import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
 import Header from './header/Header';
@@ -12,6 +14,12 @@ import './App.css';
 // import logo from './logo.svg';
 const Home = () => <h2>Home</h2>
 class App extends React.Component {
+
+  constructor (props, context) {
+    super(props, context);
+    props.dispatch(Actions.loadSpecialties());
+  }
+
   public render() {
     return (
         <Grid className="app">
@@ -32,7 +40,6 @@ class App extends React.Component {
                                   <Route exact={true} path="/" component={Home} />
                                   <Route path="/edit" component={VignetteEditor} />
                                   <Route path="/editSpecialties" component={SpecialtyEditor} />
-                                  <Route path="/topics" component={Topics} />
                                 </div>
                             </div>
                         </Col>
@@ -43,41 +50,5 @@ class App extends React.Component {
     );
   }
 }
-let specialties = {};
-fetch("/api/specialty", {
-    headers: {
-        "accepts": "application/json"
-    }
-})
-    .then((resp) => resp.json())
-    .then((data) => {
-        specialties = data;
-    })
-console.log(specialties);
 
-const Topic = ({ match }) => <h3>Requested Param: {match.params.id}</h3>;
-const Topics = ({ match }) => (
-  <div>
-    <h2>Specialties</h2>
-    <ul>
-        {
-        _.map(specialties, (v, k) => (
-            <li key={k}>
-                <Link to={`${match.url}/${k}`}>{v}</Link>
-            </li>
-        ))
-        }
-    </ul>
-
-    <Route path={`${match.path}/:id`} component={Topic} />
-    <Route
-      exact={true}
-      path={match.path}
-      render={test}
-    />
-  </div>
-);
-
-const test = () => <h3>Please select a topic.</h3>
-
-export default App;
+export default connect()(App);
