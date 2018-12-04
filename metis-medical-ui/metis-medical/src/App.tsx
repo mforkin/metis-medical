@@ -5,18 +5,12 @@ import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
 import Header from './header/Header';
-import SidebarFactory from './sidebar/Sidebar';
+import Sidebar from './sidebar/Sidebar';
 
 import './App.css';
 
-const stateObj = {};
 // import logo from './logo.svg';
-const HomeFactory = (so) => {
-    return () => <h2>{_.get(so, 'vId')}</h2>
-};
-const Sidebar = SidebarFactory(stateObj);
-const Home = HomeFactory(stateObj);
-
+const Home = () => <h2>Home</h2>
 class App extends React.Component {
   public render() {
     return (
