@@ -60,7 +60,7 @@ object VignetteService {
     edit(vignette.copy(id = Some(vignetteId)))
   }
 
-  def edit (vignette: Vignette): Unit = {
+  def edit (vignette: Vignette) = {
     db
       .update(VIGNETTE_SPECIALTY)
       .set(VIGNETTE_SPECIALTY.SPECIALTY_ID, Int.box(vignette.data.specialtyId))
@@ -123,6 +123,8 @@ object VignetteService {
         }
       }
     }
+
+    vignette
   }
 
   def getBaseVignetteQuery = {

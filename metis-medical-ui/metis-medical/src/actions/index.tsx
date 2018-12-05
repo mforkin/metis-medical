@@ -46,14 +46,15 @@ export const createOrUpdateVignette = (vignette, selectedId) => {
             body: JSON.stringify({...vignette}),
             method: selectedId === -1 ? 'post' : 'put'
         })
-            .then(() => {
-                return 1;
+            .then(response => response.json())
+            .then((data) => {
+                dispatch(loadAvailableVignettes(_.get(vignette, 'data.specialtyId'), data.id));
             });
     }
 }
 
 export const VIGNETTE_SELECTED = (specId, availableVignettes, e) => {
-    const vId = parseInt(e.target.value, 10);
+    const vId = parseInt(e, 10);
     let dataObj = {};
 
     if (vId === -1) {
@@ -81,21 +82,25 @@ export const VIGNETTE_SELECTED = (specId, availableVignettes, e) => {
     }
 };
 
-export const LOAD_AVAILABLE_VIGNETTES = (d) => {
+export const LOAD_AVAILABLE_VIGNETTES = (d, selectId) => {
     return {
         data: d,
+        selectedVignetteId: selectId,
         type: 'LOAD_AVAILABLE_VIGNETTES'
     };
 };
 
-export const loadAvailableVignettes = (e) => {
+export const loadAvailableVignettes = (e, selectId) => {
     return (dispatch) => {
-        fetch("/api/vignette/specialty/" + e.target.value)
+        fetch("/api/vignette/specialty/" + e)
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                dispatch(LOAD_AVAILABLE_VIGNETTES(data));
+                dispatch(LOAD_AVAILABLE_VIGNETTES(data, selectId));
+                if (selectId) {
+                    dispatch(VIGNETTE_SELECTED(undefined, data, selectId));
+                }
             })
     }
 };

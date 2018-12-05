@@ -23,19 +23,6 @@ class VignetteEditor extends React.Component {
         this.submit = this.submit.bind(this);
         this.wrap = this.wrap.bind(this);
         this.handleSelectedVignetteChange = this.handleSelectedVignetteChange.bind(this);
-
-        this.state = {
-            availableVignettes: [],
-            selectedVignetteId: -1,
-            specialties: {},
-            vignette: {
-                data: {
-                    name: '',
-                    specialtyId: -1,
-                    stages: []
-                }
-            }
-        };
     }
 
     public handleSelectedVignetteChange (e) {
@@ -43,7 +30,7 @@ class VignetteEditor extends React.Component {
             Actions.VIGNETTE_SELECTED(
                 _.get(this.props, 'vignettes.vignette.data.specialtyId'),
                 _.get(this.props, 'vignettes.availableVignettes'),
-                e
+                e.target.value
             )
         )
     }
@@ -166,7 +153,7 @@ class VignetteEditor extends React.Component {
             )
         );
         _.get(this.props, 'dispatch')(
-            Actions.loadAvailableVignettes(e)
+            Actions.loadAvailableVignettes(e.target.value, undefined)
         );
     }
 

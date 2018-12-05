@@ -18,7 +18,8 @@ const vignettes = (
         case 'LOAD_AVAILABLE_VIGNETTES':
             return {
                 ...state,
-                availableVignettes: action.data
+                availableVignettes: action.data,
+                selectedVignetteId: action.selectedVignetteId || state.selectedVignetteId
             };
             break;
         case 'VIGNETTE_SELECTED':
