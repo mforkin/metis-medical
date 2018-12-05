@@ -28,22 +28,31 @@ class SpecialtyEditor extends React.Component {
 
     public submit () {
         const newSpec = _.get(this.props, 'newSpec');
+        let submissions:any = [];
         if (newSpec.length > 0) {
-            fetch("/api/specialty/", {
-                body: JSON.stringify({
-                    name: newSpec
-                }),
-                method: 'post'
-            })
+            submissions.push(
+                fetch("/api/specialty/", {
+                    body: JSON.stringify({
+                        name: newSpec
+                    }),
+                    method: 'post'
+                })
+            )
         }
-        _.map(_.get(this.props, 'editorSpecialties'), (v, k) => {
-            fetch("/api/specialty/" + k, {
-                body: JSON.stringify({
-                    id: parseInt(k, 10),
-                    name: v
-                }),
-                method: 'put'
-            });
+        submissions = submissions.concat(
+            _.map(_.get(this.props, 'editorSpecialties'), (v, k) => {
+                return fetch("/api/specialty/" + k, {
+                    body: JSON.stringify({
+                        id: parseInt(k, 10),
+                        name: v
+                    }),
+                    method: 'put'
+                });
+            })
+        );
+
+        Promise.all(submissions).then(() => {
+            _.get(this.props, 'dispatch')(Actions.loadSpecialties());
         });
     }
 
