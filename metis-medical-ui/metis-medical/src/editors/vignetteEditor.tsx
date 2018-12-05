@@ -1,6 +1,8 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Button, Checkbox, ControlLabel, FormControl, FormGroup, HelpBlock, Well } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import * as Actions from '../actions';
 
 import './vignetteEditor.css';
 
@@ -34,187 +36,80 @@ class VignetteEditor extends React.Component {
                 }
             }
         };
-
-        this.getAvailableSpecialties();
     }
 
     public handleSelectedVignetteChange (e) {
-        const vId = parseInt(e.target.value, 10);
-        if (vId === -1) {
-            this.setState({
-                ...this.state,
-                selectedVignetteId: vId,
-                vignette: {
-                    data: {
-                        name: '',
-                        specialtyId: _.get(this.state, 'vignette.data.specialtyId'),
-                        stages: []
-                    }
-                }
-            });
-        } else {
-            this.setState({
-                ...this.state,
-                selectedVignetteId: vId,
-                vignette: _.find(_.get(this.state, 'availableVignettes'), (v) => {
-                    return v.id ===  vId;
-                })
-            });
-        }
-    }
-
-    public getAvailableSpecialties () {
-        const me = this;
-        fetch("/api/specialty")
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                me.setState({
-                    ...me.state,
-                    specialties: data
-                });
-            });
-    }
-
-    public getAvailableVignettes (sId) {
-        const me = this;
-        fetch("/api/vignette/specialty/" + sId)
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                me.setState({
-                    ...me.state,
-                    availableVignettes: data
-                })
-            });
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_SELECTED(
+                _.get(this.props, 'vignettes.vignette.data.specialtyId'),
+                _.get(this.props, 'vignettes.availableVignettes'),
+                e
+            )
+        )
     }
 
     public submit () {
-        const selectedId = _.get(this.state, 'selectedVignetteId');
+        _.get(this.props, 'dispatch')(
+            Actions.createOrUpdateVignette(
+                _.get(this.props, 'vignettes.vignette'),
+                _.get(this.props, 'vignettes.selectedVignetteId')
+            )
+        );
 
-        fetch("/api/vignette/", {
-            body: JSON.stringify({..._.get(this.state, 'vignette')}),
-            method: selectedId === -1 ? 'post' : 'put'
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                console.log(data);
-            });
     }
 
     public answerPropChange (propName, stageIdx, qIdx, aIdx, e) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.question[qIdx].data.answers[aIdx].data[propName] = (propName === 'isCorrect' ? e.target.checked : e.target.value);
-                if (propName === 'seq') {
-                    d.data.question[qIdx].data.answers[aIdx].data[propName] = parseInt(d.data.question[qIdx].data.answers[aIdx].data[propName], 10);
-                }
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_ANSWER_PROP_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                propName,
+                stageIdx,
+                qIdx,
+                aIdx,
+                e
+            )
         );
     }
 
-
-
-
-
     public questionNameChange (stageIdx, qIdx, e) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.question[qIdx].data.text = e.target.value;
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_QUESTION_NAME_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx,
+                qIdx,
+                e
+            )
         );
     }
 
     public questionSeqChange (stageIdx, qIdx, e) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.question[qIdx].data.seq = parseInt(e.target.value, 10);
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_QUESTION_SEQ_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx,
+                qIdx,
+                e
+            )
         );
     }
 
     public stageNameChange (stageIdx, e) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.name = e.target.value;
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_STAGE_NAME_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx,
+                e
+            )
         );
     }
 
     public stageSeqChange (stageIdx, e) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.seq = parseInt(e.target.value, 10);
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_STAGE_SEQ_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx,
+                e
+            )
         );
     }
 
@@ -227,119 +122,52 @@ class VignetteEditor extends React.Component {
     }
 
     public addStage () {
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages').concat([{
-                            data: {
-                                name: '',
-                                question: [],
-                                seq: -1
-                            }
-                        }])
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_STAGE_ADD(
+                _.get(this.props, 'vignettes.vignette.data.stages')
+            )
         );
     }
 
     public addQuestion (stageIdx) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.question = d.data.question.concat(
-                    [{
-                        data: {
-                            answers: [],
-                            seq: -1,
-                            text: ""
-                        }
-                    }]
-                );
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+         _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_QUESTION_ADD(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx
+            )
         );
     }
 
     public addAnswer (stageIdx, questionIdx) {
-        _.get(this.state, 'vignette.data.stages').map((d, i) => {
-            if (i === stageIdx) {
-                d.data.question = _.map(d.data.question, (q, idx) => {
-                    if (questionIdx === idx) {
-                        q.data.answers = q.data.answers.concat([{
-                            data: {
-                                correctResponse: "",
-                                incorrectResponse: "",
-                                isCorrect: false,
-                                selectedText: "",
-                                seq: -1,
-                                text: ""
-                            }
-                        }]);
-                    }
-                    return q;
-                })
-            }
-            return d;
-        });
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        stages: _.get(this.state, 'vignette.data.stages')
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_ANSWER_ADD(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx,
+                questionIdx
+            )
         );
     }
 
     public handleNameChange(e) {
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        name: e.target.value
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_NAME_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data'),
+                e
+            )
         );
     }
 
     public handleSpecChange(e) {
-        this.setState(
-            {
-                ...this.state,
-                vignette: {
-                    ..._.get(this.state, 'vignette'),
-                    data: {
-                        ..._.get(this.state, 'vignette.data'),
-                        specialtyId: parseInt(e.target.value, 10)
-                    }
-                }
-            }
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_SPEC_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data'),
+                _.get(this.props, 'vignettes.selectedVignetteId'),
+                e
+            )
         );
-        this.getAvailableVignettes(e.target.value);
+        _.get(this.props, 'dispatch')(
+            Actions.loadAvailableVignettes(e)
+        );
     }
 
     public render() {
@@ -356,13 +184,13 @@ class VignetteEditor extends React.Component {
                         <ControlLabel>Specialty</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.state, 'vignette.data.specialtyId')}
+                            value={_.get(this.props, 'vignettes.vignette.data.specialtyId')}
                             placeholder="Enter Specialty"
                             onChange={this.handleSpecChange}
                         >
                             <option value="-1"/>
                             {
-                                _.map(_.get(this.state, 'specialties'), (name, id) => (
+                                _.map(_.get(this.props, 'specialties.specialties'), (name, id) => (
                                     <option value={id}>{name}</option>
                                 ))
                             }
@@ -373,13 +201,13 @@ class VignetteEditor extends React.Component {
                         <ControlLabel>Select Vignette</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.state, 'selectedVignetteId')}
+                            value={_.get(this.props, 'vignettes.selectedVignetteId')}
                             placeholder="Select To Edit Existing"
                             onChange={this.handleSelectedVignetteChange}
                         >
                             <option value="-1">Create New</option>
                             {
-                                _.map(_.get(this.state, 'availableVignettes'), (v) => (
+                                _.map(_.get(this.props, 'vignettes.availableVignettes'), (v) => (
                                     <option value={_.get(v, 'id')}>{_.get(v, 'data.name')}</option>
                                 ))
                             }
@@ -392,7 +220,7 @@ class VignetteEditor extends React.Component {
                         <FormControl
                             type="text"
                             placeholder="Enter Name"
-                            value={_.get(this.state, 'vignette.data.name')}
+                            value={_.get(this.props, 'vignettes.vignette.data.name')}
                             onChange={this.handleNameChange}
                         />
                         <FormControl.Feedback />
@@ -400,7 +228,7 @@ class VignetteEditor extends React.Component {
                     </FormGroup>
                     <div>
                         {
-                            _.map(_.get(this.state, 'vignette.data.stages'), (s, i) => (
+                            _.map(_.get(this.props, 'vignettes.vignette.data.stages'), (s, i) => (
                                 <Well>
                                     <FormGroup>
                                         <FormControl
@@ -497,4 +325,11 @@ class VignetteEditor extends React.Component {
     }
 }
 
-export default VignetteEditor;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        specialties: _.get(state, 'specialties'),
+        vignettes: _.get(state, 'vignettes')
+    };
+}
+
+export default connect(mapStateToProps)(VignetteEditor);
