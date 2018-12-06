@@ -358,6 +358,18 @@ export const VIGNETTE_STAGE_NAME_CHANGE = (stages, stageIdx, e) => {
     };
 };
 
+// Sidebar
+export const SIDEBAR_SPEC_CHANGE = (e) => {
+    return {
+        data: parseInt(e.target.value, 10),
+        type: 'SIDEBAR_SPEC_CHANGE'
+    };
+};
 
-export const VIGNETTE_UPDATE = {};
+export const SIDEBAR_VIGNETTE_CHANGE = (e) => {
+    return {
+        data: parseInt(e.target.value, 10),
+        type: 'SIDEBAR_VIGNETTE_CHANGE'
+    };
+};
 
