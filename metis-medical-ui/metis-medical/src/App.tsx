@@ -8,11 +8,17 @@ import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
+import Survey from './survey/Survey';
 
 import './App.css';
 
 // import logo from './logo.svg';
-const Home = () => <h2>Home</h2>
+const Home = () => (
+    <div>
+        <h2>Home</h2>
+        <Survey />
+    </div>
+);
 class App extends React.Component {
 
   constructor (props, context) {
