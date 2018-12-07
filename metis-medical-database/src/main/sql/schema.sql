@@ -93,3 +93,22 @@ WITH (OIDS=FALSE);
 ALTER TABLE public.answer ADD CONSTRAINT ques_answer_fk FOREIGN KEY (question_id)
 REFERENCES public.question (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
+CREATE TABLE public.user_results (
+    id serial NOT NULL,
+    username varchar(100) NOT NULL,
+    submission_datetime timestamp with time zone NOT NULL,
+    answer_id integer NOT NULL,
+    CONSTRAINT "user_results_pk" PRIMARY KEY (id),
+    CONSTRAINT "user_res_unq" UNIQUE (username, submission_datetime, answer_id)
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE public.user_results ADD CONSTRAINT user_answer_fk FOREIGN KEY (answer_id)
+REFERENCES public.answer (id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
+ALTER TABLE public.user_results ADD CONSTRAINT user_answer_user_fk FOREIGN KEY (username)
+REFERENCES public.users (username) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+

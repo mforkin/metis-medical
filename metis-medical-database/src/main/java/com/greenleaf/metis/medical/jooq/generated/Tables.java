@@ -9,6 +9,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
+import com.greenleaf.metis.medical.jooq.generated.tables.UserResults;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
 import com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty;
@@ -53,6 +54,11 @@ public class Tables {
      * The table <code>public.stage</code>.
      */
     public static final Stage STAGE = com.greenleaf.metis.medical.jooq.generated.tables.Stage.STAGE;
+
+    /**
+     * The table <code>public.user_results</code>.
+     */
+    public static final UserResults USER_RESULTS = com.greenleaf.metis.medical.jooq.generated.tables.UserResults.USER_RESULTS;
 
     /**
      * The table <code>public.users</code>.

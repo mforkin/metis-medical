@@ -9,6 +9,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
+import com.greenleaf.metis.medical.jooq.generated.tables.UserResults;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
 import com.greenleaf.metis.medical.jooq.generated.tables.Vignette;
 import com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty;
@@ -17,6 +18,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.records.AuthoritiesReco
 import com.greenleaf.metis.medical.jooq.generated.tables.records.QuestionRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.SpecialtyRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.StageRecord;
+import com.greenleaf.metis.medical.jooq.generated.tables.records.UserResultsRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.UsersRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.VignetteRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.VignetteSpecialtyRecord;
@@ -51,6 +53,7 @@ public class Keys {
     public static final Identity<QuestionRecord, Integer> IDENTITY_QUESTION = Identities0.IDENTITY_QUESTION;
     public static final Identity<SpecialtyRecord, Integer> IDENTITY_SPECIALTY = Identities0.IDENTITY_SPECIALTY;
     public static final Identity<StageRecord, Integer> IDENTITY_STAGE = Identities0.IDENTITY_STAGE;
+    public static final Identity<UserResultsRecord, Integer> IDENTITY_USER_RESULTS = Identities0.IDENTITY_USER_RESULTS;
     public static final Identity<VignetteRecord, Integer> IDENTITY_VIGNETTE = Identities0.IDENTITY_VIGNETTE;
 
     // -------------------------------------------------------------------------
@@ -62,6 +65,8 @@ public class Keys {
     public static final UniqueKey<QuestionRecord> QUESTION_PK = UniqueKeys0.QUESTION_PK;
     public static final UniqueKey<SpecialtyRecord> SPECIALTY_PK = UniqueKeys0.SPECIALTY_PK;
     public static final UniqueKey<StageRecord> STAGE_PK = UniqueKeys0.STAGE_PK;
+    public static final UniqueKey<UserResultsRecord> USER_RESULTS_PK = UniqueKeys0.USER_RESULTS_PK;
+    public static final UniqueKey<UserResultsRecord> USER_RES_UNQ = UniqueKeys0.USER_RES_UNQ;
     public static final UniqueKey<UsersRecord> USERS_PK = UniqueKeys0.USERS_PK;
     public static final UniqueKey<VignetteRecord> VIGNETTE_PK = UniqueKeys0.VIGNETTE_PK;
     public static final UniqueKey<VignetteSpecialtyRecord> VIGNETTE_SPECIALTY_PK = UniqueKeys0.VIGNETTE_SPECIALTY_PK;
@@ -74,6 +79,8 @@ public class Keys {
     public static final ForeignKey<AuthoritiesRecord, UsersRecord> AUTHORITIES__FK_AUTH_USR = ForeignKeys0.AUTHORITIES__FK_AUTH_USR;
     public static final ForeignKey<QuestionRecord, StageRecord> QUESTION__QUES_STAG_FK = ForeignKeys0.QUESTION__QUES_STAG_FK;
     public static final ForeignKey<StageRecord, VignetteRecord> STAGE__STAGE_VIG_FK = ForeignKeys0.STAGE__STAGE_VIG_FK;
+    public static final ForeignKey<UserResultsRecord, UsersRecord> USER_RESULTS__USER_ANSWER_USER_FK = ForeignKeys0.USER_RESULTS__USER_ANSWER_USER_FK;
+    public static final ForeignKey<UserResultsRecord, AnswerRecord> USER_RESULTS__USER_ANSWER_FK = ForeignKeys0.USER_RESULTS__USER_ANSWER_FK;
     public static final ForeignKey<UsersRecord, SpecialtyRecord> USERS__FK_SPEC_USR = ForeignKeys0.USERS__FK_SPEC_USR;
     public static final ForeignKey<VignetteSpecialtyRecord, VignetteRecord> VIGNETTE_SPECIALTY__FK_VIG_SPE_VIG = ForeignKeys0.VIGNETTE_SPECIALTY__FK_VIG_SPE_VIG;
     public static final ForeignKey<VignetteSpecialtyRecord, SpecialtyRecord> VIGNETTE_SPECIALTY__FK_VIG_SPE_SPEC = ForeignKeys0.VIGNETTE_SPECIALTY__FK_VIG_SPE_SPEC;
@@ -87,6 +94,7 @@ public class Keys {
         public static Identity<QuestionRecord, Integer> IDENTITY_QUESTION = Internal.createIdentity(Question.QUESTION, Question.QUESTION.ID);
         public static Identity<SpecialtyRecord, Integer> IDENTITY_SPECIALTY = Internal.createIdentity(Specialty.SPECIALTY, Specialty.SPECIALTY.ID);
         public static Identity<StageRecord, Integer> IDENTITY_STAGE = Internal.createIdentity(Stage.STAGE, Stage.STAGE.ID);
+        public static Identity<UserResultsRecord, Integer> IDENTITY_USER_RESULTS = Internal.createIdentity(UserResults.USER_RESULTS, UserResults.USER_RESULTS.ID);
         public static Identity<VignetteRecord, Integer> IDENTITY_VIGNETTE = Internal.createIdentity(Vignette.VIGNETTE, Vignette.VIGNETTE.ID);
     }
 
@@ -96,6 +104,8 @@ public class Keys {
         public static final UniqueKey<QuestionRecord> QUESTION_PK = Internal.createUniqueKey(Question.QUESTION, "question_pk", Question.QUESTION.ID);
         public static final UniqueKey<SpecialtyRecord> SPECIALTY_PK = Internal.createUniqueKey(Specialty.SPECIALTY, "specialty_pk", Specialty.SPECIALTY.ID);
         public static final UniqueKey<StageRecord> STAGE_PK = Internal.createUniqueKey(Stage.STAGE, "stage_pk", Stage.STAGE.ID);
+        public static final UniqueKey<UserResultsRecord> USER_RESULTS_PK = Internal.createUniqueKey(UserResults.USER_RESULTS, "user_results_pk", UserResults.USER_RESULTS.ID);
+        public static final UniqueKey<UserResultsRecord> USER_RES_UNQ = Internal.createUniqueKey(UserResults.USER_RESULTS, "user_res_unq", UserResults.USER_RESULTS.USERNAME, UserResults.USER_RESULTS.SUBMISSION_DATETIME, UserResults.USER_RESULTS.ANSWER_ID);
         public static final UniqueKey<UsersRecord> USERS_PK = Internal.createUniqueKey(Users.USERS, "users_pk", Users.USERS.USERNAME);
         public static final UniqueKey<VignetteRecord> VIGNETTE_PK = Internal.createUniqueKey(Vignette.VIGNETTE, "vignette_pk", Vignette.VIGNETTE.ID);
         public static final UniqueKey<VignetteSpecialtyRecord> VIGNETTE_SPECIALTY_PK = Internal.createUniqueKey(VignetteSpecialty.VIGNETTE_SPECIALTY, "vignette_specialty_pk", VignetteSpecialty.VIGNETTE_SPECIALTY.SPECIALTY_ID, VignetteSpecialty.VIGNETTE_SPECIALTY.VIGNETTE_ID);
@@ -106,6 +116,8 @@ public class Keys {
         public static final ForeignKey<AuthoritiesRecord, UsersRecord> AUTHORITIES__FK_AUTH_USR = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, Authorities.AUTHORITIES, "authorities__fk_auth_usr", Authorities.AUTHORITIES.USERNAME);
         public static final ForeignKey<QuestionRecord, StageRecord> QUESTION__QUES_STAG_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.STAGE_PK, Question.QUESTION, "question__ques_stag_fk", Question.QUESTION.STAGE_ID);
         public static final ForeignKey<StageRecord, VignetteRecord> STAGE__STAGE_VIG_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.VIGNETTE_PK, Stage.STAGE, "stage__stage_vig_fk", Stage.STAGE.VIGNETTE_ID);
+        public static final ForeignKey<UserResultsRecord, UsersRecord> USER_RESULTS__USER_ANSWER_USER_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, UserResults.USER_RESULTS, "user_results__user_answer_user_fk", UserResults.USER_RESULTS.USERNAME);
+        public static final ForeignKey<UserResultsRecord, AnswerRecord> USER_RESULTS__USER_ANSWER_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.QUESTION_ANSWER_PK, UserResults.USER_RESULTS, "user_results__user_answer_fk", UserResults.USER_RESULTS.ANSWER_ID);
         public static final ForeignKey<UsersRecord, SpecialtyRecord> USERS__FK_SPEC_USR = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.SPECIALTY_PK, Users.USERS, "users__fk_spec_usr", Users.USERS.SPECIALTY_ID);
         public static final ForeignKey<VignetteSpecialtyRecord, VignetteRecord> VIGNETTE_SPECIALTY__FK_VIG_SPE_VIG = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.VIGNETTE_PK, VignetteSpecialty.VIGNETTE_SPECIALTY, "vignette_specialty__fk_vig_spe_vig", VignetteSpecialty.VIGNETTE_SPECIALTY.VIGNETTE_ID);
         public static final ForeignKey<VignetteSpecialtyRecord, SpecialtyRecord> VIGNETTE_SPECIALTY__FK_VIG_SPE_SPEC = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.SPECIALTY_PK, VignetteSpecialty.VIGNETTE_SPECIALTY, "vignette_specialty__fk_vig_spe_spec", VignetteSpecialty.VIGNETTE_SPECIALTY.SPECIALTY_ID);
