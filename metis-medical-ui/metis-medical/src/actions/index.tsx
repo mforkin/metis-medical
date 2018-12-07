@@ -286,7 +286,7 @@ export const VIGNETTE_ANSWER_PROP_CHANGE = (stages, propName, stageIdx, qIdx, aI
                                                 }
                                                 _.set(newProp, 'data.' + propName, newVal);
 
-                                                aRet = Object.assign({}, a, newProp)
+                                                aRet = _.merge({}, a, newProp)
                                             }
                                             return aRet;
                                         })
