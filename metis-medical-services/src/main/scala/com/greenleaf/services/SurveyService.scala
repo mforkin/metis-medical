@@ -14,7 +14,7 @@ object SurveyService {
   lazy val db = ConnectionManager.db
 
   def submitAnswer (answer: SurveyAnswer) = {
-    val userName = answer.userName.getOrElse(throw new Exception("Cannot submit answer if you are not logged in."))
+    val userName = "admin" //answer.userName.getOrElse(throw new Exception("Cannot submit answer if you are not logged in."))
     val answerId = db.insertInto(
       USER_RESULTS,
       USER_RESULTS.USERNAME,
@@ -24,6 +24,6 @@ object SurveyService {
       userName,
       OffsetDateTime.parse(answer.datetime),
       answer.answerId
-    )
+    ).returning.fetchOne().getAnswerId
   }
 }

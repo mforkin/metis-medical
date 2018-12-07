@@ -1,2 +1,4 @@
 com.greenleaf.services.api.SpecialityAPI
 com.greenleaf.services.api.VignetteAPI
+com.greenleaf.services.api.SurveyAPI
+com.greenleaf.services.api.UserAPI

@@ -16,9 +16,32 @@ class Stage extends React.Component {
                     {_.get(this.props, 'data.name')}
                 </div>
                 {
-                    _.map(_.get(this.props, 'data.question'), (q) => (
-                        <Question data={q.data} />
-                    ))
+                    !_.get(
+                        this.props,
+                        'data.question'
+                    ) ||
+                    _.get(
+                        this.props,
+                        'data.question'
+                    ).length === 0 ? <h2> No Questions Configured </h2> :
+                    <Question
+                        data={
+                            _.get(
+                                _.get(
+                                    this.props,
+                                    'data.question'
+                                )[
+                                    _.get(
+                                        this.props,
+                                        'sidebar.userInfo.currentVignette.questionIdx'
+                                    )
+                                ],
+                                'data'
+                            )
+                        }
+                        isLastQuestion={_.get(this.props, 'isLastQuestion')}
+                        isLastStage={_.get(this.props, 'isLastStage')}
+                    />
                 }
             </div>
         );
@@ -28,6 +51,7 @@ class Stage extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         ...ownProps,
+        sidebar: _.get(state, 'sidebar'),
         vignettes: _.get(state, 'vignettes')
     };
 }

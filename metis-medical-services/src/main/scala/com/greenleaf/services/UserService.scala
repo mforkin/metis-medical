@@ -1,6 +1,5 @@
 package com.greenleaf.services
 
-import java.lang
 import java.time.format.DateTimeFormatter
 
 import com.greenleaf.database.ConnectionManager
@@ -13,12 +12,12 @@ case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId
 object UserService {
   lazy val db = ConnectionManager.db
   def getInfo = User(
-    "",
+    "admin",
     1
   )
 
   def getInfoForVignette (vId: Int) = {
-    val userName = ""
+    val userName = "admin"
     db.select(
       USER_RESULTS.ANSWER_ID,
       USER_RESULTS.SUBMISSION_DATETIME,

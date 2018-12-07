@@ -94,6 +94,7 @@ object VignetteService {
               .set(QUESTION.SEQ, Int.box(q.data.seq))
               .set(QUESTION.QUESTION_, q.data.text)
               .where(QUESTION.ID.equal(q.id.get))
+              .execute()
             qId
           case None =>
             db.insertInto(QUESTION, QUESTION.QUESTION_, QUESTION.SEQ, QUESTION.STAGE_ID)
@@ -173,6 +174,7 @@ object VignetteService {
       val stages = db
         .selectFrom(STAGE)
         .where(STAGE.VIGNETTE_ID.equal(v.id.get))
+        .orderBy(STAGE.SEQ.asc())
         .fetch.asScala
         .map(r => {
           Stage(
@@ -193,6 +195,7 @@ object VignetteService {
         val questions = db
           .selectFrom(QUESTION)
           .where(QUESTION.STAGE_ID.equal(s.id.get))
+          .orderBy(QUESTION.SEQ.asc())
           .fetch.asScala
           .map(r => {
             Question(
@@ -215,6 +218,7 @@ object VignetteService {
           val answers = db
             .selectFrom(ANSWER)
             .where(ANSWER.QUESTION_ID.equal(q.id.get))
+            .orderBy(ANSWER.SEQ.asc())
             .fetch.asScala
             .map(r => {
               Answer(

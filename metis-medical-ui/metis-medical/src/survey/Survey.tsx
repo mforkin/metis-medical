@@ -12,11 +12,52 @@ class Survey extends React.Component {
     public render () {
         return (
             <div className='survey'>
-                {
-                    _.map(_.get(this.props, 'vignettes.vignette.data.stages'), (s) => (
-                        <Stage data={s.data}/>
-                    ))
-                }
+                <Stage
+                    data={
+                        _.get(
+                            _.get(
+                                this.props,
+                                'vignettes.vignette.data.stages'
+                            )[
+                                _.get(
+                                    this.props,
+                                    'sidebar.userInfo.currentVignette.stageIdx'
+                                )
+                            ],
+                            'data'
+                        )
+                    }
+                    isLastStage={
+                        _.get(
+                            this.props,
+                            'vignettes.vignette.data.stages'
+                        ).length - 1 === _.get(
+                            this.props,
+                            'sidebar.userInfo.currentVignette.stageIdx'
+                        )
+                    }
+                    isLastQuestion={
+                        _.get(
+                            this.props,
+                            'vignettes.vignette.data.stages'
+                        ).length === 0 ? true :
+                        _.get(
+                            _.get(
+                                this.props,
+                                'vignettes.vignette.data.stages'
+                            )[
+                                _.get(
+                                    this.props,
+                                    'sidebar.userInfo.currentVignette.stageIdx'
+                                )
+                            ],
+                            'data.question'
+                        ).length - 1 === _.get(
+                            this.props,
+                            'sidebar.userInfo.currentVignette.questionIdx'
+                        )
+                    }
+                />
             </div>
         );
     }
@@ -24,6 +65,7 @@ class Survey extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        sidebar: _.get(state, 'sidebar'),
         vignettes: _.get(state, 'vignettes')
     };
 }

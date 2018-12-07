@@ -1,5 +1,43 @@
 import * as _ from 'lodash';
 
+// Sidebar Actions
+export const submitAnswer = (answer) => {
+    return (dispatch) => {
+        return fetch("api/survey/answer", {
+            body: JSON.stringify({...answer}),
+            method: 'post'
+        })
+            .then((data) => {
+                dispatch(SIDEBAR_QUESTION_ANSWERED());
+            });
+    };
+}
+
+export const SIDEBAR_NEXT_QUESTION = (qIdx, sIdx) => {
+    return {
+        data: {
+            questionIdx: qIdx,
+            stageIdx: sIdx
+        },
+        type: 'SIDEBAR_NEXT_QUESTION',
+    };
+}
+
+export const SIDEBAR_RESPONSE_CHANGED = (answerId) => {
+    return {
+        data: {
+            currentResponse: answerId
+        },
+        type: 'SIDEBAR_RESPONSE_CHANGED'
+    };
+}
+
+export const SIDEBAR_QUESTION_ANSWERED = () => {
+    return {
+        type: 'SIDEBAR_QUESTION_ANSWERED'
+    };
+}
+
 // Specialty Actions
 
 export const LOAD_SPECIALTIES = (specialties) => {
