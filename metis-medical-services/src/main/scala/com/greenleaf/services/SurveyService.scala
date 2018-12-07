@@ -25,5 +25,6 @@ object SurveyService {
       OffsetDateTime.parse(answer.datetime),
       answer.answerId
     ).returning.fetchOne().getAnswerId
+    answerId
   }
 }
