@@ -7,6 +7,60 @@ import Stage from './Stage';
 class Survey extends React.Component {
     constructor (props, context) {
         super(props, context);
+
+        this.getStages = this.getStages.bind(this);
+        this.getStageIndex = this.getStageIndex.bind(this);
+        this.getQuestionIndex = this.getQuestionIndex.bind(this);
+        this.getQuestionsInStage = this.getQuestionsInStage.bind(this);
+        this.getStageAtIndex = this.getStageAtIndex.bind(this);
+        this.isLastQuestionOfStage = this.isLastQuestionOfStage.bind(this);
+    }
+
+    public getStages () {
+        const stages = _.get(
+            this.props,
+            'vignettes.vignette.data.stages'
+        );
+
+        return stages || [];
+    }
+
+    public getStageIndex () {
+        return _.get(
+            this.props,
+            'sidebar.userInfo.currentVignette.stageIdx'
+        );
+    }
+
+    public getQuestionIndex () {
+        return _.get(
+            this.props,
+            'sidebar.userInfo.currentVignette.questionIdx'
+        );
+    }
+
+    public getQuestionsInStage () {
+        return _.get(this.getStageAtIndex(), 'data.question');
+    }
+
+    public getStageAtIndex () {
+        return this.getStages()[this.getStageIndex()];
+    }
+
+    public isLastQuestionOfStage () {
+        const stages = this.getStages();
+        const questions = this.getQuestionsInStage();
+        let isLast = false;
+
+        if (stages.length === 0) {
+            isLast = true;
+        }
+
+        if (!questions || questions.length - 1 === this.getQuestionIndex()) {
+            isLast = true;
+        }
+
+        return isLast;
     }
 
     public render () {
@@ -15,47 +69,15 @@ class Survey extends React.Component {
                 <Stage
                     data={
                         _.get(
-                            _.get(
-                                this.props,
-                                'vignettes.vignette.data.stages'
-                            )[
-                                _.get(
-                                    this.props,
-                                    'sidebar.userInfo.currentVignette.stageIdx'
-                                )
-                            ],
+                            this.getStageAtIndex(),
                             'data'
                         )
                     }
                     isLastStage={
-                        _.get(
-                            this.props,
-                            'vignettes.vignette.data.stages'
-                        ).length - 1 === _.get(
-                            this.props,
-                            'sidebar.userInfo.currentVignette.stageIdx'
-                        )
+                        this.getStages().length - 1 === this.getStageIndex()
                     }
                     isLastQuestion={
-                        _.get(
-                            this.props,
-                            'vignettes.vignette.data.stages'
-                        ).length === 0 ? true :
-                        _.get(
-                            _.get(
-                                this.props,
-                                'vignettes.vignette.data.stages'
-                            )[
-                                _.get(
-                                    this.props,
-                                    'sidebar.userInfo.currentVignette.stageIdx'
-                                )
-                            ],
-                            'data.question'
-                        ).length - 1 === _.get(
-                            this.props,
-                            'sidebar.userInfo.currentVignette.questionIdx'
-                        )
+                        this.isLastQuestionOfStage()
                     }
                 />
             </div>

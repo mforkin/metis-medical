@@ -7,6 +7,35 @@ import Question from './Question';
 class Stage extends React.Component {
     constructor (props, context) {
         super(props, context);
+
+        this.getQuestions = this.getQuestions.bind(this);
+        this.hasQuestions = this.hasQuestions.bind(this);
+        this.getQuestionIdx = this.getQuestionIdx.bind(this);
+        this.getQuestionAtIndex = this.getQuestionAtIndex.bind(this);
+    }
+
+    public getQuestions () {
+        const questions =  _.get(
+            this.props,
+            'data.question'
+        );
+
+        return questions || [];
+    }
+
+    public hasQuestions () {
+        return this.getQuestions().length > 0
+    }
+
+    public getQuestionIdx () {
+        return _.get(
+            this.props,
+            'sidebar.userInfo.currentVignette.questionIdx'
+        )
+    }
+
+    public getQuestionAtIndex () {
+        return this.getQuestions()[this.getQuestionIdx()];
     }
 
     public render () {
@@ -16,32 +45,17 @@ class Stage extends React.Component {
                     {_.get(this.props, 'data.name')}
                 </div>
                 {
-                    !_.get(
-                        this.props,
-                        'data.question'
-                    ) ||
-                    _.get(
-                        this.props,
-                        'data.question'
-                    ).length === 0 ? <h2> No Questions Configured </h2> :
+                    this.hasQuestions() ?
                     <Question
                         data={
                             _.get(
-                                _.get(
-                                    this.props,
-                                    'data.question'
-                                )[
-                                    _.get(
-                                        this.props,
-                                        'sidebar.userInfo.currentVignette.questionIdx'
-                                    )
-                                ],
+                                this.getQuestionAtIndex(),
                                 'data'
                             )
                         }
                         isLastQuestion={_.get(this.props, 'isLastQuestion')}
                         isLastStage={_.get(this.props, 'isLastStage')}
-                    />
+                    /> : <h2> No Questions Configured </h2>
                 }
             </div>
         );

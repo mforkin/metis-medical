@@ -12,6 +12,10 @@ class Question extends React.Component {
         this.submit = this.submit.bind(this);
         this.next = this.next.bind(this);
         this.answerChanged = this.answerChanged.bind(this);
+        this.getAnswers = this.getAnswers.bind(this);
+        this.getMode = this.getMode.bind(this);
+        this.getSubmitLabel = this.getSubmitLabel.bind(this);
+        this.getSubmitFn = this.getSubmitFn.bind(this);
     }
 
     public answerChanged (e) {
@@ -40,13 +44,32 @@ class Question extends React.Component {
         }
     }
 
+
+    public getAnswers () {
+        const answers = _.get(this.props, 'data.answers');
+
+        return answers || [];
+    }
+
+    public getMode () {
+        return _.get(this.props, 'sidebar.userInfo.currentVignette.mode');
+    }
+
+    public getSubmitLabel () {
+        return this.getMode() === 'answer' ? "Submit" : "Next";
+    }
+
+    public getSubmitFn () {
+        return this.getMode() === 'answer' ? this.submit : this.next;
+    }
+
     public render () {
         return (
             <div className='question'>
                 <h2>{_.get(this.props, 'data.text')}</h2>
                 <FormGroup>
                     {
-                        _.map(_.get(this.props, 'data.answers'), (a) => (
+                        _.map(this.getAnswers(), (a) => (
                             <Radio name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
                                 {_.get(a, 'data.text')}
                             </Radio>
@@ -54,16 +77,13 @@ class Question extends React.Component {
                     }
                 </FormGroup>
                 {
-                    _.get(this.props, 'sidebar.userInfo.currentVignette.mode') === 'answer' ?
-                        (<Button
-                            onClick={this.submit}>
-                            Submit
-                        </Button>)
-                    :
-                        (<Button
-                            onClick={this.next}>
-                            Next
-                        </Button>)
+                    (
+                        <Button
+                            onClick={this.getSubmitFn()}
+                        >
+                            {this.getSubmitLabel()}
+                        </Button>
+                    )
                 }
             </div>
         );
