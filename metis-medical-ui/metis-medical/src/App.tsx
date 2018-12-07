@@ -15,7 +15,6 @@ import './App.css';
 // import logo from './logo.svg';
 const Home = () => (
     <div>
-        <h2>Home</h2>
         <Survey />
     </div>
 );

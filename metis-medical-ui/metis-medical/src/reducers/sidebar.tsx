@@ -1,7 +1,14 @@
 const sidebar = (
     state = {
         selectedSpecialityId: -1,
-        selectedVignetteId: -1
+        selectedVignetteId: -1,
+        userInfo: {
+            currentVignette: {
+                questionIdx: 0,
+                score: 0,
+                stageIdx: 0
+            }
+        }
     },
     action
 ) => {

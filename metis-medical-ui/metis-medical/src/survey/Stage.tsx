@@ -12,7 +12,9 @@ class Stage extends React.Component {
     public render () {
         return (
             <div className='stage'>
-                <div>{_.get(this.props, 'data.name')}</div>
+                <div className="header">
+                    {_.get(this.props, 'data.name')}
+                </div>
                 {
                     _.map(_.get(this.props, 'data.question'), (q) => (
                         <Question data={q.data} />
