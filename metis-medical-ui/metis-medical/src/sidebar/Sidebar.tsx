@@ -30,6 +30,12 @@ class Sidebar extends React.Component {
                 e.target.value
             )
         );
+
+        _.get(this.props, 'dispatch')(
+            Actions.loadUserDataForVignette(
+                parseInt(e.target.value, 10)
+            )
+        );
     }
 
     public render() {

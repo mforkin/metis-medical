@@ -78,6 +78,24 @@ export const loadSpecialties = () => {
 
 // Vignette Actions
 
+export const loadUserDataForVignette = (vId) => {
+    return (dispatch) => {
+        return fetch("/api/user/" + vId)
+            .then(response => response.json())
+            .then((data) => {
+                dispatch(VIGNETTE_USER_DATA_LOADED(data));
+            });
+    }
+}
+
+export const VIGNETTE_USER_DATA_LOADED = (data) => {
+    console.log(data);
+    return {
+        data: {},
+        type: 'VIGNETTE_USER_DATA_LOADED'
+    };
+}
+
 export const createOrUpdateVignette = (vignette, selectedId) => {
     return (dispatch) => {
         return fetch("/api/vignette/", {
