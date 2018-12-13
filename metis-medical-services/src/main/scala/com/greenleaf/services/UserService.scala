@@ -41,7 +41,7 @@ object UserService {
         r.getValue(STAGE.ID).toInt,
         r.getValue(QUESTION.ID).toInt,
         t,
-        r.getValue(ANSWER.ID).toInt,
+        r.getValue(USER_RESULTS.ANSWER_ID).toInt,
         Boolean.unbox(r.getValue(ANSWER.IS_CORRECT))
       )
     })
