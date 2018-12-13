@@ -84,6 +84,7 @@ export const loadUserDataForVignette = (vId) => {
             .then(response => response.json())
             .then((data) => {
                 dispatch(VIGNETTE_USER_DATA_LOADED(data));
+                return data;
             });
     }
 }
