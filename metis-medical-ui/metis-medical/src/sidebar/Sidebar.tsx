@@ -31,15 +31,12 @@ class Sidebar extends React.Component {
             )
         );
 
-        const userDataPromise = _.get(this.props, 'dispatch')(
+        _.get(this.props, 'dispatch')(
             Actions.loadUserDataForVignette(
                 parseInt(e.target.value, 10)
             )
         );
 
-        userDataPromise.then(data => {
-            console.log(data);
-        });
     }
 
     public render() {

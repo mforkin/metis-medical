@@ -7,8 +7,9 @@ export const submitAnswer = (answer) => {
             body: JSON.stringify({...answer}),
             method: 'post'
         })
+            .then(data => data.json())
             .then((data) => {
-                dispatch(SIDEBAR_QUESTION_ANSWERED());
+                dispatch(SIDEBAR_QUESTION_ANSWERED(data));
             });
     };
 }
@@ -32,8 +33,9 @@ export const SIDEBAR_RESPONSE_CHANGED = (answerId) => {
     };
 }
 
-export const SIDEBAR_QUESTION_ANSWERED = () => {
+export const SIDEBAR_QUESTION_ANSWERED = (response) => {
     return {
+        data: response,
         type: 'SIDEBAR_QUESTION_ANSWERED'
     };
 }

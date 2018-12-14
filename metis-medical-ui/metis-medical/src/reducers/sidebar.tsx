@@ -2,6 +2,9 @@ import * as _ from 'lodash';
 
 const sidebar = (
     state = {
+        feedback: {
+            id: ''
+        },
         selectedSpecialityId: -1,
         selectedVignetteId: -1,
         userInfo: {
@@ -32,10 +35,14 @@ const sidebar = (
         case 'SIDEBAR_NEXT_QUESTION':
             return {
                 ...state,
+                feedback: {
+                    id: ''
+                },
                 userInfo: {
                     ...state.userInfo,
                     currentVignette: {
                         ..._.get(state, 'userInfo.currentVignette'),
+                        currentResponse: -1,
                         mode: 'answer',
                         questionIdx: _.get(action, 'data.questionIdx'),
                         stageIdx: _.get(action, 'data.stageIdx')
@@ -46,6 +53,9 @@ const sidebar = (
         case 'SIDEBAR_QUESTION_ANSWERED':
             return {
                 ...state,
+                feedback: {
+                    id: _.get(action, 'data')
+                },
                 userInfo: {
                     ...state.userInfo,
                     currentVignette: {
