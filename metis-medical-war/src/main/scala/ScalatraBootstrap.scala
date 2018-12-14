@@ -29,7 +29,7 @@ class ScalatraBootstrap extends ApplicationContextAware with ServletContextAware
     }
 
     val springServlets = applicationContext.getBeansOfType(classOf[DefaultServlet]).asScala
-    for ((name, servlet) <- springServlets) {
+    for ((_, servlet) <- springServlets) {
       richCtx.mount(servlet, s"$rootPath/${servlet.root}")
     }
   }

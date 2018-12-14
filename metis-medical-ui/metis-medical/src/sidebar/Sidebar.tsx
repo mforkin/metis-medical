@@ -11,6 +11,8 @@ class Sidebar extends React.Component {
 
         this.handleSpecChange = this.handleSpecChange.bind(this);
         this.handleVigChange = this.handleVigChange.bind(this);
+        this.isVignetteCompleted = this.isVignetteCompleted.bind(this);
+        this.isVignetteInProgressLabel = this.isVignetteInProgressLabel.bind(this);
     }
 
     public handleSpecChange (e) {
@@ -29,7 +31,7 @@ class Sidebar extends React.Component {
                 _.get(this.props, 'vignettes.availableVignettes'),
                 e.target.value
             )
-        );
+        )
 
         _.get(this.props, 'dispatch')(
             Actions.loadUserDataForVignette(
@@ -37,6 +39,62 @@ class Sidebar extends React.Component {
             )
         );
 
+        const vignette = _.find(
+            _.get(this.props, 'vignettes.availableVignettes'),
+            (v) => v.id === parseInt(e.target.value, 10)
+        );
+        const progress = _.get(vignette, 'inProgress')
+        if (progress) {
+            _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
+                this.getNextQuestionIdxFromSeq(_.get(progress, '_2')),
+                this.getNextStageIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'))
+            ));
+        } else {
+            _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
+                0,
+                0
+            ));
+        }
+    }
+
+    // @TODO Make these functions work
+    public getNextStageIdxFromSeq (stageSeq, questionSeq) {
+        return 0;
+    }
+
+    public getNextQuestionIdxFromSeq (questionSeq) {
+        return 0;
+    }
+
+    public isVignetteCompleted (d) {
+        let finished = false;
+        const lastStage = _.maxBy(
+            _.get(d, 'data.stages'),
+            s => _.get(s, 'data.seq')
+        )
+        const lastStageSeq = _.get(lastStage, 'data.seq')
+        if (_.get(d, 'inProgress') && lastStageSeq === _.get(d, 'inProgress._1')) {
+            const lastQuestion = _.maxBy(
+                _.get(lastStage, 'data.question'),
+                q => _.get(q, 'data.seq')
+            )
+            const lastQuestionSeq = _.get(lastQuestion, 'data.seq')
+            if (lastQuestionSeq === _.get(d, 'inProgress._2')) {
+                finished = true;
+            }
+        }
+
+        return finished;
+    }
+
+    public isVignetteInProgressLabel (d) {
+        let label = ""
+        if (this.isVignetteCompleted(d)) {
+            label = " - Completed"
+        } else if (_.get(d, 'inProgress')) {
+            label = " - In Progress"
+        }
+        return label
     }
 
     public render() {
@@ -73,7 +131,7 @@ class Sidebar extends React.Component {
                             >
                                 {
                                     _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
-                                        <option value={d.id}>{d.data.name}</option>
+                                        <option disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
                                     ))
                                 }
                             </FormControl>

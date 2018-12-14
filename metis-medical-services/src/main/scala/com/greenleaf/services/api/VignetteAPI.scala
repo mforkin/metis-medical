@@ -7,7 +7,8 @@ class VignetteAPI extends API {
   override val root = "api/vignette"
 
   get ("/specialty/:specialtyId") {
-    Ok(VignetteService.getVignettesBySpecialty(params.as[Int]("specialtyId")))
+    val username = "admin"
+    Ok(VignetteService.getVignettesBySpecialty(params.as[Int]("specialtyId"), username))
   }
 
   post ("/") {
@@ -23,6 +24,7 @@ class VignetteAPI extends API {
   }
 
   get ("/:id") {
-    Ok(VignetteService.getVignetteById(params.as[Int]("id")))
+    val username = "admin"
+    Ok(VignetteService.getVignetteById(params.as[Int]("id"), username))
   }
 }

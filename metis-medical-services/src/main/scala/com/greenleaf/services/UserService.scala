@@ -46,4 +46,36 @@ object UserService {
       )
     })
   }
+
+  def getCurrentVignettePositions (username: String) = {
+    db.select()
+      .from(USER_RESULTS)
+      .join(ANSWER).on(ANSWER.ID.equal(USER_RESULTS.ANSWER_ID))
+      .join(QUESTION).on(ANSWER.QUESTION_ID.equal(QUESTION.ID))
+      .join(STAGE).on(STAGE.ID.equal(QUESTION.STAGE_ID))
+      .join(VIGNETTE).on(VIGNETTE.ID.equal(STAGE.VIGNETTE_ID))
+      .where(USER_RESULTS.USERNAME.equal(username))
+      .fetch.asScala.foldLeft(Map[Int,(Int, Int, Int)]()) {
+        case (positionMap, rec) =>
+          val vId = rec.getValue(VIGNETTE.ID).toInt
+          val recStagePos = rec.getValue(STAGE.SEQ).toInt
+          val recQuestionPos = rec.getValue(QUESTION.SEQ).toInt
+          val recAnswerPos = rec.getValue(ANSWER.SEQ).toInt
+          positionMap.updated(
+            vId,
+            positionMap.get(vId) match {
+              case Some((sPos, qPos, aPos)) => (
+                math.max(sPos, recStagePos),
+                math.max(qPos, recQuestionPos),
+                math.max(aPos, recAnswerPos)
+              )
+              case None => (
+                recStagePos,
+                recQuestionPos,
+                recAnswerPos
+              )
+            }
+          )
+      }
+  }
 }

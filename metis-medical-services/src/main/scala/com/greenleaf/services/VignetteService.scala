@@ -39,7 +39,8 @@ case class CandidateStage (
 
 case class Vignette (
                       id: Option[Int],
-                      data: CandidateVignette
+                      data: CandidateVignette,
+                      inProgress: Option[(Int, Int, Int)] = None
                     )
 case class CandidateVignette (
                              specialtyId: Int,
@@ -135,32 +136,37 @@ object VignetteService {
       .join(VIGNETTE_SPECIALTY).on(VIGNETTE.ID.equal(VIGNETTE_SPECIALTY.VIGNETTE_ID))
   }
 
-  def extractVignetteFromBaseQuery (r: Record) = {
+  def extractVignetteFromBaseQuery (r: Record, status: Map[Int, (Int, Int, Int)]) = {
+    val vId = r.getValue(VIGNETTE.ID).toInt
     Vignette(
-      Some(r.getValue(VIGNETTE.ID).toInt),
+      Some(vId),
       CandidateVignette(
         r.getValue(VIGNETTE_SPECIALTY.SPECIALTY_ID).toInt,
         r.getValue(VIGNETTE.NAME),
         Seq()
-      )
+      ),
+      status.get(vId)
     )
   }
 
-  def getVignetteById(id: Int) = {
+  def getVignetteById(id: Int, username: String) = {
+    val vignetteProgress = UserService.getCurrentVignettePositions(username)
     val vignettes = getBaseVignetteQuery
       .where(VIGNETTE.ID.equal(id))
       .fetch.asScala
-      .map(extractVignetteFromBaseQuery)
+      .map(r => extractVignetteFromBaseQuery(r, vignetteProgress))
 
     expandVignette(vignettes)
   }
 
-  def getVignettesBySpecialty(specialtyId: Int) = {
+  def getVignettesBySpecialty(specialtyId: Int, username: String) = {
+    //get user info
+    val vignetteProgress = UserService.getCurrentVignettePositions(username)
     //get All vignettes
     val vignettes = getBaseVignetteQuery
       .where(VIGNETTE_SPECIALTY.SPECIALTY_ID.equal(specialtyId))
       .fetch.asScala
-      .map(extractVignetteFromBaseQuery)
+      .map(r => extractVignetteFromBaseQuery(r, vignetteProgress))
 
     expandVignette(vignettes)
   }
