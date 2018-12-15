@@ -160,7 +160,7 @@ class Sidebar extends React.Component {
                       <Link to="/editSpecialties">Manage Specialties</Link>
                     </li>
                     <li>
-                      <Link to="/topics">Specialties</Link>
+                      <Link to="/results">Results</Link>
                     </li>
                     <li>
                       <Link to="/">Home</Link>
