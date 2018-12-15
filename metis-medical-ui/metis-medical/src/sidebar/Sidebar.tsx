@@ -39,15 +39,17 @@ class Sidebar extends React.Component {
             )
         );
 
+        // @TODO don't get vignette like this, change to redux dispatch
         const vignette = _.find(
             _.get(this.props, 'vignettes.availableVignettes'),
             (v) => v.id === parseInt(e.target.value, 10)
         );
         const progress = _.get(vignette, 'inProgress')
         if (progress) {
+            const nextIndexes = this.getNextQuestionIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'), vignette)
             _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
-                this.getNextQuestionIdxFromSeq(_.get(progress, '_2')),
-                this.getNextStageIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'))
+                nextIndexes.questionIndex,
+                nextIndexes.stageIndex
             ));
         } else {
             _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
@@ -57,13 +59,26 @@ class Sidebar extends React.Component {
         }
     }
 
-    // @TODO Make these functions work
-    public getNextStageIdxFromSeq (stageSeq, questionSeq) {
-        return 0;
-    }
-
-    public getNextQuestionIdxFromSeq (questionSeq) {
-        return 0;
+    public getNextQuestionIdxFromSeq (stageSeq, questionSeq, vig) {
+        const stages = _.get(vig, 'data.stages')
+        const stageIndex = _.findIndex(stages, (s) => _.get(s, 'data.seq') === stageSeq)
+        const questions = _.get(stages[stageIndex], 'data.question')
+        const questionIndex = _.findIndex(questions, (q) => _.get(q, 'data.seq') === questionSeq)
+        const ret = {
+            questionIndex,
+            stageIndex
+        }
+        // last question in stage was answered
+        if (questionIndex === questions.length - 1) {
+            // if there is a new stage to go to, go to it, if not leave at last question of last stage
+            if (stageIndex !== stages.length - 1) {
+                ret.stageIndex = stageIndex + 1
+                ret.questionIndex = 0
+            }
+        } else {
+            ret.questionIndex = questionIndex + 1
+        }
+        return ret;
     }
 
     public isVignetteCompleted (d) {
