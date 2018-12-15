@@ -4,6 +4,7 @@ import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import * as Actions from './actions';
+import Calculator from './calculator/Calculator';
 import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
 import Header from './header/Header';
@@ -68,7 +69,7 @@ class App extends React.Component {
                                 </div>
                             </Col>
                             <Col lgHidden={!_.get(this.state,'calculatorMode')} mdHidden={!_.get(this.state,'calculatorMode')} md={2} lg={2}>
-                                <div>Hey</div>
+                                <Calculator />
                             </Col>
                         </div>
                     </Router>
