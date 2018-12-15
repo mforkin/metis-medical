@@ -20,6 +20,18 @@ const sidebar = (
     action
 ) => {
     switch (action.type) {
+        case 'SIDEBAR_LAST_QUESTION_ANSWERED':
+            return {
+                ...state,
+                userInfo: {
+                    ..._.get(state, 'userInfo'),
+                    currentVignette: {
+                        ..._.get(state, 'userInfo.currentVignette'),
+                        inProgress: _.get(action, 'data')
+                    }
+                }
+            }
+            break;
         case 'SIDEBAR_SPEC_CHANGE':
             return {
                 ...state,

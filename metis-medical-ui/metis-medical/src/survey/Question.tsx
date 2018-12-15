@@ -43,6 +43,12 @@ class Question extends React.Component {
                 _.get(this.props, 'sidebar.userInfo.currentVignette.stageIdx') + 1,
 
             ));
+        } else {
+            _.get(this.props, 'dispatch')(Actions.SIDEBAR_LAST_QUESTION_ANSWERED({
+                '_1': _.get(_.get(this.props, 'vignettes.vignette.data.stages')[_.get(this.props, 'sidebar.userInfo.currentVignette.stageIdx')], 'data.seq'),
+                '_2': _.get(this.props, 'data.seq'),
+                '_3': _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._3')
+            }));
         }
     }
 

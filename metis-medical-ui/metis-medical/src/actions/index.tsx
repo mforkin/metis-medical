@@ -14,6 +14,13 @@ export const submitAnswer = (answer) => {
     };
 }
 
+export const SIDEBAR_LAST_QUESTION_ANSWERED = (progress) => {
+    return {
+        data: progress,
+        type: 'SIDEBAR_LAST_QUESTION_ANSWERED'
+    };
+}
+
 export const SIDEBAR_NEXT_QUESTION = (qIdx, sIdx) => {
     return {
         data: {

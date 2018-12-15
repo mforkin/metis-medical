@@ -47,6 +47,7 @@ object UserService {
     })
   }
 
+  // Could probably do a fancier query, but this is going to be fine performance wise and is easier to understand
   def getCurrentVignettePositions (username: String) = {
     db.select()
       .from(USER_RESULTS)
@@ -55,6 +56,7 @@ object UserService {
       .join(STAGE).on(STAGE.ID.equal(QUESTION.STAGE_ID))
       .join(VIGNETTE).on(VIGNETTE.ID.equal(STAGE.VIGNETTE_ID))
       .where(USER_RESULTS.USERNAME.equal(username))
+      .orderBy(VIGNETTE.ID, STAGE.SEQ, QUESTION.SEQ, USER_RESULTS.SUBMISSION_DATETIME)
       .fetch.asScala.foldLeft(Map[Int,(Int, Int, Int)]()) {
         case (positionMap, rec) =>
           val vId = rec.getValue(VIGNETTE.ID).toInt
@@ -63,18 +65,11 @@ object UserService {
           val recAnswerPos = rec.getValue(ANSWER.SEQ).toInt
           positionMap.updated(
             vId,
-            positionMap.get(vId) match {
-              case Some((sPos, qPos, aPos)) => (
-                math.max(sPos, recStagePos),
-                math.max(qPos, recQuestionPos),
-                math.max(aPos, recAnswerPos)
-              )
-              case None => (
-                recStagePos,
-                recQuestionPos,
-                recAnswerPos
-              )
-            }
+            (
+              recStagePos,
+              recQuestionPos,
+              recAnswerPos
+            )
           )
       }
   }

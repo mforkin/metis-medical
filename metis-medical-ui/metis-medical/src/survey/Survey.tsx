@@ -13,7 +13,13 @@ class Survey extends React.Component {
         this.getQuestionIndex = this.getQuestionIndex.bind(this);
         this.getQuestionsInStage = this.getQuestionsInStage.bind(this);
         this.getStageAtIndex = this.getStageAtIndex.bind(this);
+        this.getQuestionAtIndex = this.getQuestionAtIndex.bind(this);
         this.isLastQuestionOfStage = this.isLastQuestionOfStage.bind(this);
+        this.isLastStageOfVignette = this.isLastStageOfVignette.bind(this);
+        this.isCompleted = this.isCompleted.bind(this);
+        this.getRenderTpl = this.getRenderTpl.bind(this);
+        this.getStageTpl = this.getStageTpl.bind(this);
+        this.getCompletedTpl = this.getCompletedTpl.bind(this);
     }
 
     public getStages () {
@@ -47,6 +53,13 @@ class Survey extends React.Component {
         return this.getStages()[this.getStageIndex()];
     }
 
+    public getQuestionAtIndex () {
+        return _.get(
+            this.getStageAtIndex(),
+            'data.question'
+        )[this.getQuestionIndex()];
+    }
+
     public isLastQuestionOfStage () {
         const stages = this.getStages();
         const questions = this.getQuestionsInStage();
@@ -63,23 +76,56 @@ class Survey extends React.Component {
         return isLast;
     }
 
+    public isLastStageOfVignette () {
+        return this.getStages().length - 1 === this.getStageIndex()
+    }
+
+    public isCompleted () {
+        return this.isLastStageOfVignette() && this.isLastQuestionOfStage()
+            && _.get(this.getStageAtIndex(), 'data.seq') === _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._1')
+            && _.get(this.getQuestionAtIndex(), 'data.seq') === _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._2')
+    }
+
+    public getRenderTpl () {
+        if (this.isCompleted()) {
+            return this.getCompletedTpl();
+        } else {
+            return this.getStageTpl();
+        }
+    }
+
+    public getStageTpl () {
+        return (
+            <Stage
+                data={
+                    _.get(
+                        this.getStageAtIndex(),
+                        'data'
+                    )
+                }
+                isLastStage={
+                    this.isLastStageOfVignette()
+                }
+                isLastQuestion={
+                    this.isLastQuestionOfStage()
+                }
+            />
+        )
+    }
+
+    public getCompletedTpl () {
+        return (
+            <div>
+                <div>Vignette Completed!</div>
+                <div>Results</div>
+            </div>
+        );
+    }
+
     public render () {
         return (
             <div className='survey'>
-                <Stage
-                    data={
-                        _.get(
-                            this.getStageAtIndex(),
-                            'data'
-                        )
-                    }
-                    isLastStage={
-                        this.getStages().length - 1 === this.getStageIndex()
-                    }
-                    isLastQuestion={
-                        this.isLastQuestionOfStage()
-                    }
-                />
+                { this.getRenderTpl() }
             </div>
         );
     }
