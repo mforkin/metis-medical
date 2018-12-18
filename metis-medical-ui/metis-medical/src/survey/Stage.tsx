@@ -42,7 +42,7 @@ class Stage extends React.Component {
         return (
             <div className='stage'>
                 <div className="header">
-                    {_.get(this.props, 'data.name')}
+                    {_.get(this.props, 'vignettes.vignette.data.name') + " - " + (_.get(this.props, 'data.name') || '')}
                 </div>
                 {
                     this.hasQuestions() ?
