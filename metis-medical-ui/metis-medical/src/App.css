@@ -32,5 +32,5 @@ html, body {
 .calculator-button {
     position: absolute;
     top: 2px;
-    right: 20px;
+    right: 0px;
 }

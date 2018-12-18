@@ -1,7 +1,9 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Badge, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
+
+import './calculator.css'
 
 class Calculator extends React.Component {
     constructor (props, context) {
@@ -10,6 +12,7 @@ class Calculator extends React.Component {
         this.handleValueChange = this.handleValueChange.bind(this);
         this.wrapValueChange = this.wrapValueChange.bind(this);
         this.calcTotal = this.calcTotal.bind(this);
+        this.calcPiece = this.calcPiece.bind(this);
         this.clear = this.clear.bind(this);
 
         this.state = {
@@ -45,6 +48,10 @@ class Calculator extends React.Component {
         );
     }
 
+    public calcPiece (k) {
+        return (_.get(this.state, 'ratios')[k] * _.get(this.state, 'currentEntries')[k] || 0).toFixed(5);
+    }
+
     public calcTotal () {
         return _.reduce(
             _.get(this.state, 'currentEntries'),
@@ -52,36 +59,44 @@ class Calculator extends React.Component {
                 return s + _.get(this.state, 'ratios')[k] * v;
             },
             0
-        )
+        ).toFixed(5)
     }
 
     public render () {
         return (
-            <FormGroup
-                controlId="calcForm">
-                {
-                    _.map(_.get(this.state, 'ratios'), (v, k) => {
-                        return (
-                            <div>
-                                <ControlLabel>{k}</ControlLabel>
-                                <FormControl
-                                    type="number"
-                                    onChange={this.wrapValueChange(k)}
-                                    value={_.get(this.state, 'currentEntries.' + k) || ''}
-                                />
-                            </div>
-                        )
-                    })
-                }
-
-                <div>
-                    <ControlLabel>Morphene Equivalence:</ControlLabel>
-                    <div>
-                        {this.calcTotal()}
+            <div className='calculator'>
+                <div className='header'>
+                    Morphine Equivalence Calculator
+                </div>
+                <FormGroup
+                    controlId="calcForm">
+                    {
+                        _.map(_.get(this.state, 'ratios'), (v, k) => {
+                            return (
+                                <div>
+                                    <ControlLabel>{k}</ControlLabel>
+                                    <FormControl
+                                        type="number"
+                                        onChange={this.wrapValueChange(k)}
+                                        value={_.get(this.state, 'currentEntries.' + k) || ''}
+                                    />
+                                    <div className='badge-holder'>
+                                        <Badge>{this.calcPiece(k)}</Badge>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                </FormGroup>
+                <div className='footer'>
+                    <div className="badge-holder">
+                        <Badge> Total: {this.calcTotal()} </Badge>
+                    </div>
+                    <div className='clear-holder'>
+                        <Button bsStyle="danger" onClick={this.clear}>Clear</Button>
                     </div>
                 </div>
-                <Button onClick={this.clear}>Clear</Button>
-            </FormGroup>
+            </div>
         )
     }
 

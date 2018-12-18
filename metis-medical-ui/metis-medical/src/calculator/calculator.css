@@ -1,0 +1,68 @@
+.calculator-button svg {
+    margin-right: 5px;
+}
+
+.calculator-button button {
+    padding: 0 5px;
+}
+
+.calculator .header {
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    background: #337ab7;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.calculator .footer {
+    background: #333;
+    vertical-align: center;
+    padding: 5px 3px;
+}
+
+.calculator .footer button {
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+.calculator {
+    background: #efefef;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.calculator .form-group {
+    padding: 0 5px;
+}
+
+.calculator .form-group .form-control {
+    width: 50%;
+    display: inline-block;
+}
+
+.calculator .badge-holder {
+    width: 50%;
+    display: inline-block;
+    text-align: center;
+}
+
+.calculator .footer .badge {
+    background: #1ca91c;
+}
+
+.calculator .footer .clear-holder {
+    text-align: center;
+    display: inline-block;
+    width: 35%;
+}
+
+.calculator .footer .badge-holder {
+    width: 65%;
+}
+
+.calculator .form-group .control-label {
+    display: block;
+}
+
+
