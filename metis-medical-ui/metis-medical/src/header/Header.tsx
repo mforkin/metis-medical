@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as _ from 'lodash';
 import * as React from 'react';
 
@@ -7,7 +8,8 @@ class Header extends React.Component {
     public render() {
         return (
             <div className="header">
-                Test Header
+                <FontAwesomeIcon icon="notes-medical" />
+                METIS MEDICAL
             </div>
         );
     }

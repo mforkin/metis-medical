@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 class Calculator extends React.Component {
@@ -10,6 +10,7 @@ class Calculator extends React.Component {
         this.handleValueChange = this.handleValueChange.bind(this);
         this.wrapValueChange = this.wrapValueChange.bind(this);
         this.calcTotal = this.calcTotal.bind(this);
+        this.clear = this.clear.bind(this);
 
         this.state = {
             currentEntries: {},
@@ -19,6 +20,13 @@ class Calculator extends React.Component {
                 d3: 0.35
             }
         }
+    }
+
+    public clear () {
+        this.setState({
+            ...this.state,
+            currentEntries: {}
+        });
     }
 
     public handleValueChange(key, value) {
@@ -59,6 +67,7 @@ class Calculator extends React.Component {
                                 <FormControl
                                     type="number"
                                     onChange={this.wrapValueChange(k)}
+                                    value={_.get(this.state, 'currentEntries.' + k) || ''}
                                 />
                             </div>
                         )
@@ -71,6 +80,7 @@ class Calculator extends React.Component {
                         {this.calcTotal()}
                     </div>
                 </div>
+                <Button onClick={this.clear}>Clear</Button>
             </FormGroup>
         )
     }

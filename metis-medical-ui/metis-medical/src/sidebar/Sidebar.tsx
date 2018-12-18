@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as Actions from '../actions';
 
+import './sidebar.css'
+
 class Sidebar extends React.Component {
     constructor (props, context) {
         super(props, context);
@@ -115,57 +117,55 @@ class Sidebar extends React.Component {
     public render() {
         return (
             <div className='sidebar'>
-                <ul>
-                    <li>
-                        <FormGroup controlId="specMenu">
-                            <ControlLabel>Choose Speciality</ControlLabel>
-                            <FormControl
-                                componentClass="select"
-                                value={_.get(this.props, 'sidebar.specialtyId')}
-                                placeholder="Select Specialty"
-                                onChange={this.handleSpecChange}
-                            >
-                                <option value="-1"/>
-                                {
-                                    _.map(_.get(this.props, 'specialties.specialties'), (name, id) => (
-                                        <option value={id}>{name}</option>
-                                    ))
-                                }
-                            </FormControl>
-                            <FormControl.Feedback />
-                        </FormGroup>
-                    </li>
-                    <li>
-                        <FormGroup controlId="vigMenu">
-                            <ControlLabel>Choose Vignette</ControlLabel>
-                            <FormControl
-                                componentClass="select"
-                                value={_.get(this.props, 'sidebar.vignetteId')}
-                                placeholder="Select Vignette"
-                                onChange={this.handleVigChange}
-                            >
-                                {
-                                    _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
-                                        <option disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
-                                    ))
-                                }
-                            </FormControl>
-                            <FormControl.Feedback />
-                        </FormGroup>
-                    </li>
-                    <li>
-                      <Link to="/edit">Manage Vignettes</Link>
-                    </li>
-                    <li>
-                      <Link to="/editSpecialties">Manage Specialties</Link>
-                    </li>
-                    <li>
-                      <Link to="/results">Results</Link>
-                    </li>
-                    <li>
-                      <Link to="/">Home</Link>
-                    </li>
-                  </ul>
+                <div>
+                    <FormGroup controlId="specMenu">
+                        <ControlLabel>Choose Speciality</ControlLabel>
+                        <FormControl
+                            componentClass="select"
+                            value={_.get(this.props, 'sidebar.specialtyId')}
+                            placeholder="Select Specialty"
+                            onChange={this.handleSpecChange}
+                        >
+                            <option value="-1"/>
+                            {
+                                _.map(_.get(this.props, 'specialties.specialties'), (name, id) => (
+                                    <option value={id}>{name}</option>
+                                ))
+                            }
+                        </FormControl>
+                        <FormControl.Feedback />
+                    </FormGroup>
+                </div>
+                <div>
+                    <FormGroup controlId="vigMenu">
+                        <ControlLabel>Choose Vignette</ControlLabel>
+                        <FormControl
+                            componentClass="select"
+                            value={_.get(this.props, 'sidebar.vignetteId')}
+                            placeholder="Select Vignette"
+                            onChange={this.handleVigChange}
+                        >
+                            {
+                                _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
+                                    <option disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
+                                ))
+                            }
+                        </FormControl>
+                        <FormControl.Feedback />
+                    </FormGroup>
+                </div>
+                <div>
+                  <Link to="/edit">Manage Vignettes</Link>
+                </div>
+                <div>
+                  <Link to="/editSpecialties">Manage Specialties</Link>
+                </div>
+                <div>
+                  <Link to="/results">Results</Link>
+                </div>
+                <div>
+                  <Link to="/">Home</Link>
+                </div>
             </div>
         );
     }

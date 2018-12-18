@@ -49,6 +49,11 @@ class Question extends React.Component {
                 '_2': _.get(this.props, 'data.seq'),
                 '_3': _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._3')
             }));
+
+            _.get(this.props, 'dispatch')(Actions.loadAvailableVignettes(
+                _.get(this.props, 'vignettes.vignette.id'),
+                undefined
+            ));
         }
     }
 

@@ -1,3 +1,6 @@
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faAngleLeft, faAngleRight, faCalculator, faNotesMedical } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
@@ -25,6 +28,12 @@ class App extends React.Component {
 
     constructor (props, context) {
         super(props, context);
+
+        library.add(faNotesMedical);
+        library.add(faCalculator);
+        library.add(faAngleLeft);
+        library.add(faAngleRight);
+
         props.dispatch(Actions.loadSpecialties());
 
         this.toggleCalculatorMode = this.toggleCalculatorMode.bind(this);
@@ -51,7 +60,7 @@ class App extends React.Component {
                 </Row>
                 <Row>
                     <Router>
-                        <div>
+                        <div className="content">
                             <Col xsHidden={true} md={2} lg={2}>
                                 <Sidebar />
                             </Col>
@@ -65,7 +74,8 @@ class App extends React.Component {
                                     </div>
                                     <div className="calculator-button">
                                         <Button onClick={this.toggleCalculatorMode}>
-                                            { _.get(this.state,'calculatorMode') ? 'Close Calculator' : 'Open Calculator' }
+                                            <FontAwesomeIcon icon={_.get(this.state, 'calculatorMode') ? 'angle-right' : 'angle-left'} />
+                                            <FontAwesomeIcon icon="calculator" />
                                         </Button>
                                     </div>
                                 </div>
