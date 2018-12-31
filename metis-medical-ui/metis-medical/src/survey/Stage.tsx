@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-// import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Well } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Question from './Question';
 
@@ -47,9 +47,11 @@ class Stage extends React.Component {
                     <div className="vignette-name">
                         {_.get(this.props, 'vignettes.vignette.data.name')}
                     </div>
-                    <div className="stage-text">
-                    {_.get(this.props, 'data.name') || ''}
-                    </div>
+                    <Well>
+                        <div className="stage-text">
+                        {_.get(this.props, 'data.name') || ''}
+                        </div>
+                    </Well>
                 </div>
                 {
                     this.hasQuestions() ?
