@@ -5,3 +5,11 @@ div.app > .header {
     font-size: 18px;
     height: 50px;
 }
+
+.header.row .header {
+    margin-top: 11px;
+}
+
+.header.row .header svg {
+    margin-right: 10px;
+}

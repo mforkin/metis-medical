@@ -3,4 +3,5 @@
     box-shadow: 0 0 5px 2px rgba(0,0,0,0.3);
     height: 100%;
     padding: 5px;
+    overflow: auto;
 }

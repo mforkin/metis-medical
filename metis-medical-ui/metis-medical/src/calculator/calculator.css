@@ -1,3 +1,6 @@
+.content.main-pane .calculator-button {
+    height: 30px;
+}
 .calculator-button svg {
     margin-right: 5px;
 }

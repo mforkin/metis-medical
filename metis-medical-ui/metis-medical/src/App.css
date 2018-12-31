@@ -8,6 +8,7 @@ html, body {
 
 .row {
     height: calc(100% - 52px);
+    overflow: hidden;
 }
 
 .content {
@@ -19,6 +20,11 @@ html, body {
 .content > div {
     padding: 0;
     height: 100%;
+}
+
+.content.main-pane {
+    padding: 15px 50px 15px 15px;
+    overflow: auto;
 }
 
 #root {
@@ -33,4 +39,8 @@ html, body {
     position: absolute;
     top: 2px;
     right: 0px;
+}
+
+.calc-cnt {
+    overflow: auto;
 }

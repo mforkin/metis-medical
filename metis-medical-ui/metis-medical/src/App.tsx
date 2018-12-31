@@ -65,7 +65,7 @@ class App extends React.Component {
                                 <Sidebar />
                             </Col>
                             <Col xs={12} md={_.get(this.state,'calculatorMode') ? 8 : 10} lg={_.get(this.state,'calculatorMode') ? 8 : 10}>
-                                <div className="content">
+                                <div className="content main-pane">
                                     <div>
                                       <Route exact={true} path="/" component={Home} />
                                       <Route path="/edit" component={VignetteEditor} />
@@ -80,7 +80,7 @@ class App extends React.Component {
                                     </div>
                                 </div>
                             </Col>
-                            <Col lgHidden={!_.get(this.state,'calculatorMode')} mdHidden={!_.get(this.state,'calculatorMode')} md={2} lg={2}>
+                            <Col className="calc-cnt" lgHidden={!_.get(this.state,'calculatorMode')} mdHidden={!_.get(this.state,'calculatorMode')} md={2} lg={2}>
                                 <Calculator />
                             </Col>
                         </div>

@@ -4,6 +4,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Question from './Question';
 
+import './stage.css';
+
 class Stage extends React.Component {
     constructor (props, context) {
         super(props, context);
@@ -42,7 +44,12 @@ class Stage extends React.Component {
         return (
             <div className='stage'>
                 <div className="header">
-                    {_.get(this.props, 'vignettes.vignette.data.name') + " - " + (_.get(this.props, 'data.name') || '')}
+                    <div className="vignette-name">
+                        {_.get(this.props, 'vignettes.vignette.data.name')}
+                    </div>
+                    <div className="stage-text">
+                    {_.get(this.props, 'data.name') || ''}
+                    </div>
                 </div>
                 {
                     this.hasQuestions() ?
@@ -55,7 +62,7 @@ class Stage extends React.Component {
                         }
                         isLastQuestion={_.get(this.props, 'isLastQuestion')}
                         isLastStage={_.get(this.props, 'isLastStage')}
-                    /> : <h2> No Questions Configured </h2>
+                    /> : <div className="vignette-name"> No Questions Configured </div>
                 }
             </div>
         );
