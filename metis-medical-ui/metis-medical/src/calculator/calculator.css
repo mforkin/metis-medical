@@ -17,12 +17,14 @@
     background: #337ab7;
     text-align: center;
     text-transform: uppercase;
+    height: 34px;
 }
 
 .calculator .footer {
     background: #333;
     vertical-align: center;
     padding: 5px 3px;
+    height: 33px;
 }
 
 .calculator .footer button {
@@ -33,10 +35,15 @@
 .calculator {
     background: #efefef;
     border: 1px solid rgba(0,0,0,0.1);
+    max-height: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
 }
 
 .calculator .form-group {
     padding: 0 5px;
+    overflow: auto;
+    height: calc(100% - 67px);
 }
 
 .calculator .form-group .form-control {
@@ -68,4 +75,13 @@
     display: block;
 }
 
+.calculator label {
+    font-size: 12px;
+    font-family: sans-serif;
+}
+
+.calculator .drug-box {
+    padding: 5px 0;
+    border-bottom: 1px dashed #ccc;
+}
 

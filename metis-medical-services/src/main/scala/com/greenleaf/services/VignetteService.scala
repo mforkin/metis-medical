@@ -21,7 +21,7 @@ case class Answer (
 case class CandidateQuestion(
                             seq: Int,
                             text: String,
-                            multi: Boolean,
+                            multi: Option[Boolean],
                             answers: Seq[Answer]
                             )
 case class Question (
@@ -95,13 +95,13 @@ object VignetteService {
             db.update(QUESTION)
               .set(QUESTION.SEQ, Int.box(q.data.seq))
               .set(QUESTION.QUESTION_, q.data.text)
-              .set(QUESTION.MULTI, Boolean.box(q.data.multi))
+              .set(QUESTION.MULTI, Boolean.box(q.data.multi.getOrElse(false)))
               .where(QUESTION.ID.equal(q.id.get))
               .execute()
             qId
           case None =>
-            db.insertInto(QUESTION, QUESTION.QUESTION_, QUESTION.SEQ, QUESTION.STAGE_ID)
-              .values(q.data.text, Int.box(q.data.seq), stageId)
+            db.insertInto(QUESTION, QUESTION.QUESTION_, QUESTION.SEQ, QUESTION.STAGE_ID, QUESTION.MULTI)
+              .values(q.data.text, Int.box(q.data.seq), stageId, q.data.multi.getOrElse(false))
               .returning.fetchOne.getId.toInt
         }
 
@@ -211,7 +211,7 @@ object VignetteService {
               CandidateQuestion(
                 r.getSeq,
                 r.getQuestion,
-                r.getMulti,
+                Some(r.getMulti),
                 Seq()
               )
             )

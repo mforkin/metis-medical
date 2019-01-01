@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserResults extends TableImpl<UserResultsRecord> {
 
-    private static final long serialVersionUID = -1489552770;
+    private static final long serialVersionUID = -1064149733;
 
     /**
      * The reference instance of <code>public.user_results</code>
@@ -69,11 +69,6 @@ public class UserResults extends TableImpl<UserResultsRecord> {
      * The column <code>public.user_results.submission_datetime</code>.
      */
     public final TableField<UserResultsRecord, OffsetDateTime> SUBMISSION_DATETIME = createField("submission_datetime", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false), this, "");
-
-    /**
-     * The column <code>public.user_results.answer_id</code>.
-     */
-    public final TableField<UserResultsRecord, Integer> ANSWER_ID = createField("answer_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>public.user_results</code> table reference
@@ -145,15 +140,11 @@ public class UserResults extends TableImpl<UserResultsRecord> {
      */
     @Override
     public List<ForeignKey<UserResultsRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserResultsRecord, ?>>asList(Keys.USER_RESULTS__USER_ANSWER_USER_FK, Keys.USER_RESULTS__USER_ANSWER_FK);
+        return Arrays.<ForeignKey<UserResultsRecord, ?>>asList(Keys.USER_RESULTS__USER_ANSWER_USER_FK);
     }
 
     public Users users() {
         return new Users(this, Keys.USER_RESULTS__USER_ANSWER_USER_FK);
-    }
-
-    public Answer answer() {
-        return new Answer(this, Keys.USER_RESULTS__USER_ANSWER_FK);
     }
 
     /**

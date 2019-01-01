@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Alert, Button, FormGroup, Radio } from 'react-bootstrap';
+import { Alert, Button, Checkbox, FormGroup, Radio } from 'react-bootstrap';
 // import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
@@ -21,7 +21,28 @@ class Question extends React.Component {
     }
 
     public answerChanged (e) {
-         _.get(this.props, 'dispatch')(Actions.SIDEBAR_RESPONSE_CHANGED(parseInt(e.target.value, 10)));
+        const selectedAnswerId = parseInt(e.target.value, 10);
+
+        if (_.get(this.props, 'data.multi')) {
+             const idx = _.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), selectedAnswerId);
+             if (idx >= 0) {
+                _.remove(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), i => i === selectedAnswerId);
+                _.get(this.props, 'dispatch')(
+                    Actions.SIDEBAR_RESPONSE_CHANGED(
+                        _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')
+                    )
+                );
+             } else {
+                const cur = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse');
+                _.get(this.props, 'dispatch')(
+                    Actions.SIDEBAR_RESPONSE_CHANGED(
+                        cur.concat([selectedAnswerId])
+                    )
+                );
+             }
+        } else {
+            _.get(this.props, 'dispatch')(Actions.SIDEBAR_RESPONSE_CHANGED([parseInt(e.target.value, 10)]));
+        }
     }
 
     public submit (e) {
@@ -78,18 +99,23 @@ class Question extends React.Component {
 
     public getResponse (answer) {
         let response;
-        if (_.get(this.props, 'sidebar.feedback.id') === _.get(answer, 'id') || _.get(this.props, 'data.multi')) {
-            let message = _.get(answer, 'data.incorrectResponse');
-            if (_.get(answer, 'data.isCorrect')) {
-                message = _.get(answer, 'data.correctResponse');
+        if (_.get(this.props, 'sidebar.feedback.id')) {
+            if (_.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), _.get(answer, 'id')) >= 0 || _.get(answer, 'data.isCorrect')) {
+                let message = 'Incorrect. ' + _.get(answer, 'data.incorrectResponse');
+                if (_.get(answer, 'data.isCorrect')) {
+                    message = 'Correct! ' + _.get(answer, 'data.correctResponse');
+                }
+                response = (<Alert bsStyle={_.get(answer, 'data.isCorrect') ? 'success' : 'danger'}>{message}</Alert>);
             }
-            response = (<Alert bsStyle={_.get(answer, 'data.isCorrect') ? 'success' : 'danger'}>{message}</Alert>);
         }
         return response;
     }
 
     public isAnswerChecked (answer) {
-        return _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse') === answer.id;
+        if (_.get(this.props, 'data.multi')) {
+            return _.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), answer.id) >= 0;
+        }
+        return _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0] === answer.id;
     }
 
     public render () {
@@ -98,7 +124,14 @@ class Question extends React.Component {
                 <h2>{_.get(this.props, 'data.text')}</h2>
                 <FormGroup>
                     {
-                        _.map(this.getAnswers(), (a) => (
+                        _.map(this.getAnswers(), (a) => _.get(this.props, 'data.multi') ? (
+                            <div>
+                                <Checkbox checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
+                                    {_.get(a, 'data.text')}
+                                </Checkbox>
+                                {this.getResponse(a)}
+                            </div>
+                        ) : (
                             <div>
                                 <Radio checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
                                     {_.get(a, 'data.text')}

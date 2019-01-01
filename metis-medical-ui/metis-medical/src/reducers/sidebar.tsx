@@ -54,7 +54,7 @@ const sidebar = (
                     ...state.userInfo,
                     currentVignette: {
                         ..._.get(state, 'userInfo.currentVignette'),
-                        currentResponse: -1,
+                        currentResponse: [],
                         mode: 'answer',
                         questionIdx: _.get(action, 'data.questionIdx'),
                         stageIdx: _.get(action, 'data.stageIdx')
