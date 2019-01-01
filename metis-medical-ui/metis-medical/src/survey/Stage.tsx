@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Well } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Question from './Question';
 
@@ -47,11 +47,12 @@ class Stage extends React.Component {
                     <div className="vignette-name">
                         {_.get(this.props, 'vignettes.vignette.data.name')}
                     </div>
-                    <Well>
+                    {_.get(this.props, 'data.name') ?
+                    <Alert bsStyle="warning">
                         <div className="stage-text">
                         {_.get(this.props, 'data.name') || ''}
                         </div>
-                    </Well>
+                    </Alert> : ""}
                 </div>
                 {
                     this.hasQuestions() ?

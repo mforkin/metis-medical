@@ -154,17 +154,17 @@ class Sidebar extends React.Component {
                         <FormControl.Feedback />
                     </FormGroup>
                 </div>
-                <div>
+                <div className="menuItem">
                   <Link to="/edit">Manage Vignettes</Link>
                 </div>
-                <div>
+                <div className="menuItem">
                   <Link to="/editSpecialties">Manage Specialties</Link>
                 </div>
-                <div>
+                <div className="menuItem">
                   <Link to="/results">Results</Link>
                 </div>
-                <div>
-                  <Link to="/">Home</Link>
+                <div className="menuItem">
+                  <Link to="/">Quiz</Link>
                 </div>
             </div>
         );

@@ -86,6 +86,11 @@ class App extends React.Component {
                         </div>
                     </Router>
                 </Row>
+                <Row className="footer">
+                    <div>
+                        <FontAwesomeIcon icon="notes-medical" />
+                    </div>
+                </Row>
             </Grid>
         );
     }
