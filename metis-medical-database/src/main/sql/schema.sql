@@ -69,6 +69,7 @@ CREATE TABLE public.question (
     stage_id integer NOT NULL,
     seq integer NOT NULL,
     question text NOT NULL,
+    multi boolean NOT NULL,
     CONSTRAINT "question_pk" PRIMARY KEY (id)
 )
 WITH (OIDS=FALSE);
