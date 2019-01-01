@@ -21,6 +21,7 @@ case class Answer (
 case class CandidateQuestion(
                             seq: Int,
                             text: String,
+                            multi: Boolean,
                             answers: Seq[Answer]
                             )
 case class Question (
@@ -94,6 +95,7 @@ object VignetteService {
             db.update(QUESTION)
               .set(QUESTION.SEQ, Int.box(q.data.seq))
               .set(QUESTION.QUESTION_, q.data.text)
+              .set(QUESTION.MULTI, Boolean.box(q.data.multi))
               .where(QUESTION.ID.equal(q.id.get))
               .execute()
             qId
@@ -209,6 +211,7 @@ object VignetteService {
               CandidateQuestion(
                 r.getSeq,
                 r.getQuestion,
+                r.getMulti,
                 Seq()
               )
             )

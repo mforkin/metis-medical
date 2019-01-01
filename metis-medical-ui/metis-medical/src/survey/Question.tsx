@@ -78,7 +78,7 @@ class Question extends React.Component {
 
     public getResponse (answer) {
         let response;
-        if (_.get(this.props, 'sidebar.feedback.id') === _.get(answer, 'id')) {
+        if (_.get(this.props, 'sidebar.feedback.id') === _.get(answer, 'id') || _.get(this.props, 'data.multi')) {
             let message = _.get(answer, 'data.incorrectResponse');
             if (_.get(answer, 'data.isCorrect')) {
                 message = _.get(answer, 'data.correctResponse');

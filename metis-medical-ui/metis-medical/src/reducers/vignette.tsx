@@ -55,6 +55,7 @@ const vignettes = (
         case 'VIGNETTE_STAGE_SEQ_CHANGE':
         case 'VIGNETTE_ANSWER_PROP_CHANGE':
         case 'VIGNETTE_QUESTION_NAME_CHANGE':
+        case 'VIGNETTE_QUESTION_MULTI_CHANGE':
         case 'VIGNETTE_QUESTION_SEQ_CHANGE':
             return {
                 ...state,
