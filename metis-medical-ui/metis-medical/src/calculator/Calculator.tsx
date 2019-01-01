@@ -14,20 +14,21 @@ class Calculator extends React.Component {
         this.calcTotal = this.calcTotal.bind(this);
         this.calcPiece = this.calcPiece.bind(this);
         this.clear = this.clear.bind(this);
+        this.getCurrentEntryValue = this.getCurrentEntryValue.bind(this);
 
         this.state = {
             currentEntries: {},
             ratios: {
-                "Codeine": 0.15,
-                "Fentanyl transdermal (in mcg/hr)": 2.4,
-                "Hydrocodone": 1,
-                "Hydromorphone": 4,
-                "Methadone": 3,
-                "Morphine": 1,
-                "Oxycodone": 1.5,
-                "Oxymorphone": 3,
-                "Tapentadol": 0.4,
-                "Tramadol": 0.1
+                "Codeine - Oral (mg/day)": 0.15,
+                "Fentanyl - Transdermal (in mcg/hr)": 2.4,
+                "Hydrocodone - Oral (mg/day)": 1,
+                "Hydromorphone - Oral (mg/day)": 4,
+                "Methadone - Oral (mg/day)": 3,
+                "Morphine - Oral (mg/day)": 1,
+                "Oxycodone - Oral (mg/day)": 1.5,
+                "Oxymorphone - Oral (mg/day)": 3,
+                "Tapentadol (mg/day)": 0.4,
+                "Tramadol (mg/day)": 0.1
             }
         }
     }
@@ -51,7 +52,10 @@ class Calculator extends React.Component {
     public wrapValueChange (key) {
         return (e) => {
             const inputValue = parseFloat(e.target.value);
-            const v = inputValue < 0 ? 0 : inputValue;
+            let v = inputValue < 0 ? 0 : inputValue;
+            if (/^[.]0+$/.test(e.target.value)) {
+                v = e.target.value;
+            }
             this.handleValueChange(
                 key,
                 v
@@ -60,17 +64,25 @@ class Calculator extends React.Component {
     }
 
     public calcPiece (k) {
-        return (_.get(this.state, 'ratios')[k] * _.get(this.state, 'currentEntries')[k] || 0).toFixed(5);
+        return (_.get(this.state, 'ratios')[k] * (parseFloat(_.get(this.state, 'currentEntries')[k] || 0) || 0)).toFixed(5);
     }
 
     public calcTotal () {
         return _.reduce(
             _.get(this.state, 'currentEntries'),
             (s, v, k) => {
-                return s + _.get(this.state, 'ratios')[k] * v;
+                return s + _.get(this.state, 'ratios')[k] * (parseFloat(v) || 0);
             },
             0
         ).toFixed(5)
+    }
+
+    public getCurrentEntryValue (k) {
+        const val = _.get(this.state, 'currentEntries.' + k);
+        if (/^[.]0+$/.test(val)) {
+            return val;
+        }
+        return val || '';
     }
 
     public render () {
@@ -88,8 +100,9 @@ class Calculator extends React.Component {
                                     <ControlLabel>{k}</ControlLabel>
                                     <FormControl
                                         type="number"
+                                        step="0.001"
                                         onChange={this.wrapValueChange(k)}
-                                        value={_.get(this.state, 'currentEntries.' + k) || ''}
+                                        value={this.getCurrentEntryValue(k)}
                                     />
                                     <div className='badge-holder'>
                                         <Badge>{this.calcPiece(k)}</Badge>
