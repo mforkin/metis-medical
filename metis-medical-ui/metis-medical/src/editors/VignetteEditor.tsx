@@ -20,6 +20,7 @@ class VignetteEditor extends React.Component {
         this.questionNameChange = this.questionNameChange.bind(this);
         this.questionSeqChange = this.questionSeqChange.bind(this);
         this.questionMultiChange = this.questionMultiChange.bind(this);
+        this.questionTypeChange = this.questionTypeChange.bind(this);
         this.answerPropChange = this.answerPropChange.bind(this);
         this.submit = this.submit.bind(this);
         this.wrap = this.wrap.bind(this);
@@ -84,6 +85,17 @@ class VignetteEditor extends React.Component {
     public questionMultiChange (stageIdx, qIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_QUESTION_MULTI_CHANGE(
+                _.get(this.props, 'vignettes.vignette.data.stages'),
+                stageIdx,
+                qIdx,
+                e
+            )
+        );
+    }
+
+    public questionTypeChange (stageIdx, qIdx, e) {
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_QUESTION_TYPE_CHANGE(
                 _.get(this.props, 'vignettes.vignette.data.stages'),
                 stageIdx,
                 qIdx,
@@ -260,6 +272,9 @@ class VignetteEditor extends React.Component {
                                                 <Checkbox
                                                     checked={_.get(q, 'data.multi')}
                                                     onChange={this.wrap('questionMultiChange', i, j)}>Multi-Select Answers?</Checkbox>
+                                                <Checkbox
+                                                    checked={_.get(q, 'data.questionType')}
+                                                    onChange={this.wrap('questionTypeChange', i, j)}>Is-Numeric Answer?</Checkbox>
                                                 <div>
                                                 {
                                                     _.map(_.get(q, 'data.answers'), (a, k) => (

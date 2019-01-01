@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Question extends TableImpl<QuestionRecord> {
 
-    private static final long serialVersionUID = -473595917;
+    private static final long serialVersionUID = -1545402443;
 
     /**
      * The reference instance of <code>public.question</code>
@@ -78,6 +78,11 @@ public class Question extends TableImpl<QuestionRecord> {
      * The column <code>public.question.multi</code>.
      */
     public final TableField<QuestionRecord, Boolean> MULTI = createField("multi", org.jooq.impl.SQLDataType.BOOLEAN.nullable(false), this, "");
+
+    /**
+     * The column <code>public.question.question_type</code>.
+     */
+    public final TableField<QuestionRecord, String> QUESTION_TYPE = createField("question_type", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * Create a <code>public.question</code> table reference

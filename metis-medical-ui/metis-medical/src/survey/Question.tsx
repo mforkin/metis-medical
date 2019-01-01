@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Alert, Button, Checkbox, FormGroup, Radio } from 'react-bootstrap';
+import { Alert, Button, Checkbox, FormControl, FormGroup, Radio } from 'react-bootstrap';
 // import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
@@ -12,12 +12,40 @@ class Question extends React.Component {
         this.submit = this.submit.bind(this);
         this.next = this.next.bind(this);
         this.answerChanged = this.answerChanged.bind(this);
+        this.numericAnswerChanged = this.numericAnswerChanged.bind(this);
         this.getAnswers = this.getAnswers.bind(this);
         this.getMode = this.getMode.bind(this);
         this.getSubmitLabel = this.getSubmitLabel.bind(this);
         this.getSubmitFn = this.getSubmitFn.bind(this);
         this.getResponse = this.getResponse.bind(this);
+        this.getNumericResponse = this.getNumericResponse.bind(this);
         this.isAnswerChecked = this.isAnswerChecked.bind(this);
+
+        this.state = {
+            numericResponse: undefined
+        };
+    }
+
+    public numericAnswerChanged (e) {
+        const answer = parseFloat(e.target.value);
+        this.setState({
+            numericResponse: answer
+        });
+
+        const rightAnswer = _.find(this.getAnswers(), (a) => a.data.isCorrect);
+        const wrongAnswer = _.find(this.getAnswers(), (a) => !a.data.isCorrect);
+        let aId;
+        if (parseFloat(rightAnswer.data.text) === answer) {
+            aId = rightAnswer.id;
+        } else {
+            aId = wrongAnswer.id;
+        }
+
+        _.get(this.props, 'dispatch')(
+            Actions.SIDEBAR_RESPONSE_CHANGED(
+                [aId]
+            )
+        );
     }
 
     public answerChanged (e) {
@@ -111,6 +139,22 @@ class Question extends React.Component {
         return response;
     }
 
+    public getNumericResponse () {
+        let response;
+        let message;
+        if (_.get(this.props, 'sidebar.feedback.id')) {
+            const curAnswerId = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0];
+            const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
+            if (cur.data.isCorrect) {
+                message = 'Correct! ' + cur.data.correctResponse;
+            } else {
+                message = 'Incorrect! ' + cur.data.incorrectResponse;
+            }
+            response = (<Alert bsStyle={_.get(cur, 'data.isCorrect') ? 'success' : 'danger'}>{message}</Alert>);
+        }
+        return response;
+    }
+
     public isAnswerChecked (answer) {
         if (_.get(this.props, 'data.multi')) {
             return _.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), answer.id) >= 0;
@@ -122,25 +166,40 @@ class Question extends React.Component {
         return (
             <div className='question'>
                 <h2>{_.get(this.props, 'data.text')}</h2>
-                <FormGroup>
-                    {
-                        _.map(this.getAnswers(), (a) => _.get(this.props, 'data.multi') ? (
-                            <div>
-                                <Checkbox checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
-                                    {_.get(a, 'data.text')}
-                                </Checkbox>
-                                {this.getResponse(a)}
+                {
+                    _.get(this.props, 'data.questionType') === 'numeric' ? (
+                        <div>
+                            <FormControl
+                                type="number"
+                                value={_.get(this.state, 'numericResponse')}
+                                onChange={this.numericAnswerChanged}
+                                />
+                            <div className="numeric-response">
+                                {this.getNumericResponse()}
                             </div>
-                        ) : (
-                            <div>
-                                <Radio checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
-                                    {_.get(a, 'data.text')}
-                                </Radio>
-                                {this.getResponse(a)}
-                            </div>
-                        ))
-                    }
-                </FormGroup>
+                        </div>
+                    ) : (
+                        <FormGroup>
+                            {
+                                _.map(this.getAnswers(), (a) => _.get(this.props, 'data.multi') ? (
+                                    <div>
+                                        <Checkbox checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
+                                            {_.get(a, 'data.text')}
+                                        </Checkbox>
+                                        {this.getResponse(a)}
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <Radio checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
+                                            {_.get(a, 'data.text')}
+                                        </Radio>
+                                        {this.getResponse(a)}
+                                    </div>
+                                ))
+                            }
+                        </FormGroup>
+                    )
+                }
                 {
                     (
                         <Button

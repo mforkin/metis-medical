@@ -11,6 +11,14 @@
     white-space: pre-line;
 }
 
-.question .form-group .alert {
+.question .alert {
     width: fit-content;
+}
+
+.question input {
+    width: fit-content;
+}
+
+.question .numeric-response {
+    padding: 5px 0;
 }

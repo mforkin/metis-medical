@@ -221,6 +221,37 @@ export const VIGNETTE_QUESTION_ADD = (stages, stageIdx) => {
 
 };
 
+export const VIGNETTE_QUESTION_TYPE_CHANGE = (stages, stageIdx, qIdx, e) => {
+    return {
+        data: stages.map((d, i) => {
+            let ret = d;
+            if (stageIdx === i) {
+                ret = {
+                    ...d,
+                    data: {
+                        ...d.data,
+                        question: d.data.question.map((q, qi) => {
+                            let qRet = q;
+                            if (qi === qIdx) {
+                                qRet = {
+                                    ...q,
+                                    data: {
+                                        ...q.data,
+                                        questionType: e.target.checked ? 'numeric' : 'regular'
+                                    }
+                                }
+                            }
+                            return qRet
+                        })
+                    }
+                };
+            }
+            return ret;
+        }),
+        type: 'VIGNETTE_QUESTION_TYPE_CHANGE'
+    };
+};
+
 export const VIGNETTE_QUESTION_MULTI_CHANGE = (stages, stageIdx, qIdx, e) => {
     return {
         data: stages.map((d, i) => {

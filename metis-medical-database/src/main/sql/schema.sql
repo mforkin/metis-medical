@@ -70,6 +70,7 @@ CREATE TABLE public.question (
     seq integer NOT NULL,
     question text NOT NULL,
     multi boolean NOT NULL,
+    question_type text NOT NULL,
     CONSTRAINT "question_pk" PRIMARY KEY (id)
 )
 WITH (OIDS=FALSE);
