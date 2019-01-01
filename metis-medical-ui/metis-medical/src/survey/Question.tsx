@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Button, FormGroup, Radio } from 'react-bootstrap';
+import { Alert, Button, FormGroup, Radio } from 'react-bootstrap';
 // import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import * as Actions from '../actions';
@@ -83,7 +83,7 @@ class Question extends React.Component {
             if (_.get(answer, 'data.isCorrect')) {
                 message = _.get(answer, 'data.correctResponse');
             }
-            response = (<div>{message}</div>);
+            response = (<Alert bsStyle={_.get(answer, 'data.isCorrect') ? 'success' : 'danger'}>{message}</Alert>);
         }
         return response;
     }

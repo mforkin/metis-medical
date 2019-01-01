@@ -10,3 +10,7 @@
     font-family: arial, sans-serif;
     white-space: pre-line;
 }
+
+.question .form-group .alert {
+    width: fit-content;
+}
