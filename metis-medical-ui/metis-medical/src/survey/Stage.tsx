@@ -50,7 +50,7 @@ class Stage extends React.Component {
                     {_.get(this.props, 'data.name') ?
                     <Alert bsStyle="warning">
                         <div className="stage-text">
-                        {_.get(this.props, 'data.name') || ''}
+                            {_.get(this.props, 'data.name') || ''}
                         </div>
                     </Alert> : ""}
                 </div>
@@ -65,7 +65,7 @@ class Stage extends React.Component {
                         }
                         isLastQuestion={_.get(this.props, 'isLastQuestion')}
                         isLastStage={_.get(this.props, 'isLastStage')}
-                    /> : <div className="vignette-name"> No Questions Configured </div>
+                    /> : <Alert bsStyle="danger" className="vignette-name"> Please Select a Vignette! </Alert>
                 }
             </div>
         );

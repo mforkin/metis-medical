@@ -45,13 +45,13 @@ html, body {
     overflow: auto;
 }
 
-.footer {
+.footer.row {
     background-color: #333;
     color: #fff;
     height: 30px;
 }
 
-.footer > div {
+.footer.row > div {
     height: 100%;
     padding: 4px 10px 0 0;
     text-align: right;

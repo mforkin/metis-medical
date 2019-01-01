@@ -18,9 +18,16 @@ class Calculator extends React.Component {
         this.state = {
             currentEntries: {},
             ratios: {
-                d1: 0.015,
-                d2: 0.5,
-                d3: 0.35
+                "Codeine": 0.15,
+                "Fentanyl transdermal (in mcg/hr)": 2.4,
+                "Hydrocodone": 1,
+                "Hydromorphone": 4,
+                "Methadone": 3,
+                "Morphine": 1,
+                "Oxycodone": 1.5,
+                "Oxymorphone": 3,
+                "Tapentadol": 0.4,
+                "Tramadol": 0.1
             }
         }
     }
@@ -42,10 +49,14 @@ class Calculator extends React.Component {
     }
 
     public wrapValueChange (key) {
-        return (e) => this.handleValueChange(
-            key,
-            parseFloat(e.target.value)
-        );
+        return (e) => {
+            const inputValue = parseFloat(e.target.value);
+            const v = inputValue < 0 ? 0 : inputValue;
+            this.handleValueChange(
+                key,
+                v
+            );
+        };
     }
 
     public calcPiece (k) {
@@ -73,7 +84,7 @@ class Calculator extends React.Component {
                     {
                         _.map(_.get(this.state, 'ratios'), (v, k) => {
                             return (
-                                <div>
+                                <div key={k}>
                                     <ControlLabel>{k}</ControlLabel>
                                     <FormControl
                                         type="number"

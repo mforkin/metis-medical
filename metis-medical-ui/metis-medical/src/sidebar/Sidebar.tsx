@@ -15,6 +15,23 @@ class Sidebar extends React.Component {
         this.handleVigChange = this.handleVigChange.bind(this);
         this.isVignetteCompleted = this.isVignetteCompleted.bind(this);
         this.isVignetteInProgressLabel = this.isVignetteInProgressLabel.bind(this);
+        this.modeSetter = this.modeSetter.bind(this);
+        this.isSelectedClass = this.isSelectedClass.bind(this);
+
+        this.state = {
+            mode: 'quiz'
+        };
+    }
+
+    public isSelectedClass (mode) {
+        return "menu-item " + (_.get(this.state, 'mode') === mode ? 'selected' : 'not-selected');
+    }
+
+    public modeSetter (mode) {
+        const me = this;
+        return (e) => {
+            me.setState({ mode });
+        };
     }
 
     public handleSpecChange (e) {
@@ -129,7 +146,7 @@ class Sidebar extends React.Component {
                             <option value="-1"/>
                             {
                                 _.map(_.get(this.props, 'specialties.specialties'), (name, id) => (
-                                    <option value={id}>{name}</option>
+                                    <option key={id} value={id}>{name}</option>
                                 ))
                             }
                         </FormControl>
@@ -147,25 +164,17 @@ class Sidebar extends React.Component {
                         >
                             {
                                 _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
-                                    <option disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
+                                    <option key={d.id} disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
                                 ))
                             }
                         </FormControl>
                         <FormControl.Feedback />
                     </FormGroup>
                 </div>
-                <div className="menuItem">
-                  <Link to="/edit">Manage Vignettes</Link>
-                </div>
-                <div className="menuItem">
-                  <Link to="/editSpecialties">Manage Specialties</Link>
-                </div>
-                <div className="menuItem">
-                  <Link to="/results">Results</Link>
-                </div>
-                <div className="menuItem">
-                  <Link to="/">Quiz</Link>
-                </div>
+                <Link onClick={this.modeSetter('quiz')} className={this.isSelectedClass('quiz')} to="/">Quiz</Link>
+                <Link onClick={this.modeSetter('results')} className={this.isSelectedClass('results')} to="/results">Results</Link>
+                <Link onClick={this.modeSetter('mv')} className={this.isSelectedClass('mv')} to="/edit">Manage Vignettes</Link>
+                <Link onClick={this.modeSetter('ms')} className={this.isSelectedClass('ms')} to="/editSpecialties">Manage Specialties</Link>
             </div>
         );
     }

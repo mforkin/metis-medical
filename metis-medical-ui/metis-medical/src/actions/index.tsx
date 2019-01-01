@@ -72,7 +72,6 @@ export const LOAD_EDITOR_SPEC = (spec) => {
 
 export const loadSpecialties = () => {
     return (dispatch) => {
-        console.log('doing request');
         return fetch("/api/specialty", {
             headers: {
                 "accepts": "application/json"
@@ -99,7 +98,6 @@ export const loadUserDataForVignette = (vId) => {
 }
 
 export const VIGNETTE_USER_DATA_LOADED = (data) => {
-    console.log(data);
     return {
         data: {},
         type: 'VIGNETTE_USER_DATA_LOADED'

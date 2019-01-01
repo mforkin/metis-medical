@@ -219,7 +219,7 @@ class VignetteEditor extends React.Component {
                                 <Well>
                                     <FormGroup>
                                         <FormControl
-                                            type="text"
+                                            componentClass="textarea"
                                             placeholder="Stage Name"
                                             value={_.get(s, 'data.name')}
                                             onChange={this.wrap('stageNameChange', i)}
