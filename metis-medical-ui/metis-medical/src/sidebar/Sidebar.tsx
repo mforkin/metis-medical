@@ -174,8 +174,16 @@ class Sidebar extends React.Component {
                 </div>
                 <Link onClick={this.modeSetter('quiz')} className={this.isSelectedClass('quiz')} to="/">Quiz</Link>
                 <Link onClick={this.modeSetter('results')} className={this.isSelectedClass('results')} to="/results">Results</Link>
-                <Link onClick={this.modeSetter('mv')} className={this.isSelectedClass('mv')} to="/edit">Manage Vignettes</Link>
-                <Link onClick={this.modeSetter('ms')} className={this.isSelectedClass('ms')} to="/editSpecialties">Manage Specialties</Link>
+                {
+                    _.get(this.props, 'sidebar.userInfo.user.isAdmin') ? (
+                        <Link onClick={this.modeSetter('mv')} className={this.isSelectedClass('mv')} to="/edit">Manage Vignettes</Link>
+                    ) : ""
+                }
+                {
+                    _.get(this.props, 'sidebar.userInfo.user.isAdmin') ? (
+                        <Link onClick={this.modeSetter('ms')} className={this.isSelectedClass('ms')} to="/editSpecialties">Manage Specialties</Link>
+                    ) : ""
+                }
             </div>
         );
     }
