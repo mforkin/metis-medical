@@ -5,10 +5,11 @@ import java.time.OffsetDateTime
 import com.greenleaf.metis.medical.jooq.generated.Tables._
 import com.greenleaf.database.ConnectionManager
 
+case class AnswerMeta (id: Int, meta: Option[String])
 case class SurveyAnswer (
                           userName: Option[String], // when you are posting you don't need it
                           datetime: String,
-                          answerId: Seq[Int]
+                          answerMetaInfo: Seq[AnswerMeta]
                         )
 object SurveyService {
   lazy val db = ConnectionManager.db
@@ -27,9 +28,10 @@ object SurveyService {
     val baseQ = db.insertInto(
       USER_RESULTS_ANSWERS,
       USER_RESULTS_ANSWERS.USER_RESULTS_ID,
-      USER_RESULTS_ANSWERS.ANSWER_ID
+      USER_RESULTS_ANSWERS.ANSWER_ID,
+      USER_RESULTS_ANSWERS.META
     )
-    answer.answerId.map(a => baseQ.values(userResultId, a))
+    answer.answerMetaInfo.map(a => baseQ.values(userResultId, a.id, a.meta.orNull))
     baseQ.execute()
     userResultId
   }

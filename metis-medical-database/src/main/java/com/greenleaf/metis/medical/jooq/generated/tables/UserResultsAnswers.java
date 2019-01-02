@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserResultsAnswers extends TableImpl<UserResultsAnswersRecord> {
 
-    private static final long serialVersionUID = 1186673954;
+    private static final long serialVersionUID = -472033457;
 
     /**
      * The reference instance of <code>public.user_results_answers</code>
@@ -61,6 +61,11 @@ public class UserResultsAnswers extends TableImpl<UserResultsAnswersRecord> {
      * The column <code>public.user_results_answers.answer_id</code>.
      */
     public final TableField<UserResultsAnswersRecord, Integer> ANSWER_ID = createField("answer_id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>public.user_results_answers.meta</code>.
+     */
+    public final TableField<UserResultsAnswersRecord, String> META = createField("meta", org.jooq.impl.SQLDataType.CLOB, this, "");
 
     /**
      * Create a <code>public.user_results_answers</code> table reference

@@ -75,7 +75,13 @@ class Question extends React.Component {
 
     public submit (e) {
         _.get(this.props, 'dispatch')(Actions.submitAnswer({
-            answerId: _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'),
+            answerMetaInfo: _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')
+                .map((r) => {
+                    return {
+                        id: r,
+                        meta: _.get(this.state, 'numericResponse')
+                    };
+                }),
             datetime: (new Date()).toISOString()
         }));
     }

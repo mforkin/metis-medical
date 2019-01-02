@@ -107,7 +107,8 @@ WITH (OIDS=FALSE);
 
 CREATE TABLE public.user_results_answers (
     user_results_id integer NOT NULL,
-    answer_id integer NOT NULL
+    answer_id integer NOT NULL,
+    meta text
 )
 WITH (OIDS=FALSE);
 
