@@ -136,7 +136,7 @@ class Sidebar extends React.Component {
             <div className='sidebar'>
                 <div>
                     <FormGroup controlId="specMenu">
-                        <ControlLabel>Choose Speciality</ControlLabel>
+                        <ControlLabel>Choose Speciality {_.get(this.props, 'sidebar.specialtyId')}</ControlLabel>
                         <FormControl
                             componentClass="select"
                             value={_.get(this.props, 'sidebar.specialtyId')}
@@ -162,6 +162,7 @@ class Sidebar extends React.Component {
                             placeholder="Select Vignette"
                             onChange={this.handleVigChange}
                         >
+                            <option value="-1"/>
                             {
                                 _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
                                     <option key={d.id} disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>

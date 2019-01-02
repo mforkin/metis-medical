@@ -5,8 +5,8 @@ const sidebar = (
         feedback: {
             id: ''
         },
-        selectedSpecialityId: -1,
         selectedVignetteId: -1,
+        specialtyId: -1,
         userInfo: {
             currentVignette: {
                 currentResponse: -1,
@@ -14,12 +14,33 @@ const sidebar = (
                 questionIdx: 0,
                 score: 0,
                 stageIdx: 0
+            },
+            user: {
+                isAdmin: false,
+                specialtyId: -1,
+                username: ''
             }
         }
     },
     action
 ) => {
     switch (action.type) {
+        case 'LOAD_USER_INFO':
+            console.log('loadUser');
+            console.log(action.data);
+            return {
+                ...state,
+                specialtyId: _.get(action, 'data.specialtyId'),
+                userInfo: {
+                    ..._.get(state, 'userInfo'),
+                    user: {
+                        isAdmin: _.get(action, 'data.isAdmin'),
+                        specialtyId: _.get(action, 'data.specialtyId'),
+                        username: _.get(action, 'data.userName')
+                    }
+                }
+            }
+            break;
         case 'SIDEBAR_LAST_QUESTION_ANSWERED':
             return {
                 ...state,
@@ -35,7 +56,7 @@ const sidebar = (
         case 'SIDEBAR_SPEC_CHANGE':
             return {
                 ...state,
-                selectedSpecialtyId: action.data
+                specialtyId: action.data
             }
             break;
         case 'SIDEBAR_VIGNETTE_CHANGE':

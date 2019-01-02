@@ -1,6 +1,6 @@
 package com.greenleaf.services.api
 
-import com.greenleaf.services.{Vignette, VignetteService}
+import com.greenleaf.services.{UserService, Vignette, VignetteService}
 import org.scalatra.Ok
 
 class VignetteAPI extends API {
@@ -24,7 +24,7 @@ class VignetteAPI extends API {
   }
 
   get ("/:id") {
-    val username = "admin"
+    val username = UserService.getInfo.userName
     Ok(VignetteService.getVignetteById(params.as[Int]("id"), username))
   }
 }

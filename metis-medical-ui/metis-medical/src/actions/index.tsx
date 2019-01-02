@@ -56,6 +56,13 @@ export const LOAD_SPECIALTIES = (specialties) => {
     };
 };
 
+export const LOAD_USER_INFO = (userInfo) => {
+    return {
+        data: userInfo,
+        type: 'LOAD_USER_INFO'
+    }
+};
+
 export const LOAD_EDITOR_SPECIALTIES = (specialty, v) => {
     return {
         data: {key: specialty, value: v},
@@ -68,6 +75,20 @@ export const LOAD_EDITOR_SPEC = (spec) => {
         data: spec,
         type: 'LOAD_EDITOR_SPEC'
     };
+};
+
+export const loadUserInfo = () => {
+    return (dispatch) => {
+        return fetch("api/user", {
+            headers: {
+                "accepts": "application/json"
+            }
+        })
+            .then((resp) => resp.json())
+            .then((data) => {
+                return dispatch(LOAD_USER_INFO(data));
+            })
+    }
 };
 
 export const loadSpecialties = () => {

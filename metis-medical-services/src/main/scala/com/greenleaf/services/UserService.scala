@@ -4,20 +4,34 @@ import java.time.format.DateTimeFormatter
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.{User => SUser}
 
 import collection.JavaConverters._
+import scala.collection.mutable
 
-case class User (userName: String, specialtyId: Int)
+case class User (userName: String, specialtyId: Int, isAdmin: Boolean)
 case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId: Seq[Int], isCorrect: Boolean)
 object UserService {
   lazy val db = ConnectionManager.db
-  def getInfo = User(
-    "admin",
-    1
-  )
+
+  lazy val users: mutable.ListBuffer[User] = mutable.ListBuffer()
+  def getInfo = {
+    if (users.isEmpty) {
+      users.appendAll(
+        db.selectFrom(USERS).fetch.asScala.map(u => User(
+          u.getUsername,
+          u.getSpecialtyId,
+          db.selectFrom(AUTHORITIES).where(AUTHORITIES.USERNAME.equal(u.getUsername).and(AUTHORITIES.AUTHORITY.equal("ROLE_ADMIN"))).fetch.asScala.size == 1
+        ))
+      )
+    }
+    val sUser = SecurityContextHolder.getContext.getAuthentication.getPrincipal.asInstanceOf[SUser]
+    users.find(u => u.userName.equalsIgnoreCase(sUser.getUsername)).get
+  }
 
   def getInfoForVignette (vId: Int) = {
-    val userName = "admin"
+    val userName = getInfo.userName
     db.select(
       USER_RESULTS_ANSWERS.ANSWER_ID,
       USER_RESULTS.SUBMISSION_DATETIME,

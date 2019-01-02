@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faAngleDoubleLeft, faAngleDoubleRight, faCalculator, faNotesMedical } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleLeft, faAngleDoubleRight, faCalculator, faNotesMedical, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
@@ -29,12 +29,27 @@ class App extends React.Component {
     constructor (props, context) {
         super(props, context);
 
+        const me = this;
+
         library.add(faNotesMedical);
         library.add(faCalculator);
         library.add(faAngleDoubleLeft);
         library.add(faAngleDoubleRight);
+        library.add(faUserMd);
 
-        props.dispatch(Actions.loadSpecialties());
+        _.get(me.props, 'dispatch')(Actions.loadSpecialties())
+            .then(() => {
+                _.get(me.props, 'dispatch')(Actions.loadUserInfo())
+                    .then(() => {
+                        console.log(me);
+                        _.get(me.props, 'dispatch')(
+                            Actions.loadAvailableVignettes(
+                                _.get(me.props, 'sidebar.specialtyId'),
+                                undefined
+                            )
+                        )
+                    });
+            });
 
         this.toggleCalculatorMode = this.toggleCalculatorMode.bind(this);
 
@@ -96,4 +111,10 @@ class App extends React.Component {
     }
 }
 
-export default connect()(App);
+const mapStateToProps = (state, ownProps) => {
+    return {
+        sidebar: _.get(state, 'sidebar')
+    };
+}
+
+export default connect(mapStateToProps)(App);
