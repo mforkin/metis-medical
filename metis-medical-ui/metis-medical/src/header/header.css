@@ -6,10 +6,50 @@ div.app > .header {
     height: 50px;
 }
 
+.header.row {
+    overflow: visible;
+}
+
 .header.row .header {
     margin-top: 11px;
 }
 
 .header.row .header svg {
     margin-right: 10px;
+}
+
+.header.row .header li {
+    display: inline-block;
+}
+
+.header.row .header li:hover {
+    background: #333;
+}
+
+.header.row .header li a {
+    color: #fff;
+}
+
+.header.row .header li a:hover {
+    color: #fff;
+}
+
+.header.row .header li ul a {
+    color: #333;
+}
+
+.header.row .header li ul:hover {
+    background: #333;
+    color: #fff;
+
+}
+
+.header.row .header li ul:hover a {
+    background: #333;
+    color: #fff;
+}
+
+.header.row .header .dropdown-menu > li > a:hover {
+    background: #333;
+    color: #fff;
 }
