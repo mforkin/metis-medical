@@ -18,6 +18,7 @@ class Question extends React.Component {
         this.getSubmitLabel = this.getSubmitLabel.bind(this);
         this.getSubmitFn = this.getSubmitFn.bind(this);
         this.getResponse = this.getResponse.bind(this);
+        this.getMultiResultClass = this.getMultiResultClass.bind(this);
         this.getNumericResponse = this.getNumericResponse.bind(this);
         this.isAnswerChecked = this.isAnswerChecked.bind(this);
 
@@ -131,18 +132,35 @@ class Question extends React.Component {
         return this.getMode() === 'answer' ? this.submit : this.next;
     }
 
-    public getResponse (answer) {
+    public getResponse (answer, isMulti) {
         let response;
         if (_.get(this.props, 'sidebar.feedback.id')) {
             if (_.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), _.get(answer, 'id')) >= 0 || _.get(answer, 'data.isCorrect')) {
-                let message = 'Incorrect. ' + _.get(answer, 'data.incorrectResponse');
+                let prefix = 'Incorrect. ';
+                let message = prefix + _.get(answer, 'data.incorrectResponse');
                 if (_.get(answer, 'data.isCorrect')) {
-                    message = 'Correct! ' + _.get(answer, 'data.correctResponse');
+                    prefix = 'Correct! ';
+                    if (isMulti && !this.isAnswerChecked(answer)) {
+                        prefix = 'This answer is correct and should have been selected. ';
+                    }
+                    message = prefix + _.get(answer, 'data.correctResponse');
                 }
                 response = (<Alert bsStyle={_.get(answer, 'data.isCorrect') ? 'success' : 'danger'}>{message}</Alert>);
             }
         }
         return response;
+    }
+
+    public getMultiResultClass (answer) {
+        let resultCls = 'answer-cnt ';
+        if (this.getMode() !== 'answer') {
+            if (this.isAnswerChecked(answer) && !_.get(answer, 'data.isCorrect')) {
+                resultCls += 'missed-multi-answer incorrect-selected';
+            } else if (!this.isAnswerChecked(answer) && _.get(answer, 'data.isCorrect')) {
+                resultCls += 'missed-multi-answer correct-omission';
+            }
+        }
+        return resultCls;
     }
 
     public getNumericResponse () {
@@ -188,18 +206,18 @@ class Question extends React.Component {
                         <FormGroup>
                             {
                                 _.map(this.getAnswers(), (a) => _.get(this.props, 'data.multi') ? (
-                                    <div>
+                                    <div className={this.getMultiResultClass(a)}>
                                         <Checkbox checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
                                             {_.get(a, 'data.text')}
                                         </Checkbox>
-                                        {this.getResponse(a)}
+                                        {this.getResponse(a, true)}
                                     </div>
                                 ) : (
                                     <div>
                                         <Radio checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
                                             {_.get(a, 'data.text')}
                                         </Radio>
-                                        {this.getResponse(a)}
+                                        {this.getResponse(a, false)}
                                     </div>
                                 ))
                             }

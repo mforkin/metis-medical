@@ -9,12 +9,10 @@
     <body class="login-background">
         <div>
             <form id="login-form" action="/j_spring_security_check" method="POST">
-                <input name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)">
-                <input type="password" name="j_password" placeholder="Password">
+                <input name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)"/>
+                <input type="password" name="j_password" placeholder="Password"/>
+                <input type="submit" value="LOGIN"/>
             </form>
-            <button onclick="document.getElementById('login-form').submit()">
-                <span>LOGIN</span>
-            </button>
         </div>
     </body>
 </html>

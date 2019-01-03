@@ -22,3 +22,22 @@
 .question .numeric-response {
     padding: 5px 0;
 }
+
+.question div.answer-cnt {
+    margin: 5px 0;
+    padding: 0px 5px;
+    border-radius: 8px;
+}
+
+.question div.answer-cnt.missed-multi-answer {
+    border: 1px solid;
+    padding: 5px 5px;
+}
+
+.question div.answer-cnt.missed-multi-answer.incorrect-selected {
+    border-color: #ff0000;
+}
+
+.question div.answer-cnt.missed-multi-answer.correct-omission {
+    border-color: #ff0000;
+}
