@@ -1,6 +1,6 @@
 package com.greenleaf.services.api
 
-import com.greenleaf.services.UserService
+import com.greenleaf.services.{User, UserService}
 import org.scalatra.Ok
 
 class UserAPI extends API {
@@ -11,5 +11,10 @@ class UserAPI extends API {
 
   get("/:vignetteId") {
     Ok(UserService.getInfoForVignette(params.as[Int]("vignetteId")))
+  }
+
+  post("/") {
+    val b = readJsonFromBody(request.body)
+    UserService.createUser(b.extract[User], "admin")
   }
 }

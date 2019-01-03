@@ -4,25 +4,47 @@ import java.time.format.DateTimeFormatter
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
+import org.scalatra.NotAcceptable
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.{User => SUser}
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 import collection.JavaConverters._
 import scala.collection.mutable
 
-case class User (userName: String, specialtyId: Int, isAdmin: Boolean)
+case class User (userName: String, specialtyId: Int, isAdmin: Option[Boolean])
 case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId: Seq[Int], isCorrect: Boolean)
 object UserService {
   lazy val db = ConnectionManager.db
 
   lazy val users: mutable.ListBuffer[User] = mutable.ListBuffer()
+
+  val encoder = new BCryptPasswordEncoder()
+
+  def createUser(user: User, password: String) = {
+    if (
+      db.selectFrom(USERS).where(USERS.USERNAME.equal(user.userName)).fetch.asScala.isEmpty
+    ) {
+      db.insertInto(USERS, USERS.ENABLED, USERS.PASSWORD, USERS.SPECIALTY_ID, USERS.USERNAME)
+        .values(true, encoder.encode(password), user.specialtyId, user.userName)
+        .execute()
+      db.insertInto(AUTHORITIES, AUTHORITIES.USERNAME, AUTHORITIES.AUTHORITY)
+        .values(user.userName, "ROLE_USER")
+        .execute()
+    } else {
+      throw new Exception("User Exists")
+    }
+  }
+
   def getInfo = {
     if (users.isEmpty) {
       users.appendAll(
         db.selectFrom(USERS).fetch.asScala.map(u => User(
           u.getUsername,
           u.getSpecialtyId,
-          db.selectFrom(AUTHORITIES).where(AUTHORITIES.USERNAME.equal(u.getUsername).and(AUTHORITIES.AUTHORITY.equal("ROLE_ADMIN"))).fetch.asScala.size == 1
+          Some(
+            db.selectFrom(AUTHORITIES).where(AUTHORITIES.USERNAME.equal(u.getUsername).and(AUTHORITIES.AUTHORITY.equal("ROLE_ADMIN"))).fetch.asScala.size == 1
+          )
         ))
       )
     }
