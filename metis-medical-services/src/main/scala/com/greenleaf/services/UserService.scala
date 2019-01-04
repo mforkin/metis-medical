@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import collection.JavaConverters._
 import scala.collection.mutable
 
+case class DataPoint(id: String, x: String, y: Int)
+
 case class User (userName: String, specialtyId: Int, isAdmin: Option[Boolean])
 case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId: Seq[Int], isCorrect: Boolean)
 object UserService {
@@ -50,6 +52,113 @@ object UserService {
     }
     val sUser = SecurityContextHolder.getContext.getAuthentication.getPrincipal.asInstanceOf[SUser]
     users.find(u => u.userName.equalsIgnoreCase(sUser.getUsername)).get
+  }
+
+  def getResults = {
+    val user = getInfo
+
+    val answersMap = db.select()
+      .from(ANSWER)
+      .join(QUESTION).on(QUESTION.ID.equal(ANSWER.QUESTION_ID))
+      .join(STAGE).on(QUESTION.STAGE_ID.equal(STAGE.ID))
+      .join(VIGNETTE).on(STAGE.VIGNETTE_ID.equal(VIGNETTE.ID))
+      .fetch.asScala.foldLeft(Map[(Int, Int, Int), Seq[Int]]())((tot, r) => {
+        val sId = r.getValue(STAGE.ID)
+        val qId = r.getValue(QUESTION.ID)
+        val vId = r.getValue(VIGNETTE.ID)
+        tot.updated(
+          (vId, sId, qId),
+          tot.getOrElse(
+            (vId, sId, qId),
+            Seq()
+          ) ++ (
+            if (r.getValue(ANSWER.IS_CORRECT).booleanValue()) {
+              Seq(r.getValue(ANSWER.ID).toInt)
+            } else {
+              Seq()
+            }
+          )
+        )
+      })
+
+    val baseQ = db.select()
+      .from(USER_RESULTS_ANSWERS)
+      .join(USER_RESULTS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
+      .join(ANSWER).on(ANSWER.ID.equal(USER_RESULTS_ANSWERS.ANSWER_ID))
+      .join(QUESTION).on(QUESTION.ID.equal(ANSWER.QUESTION_ID))
+      .join(STAGE).on(QUESTION.STAGE_ID.equal(STAGE.ID))
+      .join(VIGNETTE).on(STAGE.VIGNETTE_ID.equal(VIGNETTE.ID))
+
+    if (!user.isAdmin.getOrElse(false)) {
+      baseQ.where(USER_RESULTS.USERNAME.equal(user.userName))
+    }
+
+    val answerResults = baseQ.fetch.asScala
+
+    val userToAnswers = answerResults.foldLeft(Map[(String, Int, Int, Int), Seq[Int]]())((tot, r) => {
+      val userName = r.getValue(USER_RESULTS.USERNAME)
+      val vId = r.getValue(VIGNETTE.ID)
+      val sId = r.getValue(STAGE.ID)
+      val qId = r.getValue(QUESTION.ID)
+      tot.updated(
+        (userName, vId, sId, qId),
+        tot.getOrElse((userName, vId, sId, qId), Seq[Int]()) ++ Seq(r.getValue(ANSWER.ID).toInt)
+      )
+    })
+
+    val userToCorrectQuestion = userToAnswers.map {
+      case ((userName, vId, sId, qId), userAnswers) => (
+        (userName, vId, sId, qId),
+        answersMap(vId, sId, qId).size == userAnswers.size && answersMap(vId, sId, qId).toSet.diff(userAnswers.toSet).isEmpty
+      )
+    }
+
+    val questionsRightByVignette = userToCorrectQuestion.foldLeft(Map[(Int, Int), Int]()) {
+      case (tot, ((u, v, s, q), isCorrect)) =>
+        tot.updated(
+          (v, q),
+          tot.getOrElse(
+            (v, q),
+            0
+          ) + (if (isCorrect) 1 else 0)
+        )
+    }
+
+    val vignetteDetails = questionsRightByVignette.foldLeft(Map[Int, Seq[DataPoint]]()) {
+      case (tot, ((v, q), numCorrect)) =>
+        tot.updated(v, tot.getOrElse(v, Seq[DataPoint]()) ++ Seq(DataPoint(s"v${v}_q$q", s"$q", numCorrect)))
+    }
+
+    val vignetteQuestionAnswerCount = userToAnswers.foldLeft(Map[(Int, Int, Int, Int), Int]()) {
+      case (tot, ((u, v, s, q), answers)) =>
+        answers.foldLeft(tot) {
+          case (tot, a) =>
+            tot.updated((v, s, q, a), tot.getOrElse((v, s, q, a), 0) + 1)
+        }
+    }
+
+    val questionDetails = vignetteQuestionAnswerCount.foldLeft(Map[Int, Map[Int, Seq[DataPoint]]]()) {
+      case (tot, ((v, s, q, a), numAnswered)) =>
+        val vignetteMap = tot.getOrElse(v, Map[Int, Seq[DataPoint]]())
+        tot.updated(
+          v,
+          vignetteMap.updated(
+            q,
+            vignetteMap.getOrElse(
+              q,
+              Seq[DataPoint]()
+            ) ++ Seq(
+              DataPoint(s"${v}_${q}_$a", s"$a", numAnswered)
+            )
+          )
+        )
+    }
+
+    Map(
+      "questionDetails" -> questionDetails,
+      "vignetteDetails" -> vignetteDetails
+    )
+
   }
 
   def getInfoForVignette (vId: Int) = {

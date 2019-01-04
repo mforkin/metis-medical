@@ -17,4 +17,8 @@ class UserAPI extends API {
     val b = readJsonFromBody(request.body)
     UserService.createUser(b.extract[User], "admin")
   }
+
+  get("/results") {
+    Ok(UserService.getResults)
+  }
 }

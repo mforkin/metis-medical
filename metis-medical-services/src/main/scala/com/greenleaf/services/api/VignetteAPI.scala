@@ -7,7 +7,7 @@ class VignetteAPI extends API {
   override val root = "api/vignette"
 
   get ("/specialty/:specialtyId") {
-    val username = "admin"
+    val username = UserService.getInfo.userName
     Ok(VignetteService.getVignettesBySpecialty(params.as[Int]("specialtyId"), username))
   }
 

@@ -30,11 +30,16 @@ class Sidebar extends React.Component {
     public modeSetter (mode) {
         const me = this;
         return (e) => {
+            _.get(me.props, 'dispatch')(Actions.loadUserResults());
             me.setState({ mode });
         };
     }
 
     public handleSpecChange (e) {
+        _.get(this.props, 'dispatch')(
+            Actions.SIDEBAR_SPEC_CHANGE(e)
+        );
+
         _.get(this.props, 'dispatch')(
             Actions.loadAvailableVignettes(
                 parseInt(e.target.value, 10),
@@ -136,7 +141,7 @@ class Sidebar extends React.Component {
             <div className='sidebar'>
                 <div>
                     <FormGroup controlId="specMenu">
-                        <ControlLabel>Choose Speciality {_.get(this.props, 'sidebar.specialtyId')}</ControlLabel>
+                        <ControlLabel>Choose Speciality</ControlLabel>
                         <FormControl
                             componentClass="select"
                             value={_.get(this.props, 'sidebar.specialtyId')}

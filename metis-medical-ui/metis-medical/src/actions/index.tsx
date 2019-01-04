@@ -520,3 +520,21 @@ export const SIDEBAR_VIGNETTE_CHANGE = (e) => {
     };
 };
 
+// Results
+
+export const LOAD_RESULTS = (data) => {
+    return {
+        data,
+        type: 'LOAD_RESULTS'
+    };
+};
+
+export const loadUserResults = () => {
+    return (dispatch) => {
+        return fetch("/api/user/results")
+            .then(response => response.json())
+            .then((data) => {
+                dispatch(LOAD_RESULTS(data));
+            });
+    }
+};
