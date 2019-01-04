@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { HorizontalGridLines, VerticalBarSeries, VerticalGridLines, XAxis, XYPlot, YAxis } from 'react-vis';
+import { FlexibleXYPlot, HorizontalGridLines, VerticalBarSeries, VerticalGridLines, XAxis, YAxis } from 'react-vis';
 import * as Actions from '../actions';
 
 class UserResults extends React.Component {
@@ -39,14 +39,14 @@ class UserResults extends React.Component {
 
     public render () {
         return (
-            <div>
-                <XYPlot width={500} height={300}>
+            <div className="flexi-cnt">
+                <FlexibleXYPlot>
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis title="Number of Questions Answered Correctly" />
                     <YAxis title="Count of Participants" />
                     <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getVignetteChartData()} />
-                </XYPlot>
+                </FlexibleXYPlot>
             </div>
         )
     }
