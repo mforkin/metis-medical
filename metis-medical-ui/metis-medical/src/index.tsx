@@ -5,6 +5,7 @@ import App from './App';
 import './bootstrap/css/bootstrap-theme.min.css';
 import './bootstrap/css/bootstrap.min.css';
 import './index.css';
+import './react-vis/style.css';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/store';
 

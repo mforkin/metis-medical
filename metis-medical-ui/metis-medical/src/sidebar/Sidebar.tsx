@@ -170,7 +170,7 @@ class Sidebar extends React.Component {
                             <option value="-1"/>
                             {
                                 _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
-                                    <option key={d.id} disabled={this.isVignetteCompleted(d)} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
+                                    <option key={d.id} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
                                 ))
                             }
                         </FormControl>

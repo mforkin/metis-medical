@@ -109,24 +109,29 @@ object UserService {
     val userToCorrectQuestion = userToAnswers.map {
       case ((userName, vId, sId, qId), userAnswers) => (
         (userName, vId, sId, qId),
-        answersMap(vId, sId, qId).size == userAnswers.size && answersMap(vId, sId, qId).toSet.diff(userAnswers.toSet).isEmpty
+        answersMap((vId, sId, qId)).size == userAnswers.size && answersMap((vId, sId, qId)).toSet.diff(userAnswers.toSet).isEmpty
       )
     }
 
-    val questionsRightByVignette = userToCorrectQuestion.foldLeft(Map[(Int, Int), Int]()) {
+    val questionsRightByVignette = userToCorrectQuestion.foldLeft(Map[(Int, String), Int]()) {
       case (tot, ((u, v, s, q), isCorrect)) =>
         tot.updated(
-          (v, q),
+          (v, u),
           tot.getOrElse(
-            (v, q),
+            (v, u),
             0
           ) + (if (isCorrect) 1 else 0)
         )
     }
 
-    val vignetteDetails = questionsRightByVignette.foldLeft(Map[Int, Seq[DataPoint]]()) {
-      case (tot, ((v, q), numCorrect)) =>
-        tot.updated(v, tot.getOrElse(v, Seq[DataPoint]()) ++ Seq(DataPoint(s"v${v}_q$q", s"$q", numCorrect)))
+    val questionsRightByUser = questionsRightByVignette.foldLeft(Map[(Int, Int), Int]()) {
+      case (tot, ((v, u), numberCorrect)) =>
+        tot.updated((v, numberCorrect), tot.getOrElse((v, numberCorrect), 0) + 1)
+    }
+
+    val vignetteDetails = questionsRightByUser.foldLeft(Map[Int, Seq[DataPoint]]()) {
+      case (tot, ((v, questionsCorrect), num)) =>
+        tot.updated(v, tot.getOrElse(v, Seq[DataPoint]()) ++ Seq(DataPoint(s"v${v}_q$questionsCorrect", s"$questionsCorrect", num)))
     }
 
     val vignetteQuestionAnswerCount = userToAnswers.foldLeft(Map[(Int, Int, Int, Int), Int]()) {
