@@ -42,7 +42,6 @@ class App extends React.Component {
             .then(() => {
                 _.get(me.props, 'dispatch')(Actions.loadUserInfo())
                     .then(() => {
-                        console.log(me);
                         _.get(me.props, 'dispatch')(
                             Actions.loadAvailableVignettes(
                                 _.get(me.props, 'sidebar.specialtyId'),

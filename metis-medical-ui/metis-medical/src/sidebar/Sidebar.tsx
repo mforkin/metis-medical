@@ -79,7 +79,6 @@ class Sidebar extends React.Component {
                 _.get(me.props, 'vignettes.availableVignettes'),
                 (v) => v.id === targetValue
             );
-            console.log(t);
             const progress = _.get(_.get(me.props, 'vignettes.userData')[0], 'inProgress')
             if (progress) {
                 const nextIndexes = me.getNextQuestionIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'), _.get(progress, '_3'), vignette)

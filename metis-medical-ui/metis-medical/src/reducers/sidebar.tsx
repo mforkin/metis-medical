@@ -27,8 +27,6 @@ const sidebar = (
 ) => {
     switch (action.type) {
         case 'LOAD_USER_INFO':
-            console.log('loadUser');
-            console.log(action.data);
             return {
                 ...state,
                 specialtyId: _.get(action, 'data.specialtyId'),
