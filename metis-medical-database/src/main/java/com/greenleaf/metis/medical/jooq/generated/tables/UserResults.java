@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserResults extends TableImpl<UserResultsRecord> {
 
-    private static final long serialVersionUID = -1064149733;
+    private static final long serialVersionUID = -102031819;
 
     /**
      * The reference instance of <code>public.user_results</code>
@@ -69,6 +69,11 @@ public class UserResults extends TableImpl<UserResultsRecord> {
      * The column <code>public.user_results.submission_datetime</code>.
      */
     public final TableField<UserResultsRecord, OffsetDateTime> SUBMISSION_DATETIME = createField("submission_datetime", org.jooq.impl.SQLDataType.TIMESTAMPWITHTIMEZONE.nullable(false), this, "");
+
+    /**
+     * The column <code>public.user_results.iteration</code>.
+     */
+    public final TableField<UserResultsRecord, Integer> ITERATION = createField("iteration", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>public.user_results</code> table reference

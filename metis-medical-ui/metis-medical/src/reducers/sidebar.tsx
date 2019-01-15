@@ -10,6 +10,7 @@ const sidebar = (
         userInfo: {
             currentVignette: {
                 currentResponse: -1,
+                iteration: 0,
                 mode: 'answer', // or 'answered'
                 questionIdx: 0,
                 score: 0,
@@ -110,6 +111,17 @@ const sidebar = (
                 }
             };
             break;
+        case 'SIDEBAR_UPDATE_ITERATION':
+            return {
+                ...state,
+                userInfo: {
+                    ...state.userInfo,
+                    currentVignette: {
+                        ..._.get(state, 'userInfo.currentVignette'),
+                        iteration: _.get(action, 'data.iteration')
+                    }
+                }
+            }
         default:
             return state;
             break;

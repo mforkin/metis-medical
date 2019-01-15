@@ -84,6 +84,7 @@ class Survey extends React.Component {
         return this.isLastStageOfVignette() && this.isLastQuestionOfStage()
             && _.get(this.getStageAtIndex(), 'data.seq') === _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._1')
             && _.get(this.getQuestionAtIndex(), 'data.seq') === _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._2')
+            && _.get(this.props, 'vignettes.vignette.inProgress._3') === _.get(this.props, 'sidebar.userInfo.currentVignette.iteration')
     }
 
     public getRenderTpl () {

@@ -100,6 +100,7 @@ CREATE TABLE public.user_results (
     id serial NOT NULL,
     username varchar(100) NOT NULL,
     submission_datetime timestamp with time zone NOT NULL,
+    iteration integer NOT NULL,
     CONSTRAINT "user_results_pk" PRIMARY KEY (id),
     CONSTRAINT "user_res_unq" UNIQUE (username, submission_datetime)
 )

@@ -4,7 +4,6 @@ import java.time.format.DateTimeFormatter
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
-import org.scalatra.NotAcceptable
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.{User => SUser}
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -15,7 +14,7 @@ import scala.collection.mutable
 case class DataPoint(id: String, x: String, y: Int)
 
 case class User (userName: String, specialtyId: Int, isAdmin: Option[Boolean])
-case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId: Seq[Int], isCorrect: Boolean)
+case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId: Seq[Int], isCorrect: Boolean, iteration: Int)
 object UserService {
   lazy val db = ConnectionManager.db
 
@@ -177,7 +176,8 @@ object UserService {
       USER_RESULTS.SUBMISSION_DATETIME,
       QUESTION.ID,
       STAGE.ID,
-      ANSWER.IS_CORRECT
+      ANSWER.IS_CORRECT,
+      USER_RESULTS.ITERATION
     )
       .from(USER_RESULTS)
       .join(USER_RESULTS_ANSWERS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
@@ -190,6 +190,16 @@ object UserService {
           VIGNETTE.ID.equal(vId)
         )
       )
+      .and(USER_RESULTS.ITERATION.in(
+        db.select(USER_RESULTS.ITERATION.max())
+          .from(USER_RESULTS)
+          .join(USER_RESULTS_ANSWERS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
+          .join(ANSWER).on(ANSWER.ID.equal(USER_RESULTS_ANSWERS.ANSWER_ID))
+          .join(QUESTION).on(QUESTION.ID.equal(ANSWER.QUESTION_ID))
+          .join(STAGE).on(QUESTION.STAGE_ID.equal(STAGE.ID))
+          .join(VIGNETTE).on(STAGE.VIGNETTE_ID.equal(VIGNETTE.ID))
+          .where(VIGNETTE.ID.equal(vId))
+      ))
       .fetch.asScala.foldLeft(Map[(Int, Int, String), UserResult]())((tot, r) => {
       val t = r.getValue(USER_RESULTS.SUBMISSION_DATETIME).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
       val sId = r.getValue(STAGE.ID).toInt
@@ -202,14 +212,15 @@ object UserService {
           case Some(ur) => ur.answerId
           case None => Seq[Int]()
         }) ++ Seq(r.getValue(USER_RESULTS_ANSWERS.ANSWER_ID).toInt),
-        Boolean.unbox(r.getValue(ANSWER.IS_CORRECT))
+        Boolean.unbox(r.getValue(ANSWER.IS_CORRECT)),
+        r.getValue(USER_RESULTS.ITERATION).toInt
       ))
     }).values.toSeq
   }
 
   // Could probably do a fancier query, but this is going to be fine performance wise and is easier to understand
   def getCurrentVignettePositions (username: String) = {
-    db.select()
+    val rawData = db.select()
       .from(USER_RESULTS)
       .join(USER_RESULTS_ANSWERS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
       .join(ANSWER).on(ANSWER.ID.equal(USER_RESULTS_ANSWERS.ANSWER_ID))
@@ -218,20 +229,38 @@ object UserService {
       .join(VIGNETTE).on(VIGNETTE.ID.equal(STAGE.VIGNETTE_ID))
       .where(USER_RESULTS.USERNAME.equal(username))
       .orderBy(VIGNETTE.ID, STAGE.SEQ, QUESTION.SEQ, USER_RESULTS.SUBMISSION_DATETIME)
-      .fetch.asScala.foldLeft(Map[Int,(Int, Int, Int)]()) {
-        case (positionMap, rec) =>
-          val vId = rec.getValue(VIGNETTE.ID).toInt
-          val recStagePos = rec.getValue(STAGE.SEQ).toInt
-          val recQuestionPos = rec.getValue(QUESTION.SEQ).toInt
-          val recAnswerPos = rec.getValue(ANSWER.SEQ).toInt
-          positionMap.updated(
-            vId,
-            (
-              recStagePos,
-              recQuestionPos,
-              recAnswerPos
-            )
-          )
-      }
+      .fetch.asScala
+
+    val vignetteToMaxIterationMaxQuestion: Map[Int, (Int, Int, Int)] = rawData.foldLeft(Map[Int, (Int, Int, Int)]()) {
+      case (tot, rec) =>
+        val vId = rec.getValue(VIGNETTE.ID).toInt
+        val recStagePos = rec.getValue(STAGE.SEQ).toInt
+        val recQuestionPos = rec.getValue(QUESTION.SEQ).toInt
+        val recAnswerPos = rec.getValue(ANSWER.SEQ).toInt
+        val iteration = rec.getValue(USER_RESULTS.ITERATION).toInt
+        tot.get(vId) match {
+          case Some((sPos, qPos, iter)) =>
+            if (iteration > iter) {
+              tot.updated(vId, (recStagePos, recQuestionPos, iteration))
+            } else if (iteration == iter) {
+              if (recStagePos > sPos) {
+                tot.updated(vId, (recStagePos, recQuestionPos, iteration))
+              } else if (recStagePos == sPos) {
+                if (recQuestionPos > qPos) {
+                  tot.updated(vId, (recStagePos, recQuestionPos, iteration))
+                } else {
+                  tot
+                }
+              } else {
+                tot
+              }
+            } else {
+              tot
+            }
+          case None => tot.updated(vId, (recStagePos, recQuestionPos, iteration))
+        }
+    }
+
+    vignetteToMaxIterationMaxQuestion
   }
 }

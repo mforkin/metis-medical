@@ -63,27 +63,40 @@ class Sidebar extends React.Component {
             )
         );
 
-        // @TODO don't get vignette like this, change to redux dispatch
-        const vignette = _.find(
-            _.get(this.props, 'vignettes.availableVignettes'),
-            (v) => v.id === parseInt(e.target.value, 10)
+        const loadPromise = _.get(this.props, 'dispatch')(
+            Actions.loadProgressForVignette(
+                parseInt(e.target.value, 10)
+            )
         );
-        const progress = _.get(vignette, 'inProgress')
-        if (progress) {
-            const nextIndexes = this.getNextQuestionIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'), vignette)
-            _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
-                nextIndexes.questionIndex,
-                nextIndexes.stageIndex
-            ));
-        } else {
-            _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
-                0,
-                0
-            ));
-        }
+
+        const targetValue = parseInt(e.target.value, 10);
+
+        const me = this;
+
+        loadPromise.then(t => {
+            // @TODO don't get vignette like this, change to redux dispatch
+            const vignette = _.find(
+                _.get(me.props, 'vignettes.availableVignettes'),
+                (v) => v.id === targetValue
+            );
+            console.log(t);
+            const progress = _.get(_.get(me.props, 'vignettes.userData')[0], 'inProgress')
+            if (progress) {
+                const nextIndexes = me.getNextQuestionIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'), _.get(progress, '_3'), vignette)
+                _.get(me.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
+                    nextIndexes.questionIndex,
+                    nextIndexes.stageIndex
+                ));
+            } else {
+                _.get(me.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
+                    0,
+                    0
+                ));
+            }
+        });
     }
 
-    public getNextQuestionIdxFromSeq (stageSeq, questionSeq, vig) {
+    public getNextQuestionIdxFromSeq (stageSeq, questionSeq, iteration, vig) {
         const stages = _.get(vig, 'data.stages')
         const stageIndex = _.findIndex(stages, (s) => _.get(s, 'data.seq') === stageSeq)
         const questions = _.get(stages[stageIndex], 'data.question')
@@ -94,13 +107,25 @@ class Sidebar extends React.Component {
         }
         // last question in stage was answered
         if (questionIndex === questions.length - 1) {
-            // if there is a new stage to go to, go to it, if not leave at last question of last stage
+            // if there is a new stage to go to, go to it, if not, reset!
             if (stageIndex !== stages.length - 1) {
                 ret.stageIndex = stageIndex + 1
                 ret.questionIndex = 0
+                _.get(this.props, 'dispatch')(Actions.SIDEBAR_UPDATE_ITERATION(
+                    iteration
+                ));
+            } else {
+                ret.stageIndex = 0
+                ret.questionIndex = 0
+                _.get(this.props, 'dispatch')(Actions.SIDEBAR_UPDATE_ITERATION(
+                    iteration + 1
+                ));
             }
         } else {
             ret.questionIndex = questionIndex + 1
+            _.get(this.props, 'dispatch')(Actions.SIDEBAR_UPDATE_ITERATION(
+                iteration
+            ));
         }
         return ret;
     }

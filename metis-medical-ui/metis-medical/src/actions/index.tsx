@@ -120,10 +120,22 @@ export const loadUserDataForVignette = (vId) => {
 
 export const VIGNETTE_USER_DATA_LOADED = (data) => {
     return {
-        data: {},
+        data,
         type: 'VIGNETTE_USER_DATA_LOADED'
     };
 }
+
+export const loadProgressForVignette = (e) => {
+    return (dispatch) => {
+        return fetch("/api/vignette/specialty/" + e)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                return dispatch(VIGNETTE_USER_DATA_LOADED(data));
+            })
+    }
+};
 
 export const createOrUpdateVignette = (vignette, selectedId) => {
     return (dispatch) => {
@@ -538,3 +550,12 @@ export const loadUserResults = () => {
             });
     }
 };
+
+export const SIDEBAR_UPDATE_ITERATION = (iteration) => {
+    return {
+         data: {
+            iteration
+         },
+         type: 'SIDEBAR_UPDATE_ITERATION'
+    };
+}

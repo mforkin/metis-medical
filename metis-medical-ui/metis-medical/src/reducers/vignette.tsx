@@ -48,6 +48,12 @@ const vignettes = (
                 }
             };
             break;
+        case 'VIGNETTE_USER_DATA_LOADED':
+            return {
+                ...state,
+                userData: action.data
+            };
+            break;
         case 'VIGNETTE_STAGE_ADD':
         case 'VIGNETTE_QUESTION_ADD':
         case 'VIGNETTE_ANSWER_ADD':

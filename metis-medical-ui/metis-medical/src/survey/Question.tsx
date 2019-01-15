@@ -83,7 +83,8 @@ class Question extends React.Component {
                         meta: _.get(this.state, 'numericResponse')
                     };
                 }),
-            datetime: (new Date()).toISOString()
+            datetime: (new Date()).toISOString(),
+            iteration: _.get(this.props, 'sidebar.userInfo.currentVignette.iteration')
         }));
     }
 

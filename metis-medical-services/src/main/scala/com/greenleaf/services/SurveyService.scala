@@ -9,6 +9,7 @@ case class AnswerMeta (id: Int, meta: Option[String])
 case class SurveyAnswer (
                           userName: Option[String], // when you are posting you don't need it
                           datetime: String,
+                          iteration: Int,
                           answerMetaInfo: Seq[AnswerMeta]
                         )
 object SurveyService {
@@ -19,10 +20,12 @@ object SurveyService {
     val userResultId = db.insertInto(
       USER_RESULTS,
       USER_RESULTS.USERNAME,
-      USER_RESULTS.SUBMISSION_DATETIME
+      USER_RESULTS.SUBMISSION_DATETIME,
+      USER_RESULTS.ITERATION
     ).values(
       userName,
-      OffsetDateTime.parse(answer.datetime)
+      OffsetDateTime.parse(answer.datetime),
+      answer.iteration
     ).returning.fetchOne().getId
 
     val baseQ = db.insertInto(
