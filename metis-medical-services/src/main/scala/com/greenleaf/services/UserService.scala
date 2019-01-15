@@ -33,23 +33,27 @@ object UserService {
       db.insertInto(AUTHORITIES, AUTHORITIES.USERNAME, AUTHORITIES.AUTHORITY)
         .values(user.userName, "ROLE_USER")
         .execute()
+      users.clear()
+      populateUsersCache()
     } else {
       throw new Exception("User Exists")
     }
   }
 
+  private def populateUsersCache (): Unit = {
+    users.appendAll(
+      db.selectFrom(USERS).fetch.asScala.map(u => User(
+        u.getUsername,
+        u.getSpecialtyId,
+        Some(
+          db.selectFrom(AUTHORITIES).where(AUTHORITIES.USERNAME.equal(u.getUsername).and(AUTHORITIES.AUTHORITY.equal("ROLE_ADMIN"))).fetch.asScala.size == 1
+        )
+      ))
+    )
+  }
+
   def getInfo = {
-    if (users.isEmpty) {
-      users.appendAll(
-        db.selectFrom(USERS).fetch.asScala.map(u => User(
-          u.getUsername,
-          u.getSpecialtyId,
-          Some(
-            db.selectFrom(AUTHORITIES).where(AUTHORITIES.USERNAME.equal(u.getUsername).and(AUTHORITIES.AUTHORITY.equal("ROLE_ADMIN"))).fetch.asScala.size == 1
-          )
-        ))
-      )
-    }
+    if (users.isEmpty) populateUsersCache()
     val sUser = SecurityContextHolder.getContext.getAuthentication.getPrincipal.asInstanceOf[SUser]
     users.find(u => u.userName.equalsIgnoreCase(sUser.getUsername)).get
   }

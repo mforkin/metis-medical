@@ -37,6 +37,16 @@ class UserResults extends React.Component {
         }
     }
 
+    public yTickFormat (t) {
+        let ret = '';
+        const tick = parseFloat(t);
+        if (tick % 1 === 0) {
+            ret = tick.toFixed(0);
+        }
+
+        return ret;
+    }
+
     public render () {
         return (
             <div className="flexi-cnt">
@@ -44,7 +54,10 @@ class UserResults extends React.Component {
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis title="Number of Questions Answered Correctly" />
-                    <YAxis title="Count of Participants" />
+                    <YAxis
+                        tickFormat={this.yTickFormat}
+                        title="Count of Participants"
+                        />
                     <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getVignetteChartData()} />
                 </FlexibleXYPlot>
             </div>
