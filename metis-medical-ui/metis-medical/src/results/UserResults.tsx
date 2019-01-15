@@ -14,6 +14,10 @@ class UserResults extends React.Component {
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
     }
 
+    public getQuestionDetails () {
+        return _.get(this.props, 'results.results.questionDetails');
+    }
+
     public getVignetteDetails () {
         return _.get(this.props, 'results.results.vignetteDetails');
     }
@@ -37,6 +41,26 @@ class UserResults extends React.Component {
         }
     }
 
+    public getQuestionChartData () {
+        const d = _.get(this.getQuestionDetails(), this.getSelectedVignetteId());
+        const res = {};
+        if (d) {
+            _.each(d, (v, k) => {
+                res[k] = [];
+                _.each(v, dp => {
+                    res[k].push({
+                        id: dp.id,
+                        x: dp.x,
+                        y: dp.y
+                    });
+                })
+                res[k] = _.sortBy(res[k], dp => dp.x);
+            });
+        }
+
+        return res;
+    }
+
     public yTickFormat (t) {
         let ret = '';
         const tick = parseFloat(t);
@@ -49,17 +73,38 @@ class UserResults extends React.Component {
 
     public render () {
         return (
-            <div className="flexi-cnt">
-                <FlexibleXYPlot>
-                    <VerticalGridLines />
-                    <HorizontalGridLines />
-                    <XAxis title="Number of Questions Answered Correctly" />
-                    <YAxis
-                        tickFormat={this.yTickFormat}
-                        title="Count of Participants"
-                        />
-                    <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getVignetteChartData()} />
-                </FlexibleXYPlot>
+            <div className="res-cnt">
+                <div className="flexi-cnt">
+                    <FlexibleXYPlot>
+                        <VerticalGridLines />
+                        <HorizontalGridLines />
+                        <XAxis title="Number of Questions Answered Correctly" />
+                        <YAxis
+                            tickFormat={this.yTickFormat}
+                            title="Count of Participants"
+                            />
+                        <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getVignetteChartData()} />
+                    </FlexibleXYPlot>
+                </div>
+                <div className="q-details">
+                    {
+                        _.map(this.getQuestionChartData(), d => (
+                            <div className='q-chart-cnt'>
+                                <FlexibleXYPlot xType="ordinal">
+                                    <VerticalGridLines />
+                                    <HorizontalGridLines />
+                                    <XAxis title="Selected Answer" />
+                                    <YAxis
+                                        tickFormat={this.yTickFormat}
+                                        title="Count of Participants"
+                                        />
+                                    <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={d} />
+                                </FlexibleXYPlot>
+                            </div>
+                        ))
+                    }
+
+                </div>
             </div>
         )
     }
