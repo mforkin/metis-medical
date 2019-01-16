@@ -29,13 +29,14 @@ class UserResults extends React.Component {
     public getVignetteChartData () {
         const d = _.get(this.getVignetteDetails(), this.getSelectedVignetteId());
         if (d) {
-            return d.map(dp => {
+            const res = d.map(dp => {
                 return {
                     id: dp.id,
                     x: dp.x,
                     y: dp.y
                 };
             });
+            return res;
         } else {
             return [];
         }
@@ -75,7 +76,7 @@ class UserResults extends React.Component {
         return (
             <div className="res-cnt">
                 <div className="flexi-cnt">
-                    <FlexibleXYPlot>
+                    <FlexibleXYPlot xType="ordinal">
                         <VerticalGridLines />
                         <HorizontalGridLines />
                         <XAxis title="Number of Questions Answered Correctly" />
