@@ -65,7 +65,7 @@ class Sidebar extends React.Component {
 
         const loadPromise = _.get(this.props, 'dispatch')(
             Actions.loadProgressForVignette(
-                _.get(this.props, 'vignettes.vignette.data.specialtyId'),
+                _.get(this.props, 'sidebar.specialtyId'),
                 parseInt(e.target.value, 10)
             )
         );
@@ -153,11 +153,11 @@ class Sidebar extends React.Component {
 
     public isVignetteInProgressLabel (d) {
         let label = ""
-        if (this.isVignetteCompleted(d)) {
-            label = " - Completed"
-        } else if (_.get(d, 'inProgress')) {
-            label = " - In Progress"
+        const prog = _.get(d, 'inProgress');
+        if (prog && _.get(prog, '_3') > 0) {
+            label = ' (Attempts Completed: ' + (_.get(prog, '_3')) + ')';
         }
+
         return label
     }
 
