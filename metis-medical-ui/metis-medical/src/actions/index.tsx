@@ -125,13 +125,16 @@ export const VIGNETTE_USER_DATA_LOADED = (data) => {
     };
 }
 
-export const loadProgressForVignette = (e) => {
+export const loadProgressForVignette = (e, vId) => {
     return (dispatch) => {
         return fetch("/api/vignette/specialty/" + e)
             .then((response) => {
                 return response.json();
             })
-            .then((data) => {
+            .then((rawData) => {
+                const data = rawData.filter(dp => {
+                    return dp.id === vId;
+                });
                 return dispatch(VIGNETTE_USER_DATA_LOADED(data));
             })
     }

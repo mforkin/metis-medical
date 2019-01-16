@@ -65,6 +65,7 @@ class Sidebar extends React.Component {
 
         const loadPromise = _.get(this.props, 'dispatch')(
             Actions.loadProgressForVignette(
+                _.get(this.props, 'vignettes.vignette.data.specialtyId'),
                 parseInt(e.target.value, 10)
             )
         );

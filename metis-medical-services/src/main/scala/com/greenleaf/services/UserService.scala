@@ -199,6 +199,7 @@ object UserService {
           .join(STAGE).on(QUESTION.STAGE_ID.equal(STAGE.ID))
           .join(VIGNETTE).on(STAGE.VIGNETTE_ID.equal(VIGNETTE.ID))
           .where(VIGNETTE.ID.equal(vId))
+          .and(USER_RESULTS.USERNAME.equal(userName))
       ))
       .fetch.asScala.foldLeft(Map[(Int, Int, String), UserResult]())((tot, r) => {
       val t = r.getValue(USER_RESULTS.SUBMISSION_DATETIME).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
