@@ -5,32 +5,53 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <title>Metis Medical</title>
         <link type="text/css" rel="stylesheet" href="login.css">
+        <link type="text/css" rel="stylesheet" href="bootstrap.min.css">
+        <script type="text/javascript" src="bootstrap.min.js"></script>
+        <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
     </head>
     <body class="login-background">
-        <div class="login">
-            <div class="header">
-                Existing Users Login
-            </div>
-            <form id="login-form" action="/j_spring_security_check" method="POST">
-                <input id="j_username" name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)"/>
-                <input type="password" name="j_password" placeholder="Password" value="admin" style="display:none;" />
-                <input type="submit" value="LOGIN"/>
-            </form>
+        <div class="loginpage-header">
+            METIS MEDICAL
         </div>
-        <div></div>
-        <div class="register">
-            <div class="header">
-                New Users Register
+
+        <div class="content">
+            <div class="login">
+                <div class="header">
+                    Existing Users Login
+                </div>
+                <form id="login-form" action="/j_spring_security_check" method="POST">
+                    <div class="input-group">
+                        <input class="form-control" id="j_username" name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)"/>
+                        <div class="input-group-btn">
+                            <input class="btn btn-primary" type="submit" value="LOGIN"/>
+                        </div>
+                    </div>
+                    <input type="password" name="j_password" placeholder="Password" value="admin" style="display:none;" />
+                </form>
+                <div id="login-feedback"></div>
             </div>
-            <form id="register-form">
-                <input id="register-user-name" name="userName" type="text" placeholder="UVA ID (e.g. mst3k)"/>
-            </form>
-            <label>Select Specialty</label>
-            <select id="specialties" name="specialtyId" form="register-form">
-            </select>
-            <button onclick="register()">Register</button>
-            <div id="reg-feedback"></div>
+
+            <div class="divider"></div>
+
+            <div class="register">
+                <div class="header">
+                    New Users Register
+                </div>
+                <div class="input-group">
+                    <input class="form-control" id="register-user-name" name="userName" type="text" placeholder="UVA ID (e.g. mst3k)"/>
+                    <div class="input-group-btn">
+                        <select class="btn btn-info" id="specialties" name="specialtyId"></select>
+                    </div>
+                </div>
+                <button class="reg btn btn-primary" onclick="register()">Register</button>
+                <div id="reg-feedback"></div>
+            </div>
         </div>
+
+        <div class="footer">
+
+        </div>
+
         <script type="text/javascript">
             let s = document.getElementById("specialties");
             fetch("/api/specialty", {method: 'GET'})
@@ -44,6 +65,12 @@
                     };
                 });
 
+            if (/error/.test(window.location.href)) {
+                const e = document.getElementById("login-feedback")
+                e.append("Invalid user. Please check username or register!")
+                e.setAttribute("class", "alert alert-danger")
+            }
+
             function register () {
                 const s = document.getElementById("specialties")
                 const specialtyId = s.options[s.selectedIndex].value;
@@ -56,7 +83,9 @@
                     })
                 })
                     .then(r => {
-                        document.getElementById("reg-feedback").append("Registration Successful. Please Login.")
+                        const e = document.getElementById("reg-feedback");
+                        e.append("Registration Successful. Please Login.");
+                        e.setAttribute("class", "alert alert-success");
                         document.getElementById("j_username").value = userName;
                     })
             }

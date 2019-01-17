@@ -1,0 +1,76 @@
+html, body {
+    height: 100%;
+}
+
+html {
+    background: #333;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+}
+
+.loginpage-header {
+    height: 50px;
+    background-color: #333;
+    color: #ccc;
+    border-bottom: 3px solid #337ab7;
+    font-size: 18px;
+    font-family: Arial, arial, sans-serif;
+    padding: 12px;
+}
+
+.content {
+    height: calc(100% - 100px);
+    display: flex;
+}
+
+.login {
+    height: 100%;
+    width: calc(50% - 3px);
+    padding: 15px 5px;
+}
+
+#login-feedback {
+    margin-top: 15px;
+}
+
+#reg-feedback {
+    margin-top: 60px;
+}
+
+.header {
+    height: 50px;
+    font-size: 18px;
+    font-family: Arial, arial, sans-serif;
+    text-align: center;
+}
+
+.register {
+    height: 100%;
+    width: calc(50% - 3px);
+    padding: 15px 5px;
+}
+
+.divider {
+    width: 1px;
+    border-right: 1px solid #333;
+    height: calc(100% - 20px);
+    margin: 10px 0;
+}
+
+.footer {
+    height: 50px;
+    background-color: #333;
+    border-top: 3px solid #337ab7;
+}
+
+#specialties {
+    border-width: 2px;
+}
+
+button.reg {
+    float: right;
+    margin-top: 15px;
+}

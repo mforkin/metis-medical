@@ -30,6 +30,10 @@
         <s:intercept-url pattern="/favicon.ico" access="permitAll()"/>
         <s:intercept-url pattern="/login.html" access="permitAll()" />
         <s:intercept-url pattern="/login.css" access="permitAll()" />
+        <s:intercept-url pattern="/bootstrap.min.css" access="permitAll()" />
+        <s:intercept-url pattern="/bootstrap.min.css.map" access="permitAll()" />
+        <s:intercept-url pattern="/bootstrap.min.js" access="permitAll()" />
+        <s:intercept-url pattern="/jquery-3.3.1.min.js" access="permitAll()" />
         <s:intercept-url pattern="/styles.css" access="permitAll()" />
         <s:intercept-url pattern="/api/specialty" access="permitAll()" method="GET"/>
         <s:intercept-url pattern="/api/user" access="permitAll()" method="POST"/>
@@ -43,6 +47,7 @@
         <!--<s:intercept-url pattern="/**" access="permitAll()" method="DELETE" />-->
         <s:form-login
                 login-page="/login.html"
+                default-target-url="/"
                 username-parameter="j_username"
                 password-parameter="j_password"
                 login-processing-url="/j_spring_security_check"
