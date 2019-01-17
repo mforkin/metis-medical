@@ -13,43 +13,39 @@
         <div class="loginpage-header">
             METIS MEDICAL
         </div>
-
-        <div class="content">
-            <div class="login">
-                <div class="header">
-                    Existing Users Login
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="login" id="login-cnt">
+                    <button class="btn btn-info h-btn" onclick="swapNew()">Register</button>
+                    <div class="header">
+                        Login
+                    </div>
+                    <form id="login-form" action="/j_spring_security_check" method="POST">
+                        <div class="input-group">
+                            <input class="form-control" id="j_username" name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)"/>
+                            <div class="input-group-btn">
+                                <input class="btn btn-primary" type="submit" value="LOGIN"/>
+                            </div>
+                        </div>
+                        <input type="password" name="j_password" placeholder="Password" value="admin" style="display:none;" />
+                    </form>
+                    <div id="login-feedback"></div>
                 </div>
-                <form id="login-form" action="/j_spring_security_check" method="POST">
+
+                <div class="register off" id="reg-cnt">
+                    <button class="btn btn-warning h-btn" onclick="swapLogin()">User Login</button>
+                    <div class="header">
+                        User Registration
+                    </div>
                     <div class="input-group">
-                        <input class="form-control" id="j_username" name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)"/>
+                        <input class="form-control" id="register-user-name" name="userName" type="text" placeholder="UVA ID (e.g. mst3k)"/>
                         <div class="input-group-btn">
-                            <input class="btn btn-primary" type="submit" value="LOGIN"/>
+                            <select class="btn btn-info" id="specialties" name="specialtyId"></select>
                         </div>
                     </div>
-                    <input type="password" name="j_password" placeholder="Password" value="admin" style="display:none;" />
-                </form>
-                <div id="login-feedback"></div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="register">
-                <div class="header">
-                    New Users Register
+                    <button class="reg btn btn-primary" onclick="register()">Register</button>
                 </div>
-                <div class="input-group">
-                    <input class="form-control" id="register-user-name" name="userName" type="text" placeholder="UVA ID (e.g. mst3k)"/>
-                    <div class="input-group-btn">
-                        <select class="btn btn-info" id="specialties" name="specialtyId"></select>
-                    </div>
-                </div>
-                <button class="reg btn btn-primary" onclick="register()">Register</button>
-                <div id="reg-feedback"></div>
             </div>
-        </div>
-
-        <div class="footer">
-
         </div>
 
         <script type="text/javascript">
@@ -67,8 +63,25 @@
 
             if (/error/.test(window.location.href)) {
                 const e = document.getElementById("login-feedback")
+                e.innerHTML = "";
                 e.append("Invalid user. Please check username or register!")
                 e.setAttribute("class", "alert alert-danger")
+            }
+
+            function swapNew () {
+                const el = document.getElementById("login-cnt")
+                const er = document.getElementById("reg-cnt")
+
+                er.setAttribute("class", "register");
+                el.setAttribute("class", "login off");
+            }
+
+            function swapLogin () {
+                const el = document.getElementById("login-cnt")
+                const er = document.getElementById("reg-cnt")
+
+                er.setAttribute("class", "register off");
+                el.setAttribute("class", "login");
             }
 
             function register () {
@@ -83,10 +96,12 @@
                     })
                 })
                     .then(r => {
-                        const e = document.getElementById("reg-feedback");
+                        const e = document.getElementById("login-feedback");
+                        e.innerHTML = "";
                         e.append("Registration Successful. Please Login.");
                         e.setAttribute("class", "alert alert-success");
                         document.getElementById("j_username").value = userName;
+                        swapLogin();
                     })
             }
         </script>

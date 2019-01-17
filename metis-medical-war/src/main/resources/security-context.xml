@@ -30,6 +30,8 @@
         <s:intercept-url pattern="/favicon.ico" access="permitAll()"/>
         <s:intercept-url pattern="/login.html" access="permitAll()" />
         <s:intercept-url pattern="/login.css" access="permitAll()" />
+        <s:intercept-url pattern="/cross-hatch-texture.png" access="permitAll()" />
+        <s:intercept-url pattern="/Montserrat_font.woff" access="permitAll()" />
         <s:intercept-url pattern="/bootstrap.min.css" access="permitAll()" />
         <s:intercept-url pattern="/bootstrap.min.css.map" access="permitAll()" />
         <s:intercept-url pattern="/bootstrap.min.js" access="permitAll()" />
