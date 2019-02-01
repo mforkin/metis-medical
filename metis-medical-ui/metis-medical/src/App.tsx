@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faAngleDoubleLeft, faAngleDoubleRight, faCalculator, faChevronDown, faNotesMedical, faUserMd } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleLeft, faAngleDoubleRight, faCalculator, faCheckCircle, faChevronDown, faNotesMedical, faTimesCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
@@ -37,6 +37,8 @@ class App extends React.Component {
         library.add(faAngleDoubleRight);
         library.add(faUserMd);
         library.add(faChevronDown);
+        library.add(faCheckCircle);
+        library.add(faTimesCircle);
 
         _.get(me.props, 'dispatch')(Actions.loadSpecialties())
             .then(() => {

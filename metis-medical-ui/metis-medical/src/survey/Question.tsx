@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Alert, Button, Checkbox, FormControl, FormGroup, Radio } from 'react-bootstrap';
@@ -164,6 +165,20 @@ class Question extends React.Component {
         return resultCls;
     }
 
+    public getNumericResponseIcon () {
+        let response;
+        if (_.get(this.props, 'sidebar.feedback.id')) {
+            const curAnswerId = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0];
+            const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
+            if (cur.data.isCorrect) {
+                response = (<FontAwesomeIcon icon="check-circle" />)
+            } else {
+                response = (<FontAwesomeIcon icon="times-circle" />)
+            }
+        }
+        return response;
+    }
+
     public getNumericResponse () {
         let response;
         let message;
@@ -178,6 +193,12 @@ class Question extends React.Component {
             response = (<Alert bsStyle={_.get(cur, 'data.isCorrect') ? 'success' : 'danger'}>{message}</Alert>);
         }
         return response;
+    }
+
+    public getNumericSuffix (data) {
+        const answers = _.get(data, 'answers')
+        const unit = _.find(answers, a => _.get(a, 'data.isCorrect'))
+        return _.get(unit, 'data.selectedText')
     }
 
     public isAnswerChecked (answer) {
@@ -195,10 +216,15 @@ class Question extends React.Component {
                     _.get(this.props, 'data.questionType') === 'numeric' ? (
                         <div>
                             <FormControl
+                                className="numeric-form-control"
                                 type="number"
                                 value={_.get(this.state, 'numericResponse')}
                                 onChange={this.numericAnswerChanged}
                                 />
+                                <div className="numeric-suffix">{this.getNumericSuffix(_.get(this.props, 'data'))}</div>
+                            <div className="numeric-response">
+                                {this.getNumericResponseIcon()}
+                            </div>
                             <div className="numeric-response">
                                 {this.getNumericResponse()}
                             </div>

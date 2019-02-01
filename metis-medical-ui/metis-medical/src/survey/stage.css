@@ -41,3 +41,13 @@
 .question div.answer-cnt.missed-multi-answer.correct-omission {
     border-color: #ff0000;
 }
+
+div.numeric-suffix {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+input.form-control.numeric-form-control {
+    display: inline-block;
+    margin-left: 0px;
+}
