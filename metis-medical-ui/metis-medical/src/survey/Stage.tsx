@@ -48,11 +48,11 @@ class Stage extends React.Component {
                         {_.get(this.props, 'vignettes.vignette.data.name')}
                     </div>
                     {_.get(this.props, 'data.name') ?
-                    <Alert bsStyle="warning">
+                    <div className="vignette-text-cnt">
                         <div className="stage-text">
                             {_.get(this.props, 'data.name') || ''}
                         </div>
-                    </Alert> : ""}
+                    </div> : ""}
                 </div>
                 {
                     this.hasQuestions() ?

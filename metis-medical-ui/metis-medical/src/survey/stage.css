@@ -4,6 +4,12 @@
     font-family: arial, sans-serif;
 }
 
+.header .vignette-text-cnt {
+    box-shadow: 0 0 8px 1px #ccc;
+    border-radius: 0;
+    padding: 5px;
+}
+
 .header .stage-text {
     font-size: 16px;
     font-weight: normal;
@@ -30,16 +36,16 @@
 }
 
 .question div.answer-cnt.missed-multi-answer {
-    border: 1px solid;
-    padding: 5px 5px;
+    box-shadow: 0 0 8px 1px red;
+    padding: 0 5px;
 }
 
 .question div.answer-cnt.missed-multi-answer.incorrect-selected {
-    border-color: #ff0000;
+    box-shadow: 0 0 8px 1px red;
 }
 
 .question div.answer-cnt.missed-multi-answer.correct-omission {
-    border-color: #ff0000;
+    box-shadow: 0 0 8px 1px red;
 }
 
 div.numeric-suffix {
@@ -50,4 +56,58 @@ div.numeric-suffix {
 input.form-control.numeric-form-control {
     display: inline-block;
     margin-left: 0px;
+}
+
+.question div .numeric-response-icon {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.question div.numeric-response-cnt {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.question div.numeric-response-cnt.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border: none;
+    box-shadow: 0 0 8px 1px green;
+}
+
+.question div.numeric-response-cnt.success input {
+    color: #3c763d;
+    background-color: #dff0d8;
+}
+
+.question div.numeric-response-cnt.danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border: none;
+    box-shadow: 0 0 8px 1px red;
+}
+
+.question div.numeric-response-cnt.danger input {
+    color: #a94442;
+    background-color: #f2dede;
+}
+
+.question .form-group > div {
+    padding: 1px 5px;
+    border-radius: 6px;
+    border: none;
+    box-shadow: 0 0 8px 1px #ccc;
+    margin: 10px 0;
+}
+.question .form-group .success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border: none;
+    box-shadow: 0 0 8px 1px green;
+}
+.question .form-group .danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border: none;
+    box-shadow: 0 0 8px 1px red;
 }
