@@ -1,3 +1,4 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
@@ -22,8 +23,11 @@ class Question extends React.Component {
         this.getMultiResultClass = this.getMultiResultClass.bind(this);
         this.getNumericResponse = this.getNumericResponse.bind(this);
         this.isAnswerChecked = this.isAnswerChecked.bind(this);
+        this.getAnswerCheckbox = this.getAnswerCheckbox.bind(this);
+        this.getAnswerRadio = this.getAnswerRadio.bind(this);
 
         this.state = {
+            iconSize: "lg",
             numericResponse: undefined
         };
     }
@@ -134,6 +138,44 @@ class Question extends React.Component {
         return this.getMode() === 'answer' ? this.submit : this.next;
     }
 
+    public getAnswerCheckbox (isAnswerChecked, a, props, answerChanged, cls) {
+        if (this.getMode() === 'answer') {
+            return (<Checkbox checked={isAnswerChecked(a)} name={_.get(props, 'data.text')} value={_.get(a, 'id')} onClick={answerChanged}>
+                {_.get(a, 'data.text')}
+            </Checkbox>)
+        } else {
+            let icon: IconProp = cls === 'success' ? ["far", "check-square"] : ["far", "times-circle"];
+            if (cls === '') { icon = ["far", "square"] }
+            return (
+                <div className="verify-checkbox">
+                    <FontAwesomeIcon icon={icon} size={_.get(this.state, 'iconSize')} />
+                    <div className="checkbox-text">
+                        {_.get(a, 'data.text')}
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    public getAnswerRadio (isAnswerChecked, a, props, answerChanged, cls) {
+        if (this.getMode() === 'answer') {
+            return (<Radio checked={isAnswerChecked(a)} name={_.get(props, 'data.text')} value={_.get(a, 'id')} onClick={answerChanged}>
+                {_.get(a, 'data.text')}
+            </Radio>)
+        } else {
+            let icon: IconProp = cls === 'success' ? ["far", "check-circle"] : ["far", "times-circle"];
+            if (cls === '') { icon = ["far", "circle"] }
+            return (
+                <div className="verify-checkbox">
+                    <FontAwesomeIcon icon={icon} size={_.get(this.state, 'iconSize')} />
+                    <div className="checkbox-text">
+                        {_.get(a, 'data.text')}
+                    </div>
+                </div>
+            )
+        }
+    }
+
     public getResponse (answer, isMulti) {
         const response = { message: '', class: '' };
         if (_.get(this.props, 'sidebar.feedback.id')) {
@@ -173,9 +215,9 @@ class Question extends React.Component {
             const curAnswerId = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0];
             const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
             if (cur.data.isCorrect) {
-                response = (<FontAwesomeIcon icon="check-circle" />)
+                response = (<FontAwesomeIcon icon={["far", "check-circle"]} size={_.get(this.state, 'iconSize')} />)
             } else {
-                response = (<FontAwesomeIcon icon="times-circle" />)
+                response = (<FontAwesomeIcon icon={["far", "times-circle"]} size={_.get(this.state, 'iconSize')} />)
             }
         }
         return response;
@@ -235,16 +277,12 @@ class Question extends React.Component {
                             {
                                 _.map(this.getAnswers(), (a) => _.get(this.props, 'data.multi') ? (
                                     <div className={this.getMultiResultClass(a) + ' ' + this.getResponse(a, false).class}>
-                                        <Checkbox checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
-                                            {_.get(a, 'data.text')}
-                                        </Checkbox>
+                                        {this.getAnswerCheckbox(this.isAnswerChecked, a, this.props, this.answerChanged, this.getResponse(a, false).class)}
                                         {this.getResponse(a, true).message}
                                     </div>
                                 ) : (
                                     <div className={this.getResponse(a, false).class}>
-                                        <Radio checked={this.isAnswerChecked(a)} name={_.get(this.props, 'data.text')} value={_.get(a, 'id')} onClick={this.answerChanged}>
-                                            {_.get(a, 'data.text')}
-                                        </Radio>
+                                        {this.getAnswerRadio(this.isAnswerChecked, a, this.props, this.answerChanged, this.getResponse(a, false).class)}
                                         {this.getResponse(a, false).message}
                                     </div>
                                 ))

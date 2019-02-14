@@ -92,6 +92,18 @@ input.form-control.numeric-form-control {
     background-color: #f2dede;
 }
 
+.question .verify-checkbox {
+    margin-bottom: 5px;
+}
+
+.question .verify-checkbox svg {
+    margin-right: 5px;
+}
+
+.question .verify-checkbox .checkbox-text {
+    display: inline-block;
+}
+
 .question .form-group > div {
     padding: 1px 5px;
     border-radius: 6px;
