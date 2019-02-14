@@ -155,7 +155,7 @@ class Sidebar extends React.Component {
         let label = ""
         const prog = _.get(d, 'inProgress');
         if (prog && _.get(prog, '_3') > 0) {
-            label = ' (Attempts Completed: ' + (_.get(prog, '_3')) + ')';
+            label = ' (' + (_.get(prog, '_3')) + ' Attempts Completed)';
         }
 
         return label
