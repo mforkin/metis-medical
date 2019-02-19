@@ -58,16 +58,16 @@ class Question extends React.Component {
         const selectedAnswerId = parseInt(e.target.value, 10);
 
         if (_.get(this.props, 'data.multi')) {
-             const idx = _.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), selectedAnswerId);
+             const idx = _.indexOf(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), selectedAnswerId);
              if (idx >= 0) {
-                _.remove(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), i => i === selectedAnswerId);
+                _.remove(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), i => i === selectedAnswerId);
                 _.get(this.props, 'dispatch')(
                     Actions.SIDEBAR_RESPONSE_CHANGED(
-                        _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')
+                        _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')
                     )
                 );
              } else {
-                const cur = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse');
+                const cur = _.get(this.props, 'content.selectedVignette.userInfo.currentResponse');
                 _.get(this.props, 'dispatch')(
                     Actions.SIDEBAR_RESPONSE_CHANGED(
                         cur.concat([selectedAnswerId])
@@ -81,7 +81,7 @@ class Question extends React.Component {
 
     public submit (e) {
         _.get(this.props, 'dispatch')(Actions.submitAnswer({
-            answerMetaInfo: _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')
+            answerMetaInfo: _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')
                 .map((r) => {
                     return {
                         id: r,
@@ -89,31 +89,31 @@ class Question extends React.Component {
                     };
                 }),
             datetime: (new Date()).toISOString(),
-            iteration: _.get(this.props, 'sidebar.userInfo.currentVignette.iteration')
+            iteration: _.get(this.props, 'content.selectedVignette.userInfo.iteration')
         }));
     }
 
     public next () {
         if (!_.get(this.props, 'isLastQuestion')) {
             _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
-                _.get(this.props, 'sidebar.userInfo.currentVignette.questionIdx') + 1,
-                _.get(this.props, 'sidebar.userInfo.currentVignette.stageIdx')
+                _.get(this.props, 'content.selectedVignette.userInfo.questionIdx') + 1,
+                _.get(this.props, 'content.selectedVignette.userInfo.stageIdx')
             ));
         } else if (!_.get(this.props, 'isLastStage')) {
             _.get(this.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
                 0,
-                _.get(this.props, 'sidebar.userInfo.currentVignette.stageIdx') + 1,
+                _.get(this.props, 'content.selectedVignette.userInfo.stageIdx') + 1,
 
             ));
         } else {
             _.get(this.props, 'dispatch')(Actions.SIDEBAR_LAST_QUESTION_ANSWERED({
-                '_1': _.get(_.get(this.props, 'vignettes.vignette.data.stages')[_.get(this.props, 'sidebar.userInfo.currentVignette.stageIdx')], 'data.seq'),
+                '_1': _.get(_.get(this.props, 'content.selectedVignette.data.stages')[_.get(this.props, 'content.selectedVignette.userInfo.stageIdx')], 'data.seq'),
                 '_2': _.get(this.props, 'data.seq'),
-                '_3': _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._3')
+                '_3': _.get(this.props, 'content.selectedVignette.userInfo.inProgress._3')
             }));
 
             _.get(this.props, 'dispatch')(Actions.loadAvailableVignettes(
-                _.get(this.props, 'vignettes.vignette.id'),
+                _.get(this.props, 'content.selectedVignette.id'),
                 undefined
             ));
         }
@@ -127,7 +127,7 @@ class Question extends React.Component {
     }
 
     public getMode () {
-        return _.get(this.props, 'sidebar.userInfo.currentVignette.mode');
+        return _.get(this.props, 'content.selectedVignette.userInfo.mode');
     }
 
     public getSubmitLabel () {
@@ -178,8 +178,8 @@ class Question extends React.Component {
 
     public getResponse (answer, isMulti) {
         const response = { message: '', class: '' };
-        if (_.get(this.props, 'sidebar.feedback.id')) {
-            if (_.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), _.get(answer, 'id')) >= 0 || _.get(answer, 'data.isCorrect')) {
+        if (_.get(this.props, 'content.feedback.id')) {
+            if (_.indexOf(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), _.get(answer, 'id')) >= 0 || _.get(answer, 'data.isCorrect')) {
                 let prefix = 'Incorrect. ';
                 response.message = prefix + _.get(answer, 'data.incorrectResponse');
                 if (_.get(answer, 'data.isCorrect')) {
@@ -211,8 +211,8 @@ class Question extends React.Component {
 
     public getNumericResponseIcon () {
         let response;
-        if (_.get(this.props, 'sidebar.feedback.id')) {
-            const curAnswerId = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0];
+        if (_.get(this.props, 'content.feedback.id')) {
+            const curAnswerId = _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0];
             const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
             if (cur.data.isCorrect) {
                 response = (<FontAwesomeIcon icon={["far", "check-circle"]} size={_.get(this.state, 'iconSize')} />)
@@ -225,8 +225,8 @@ class Question extends React.Component {
 
     public getNumericResponse () {
         const response = { message: '', class: '' };
-        if (_.get(this.props, 'sidebar.feedback.id')) {
-            const curAnswerId = _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0];
+        if (_.get(this.props, 'content.feedback.id')) {
+            const curAnswerId = _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0];
             const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
             if (cur.data.isCorrect) {
                 response.message = 'Correct! ' + cur.data.correctResponse;
@@ -246,9 +246,9 @@ class Question extends React.Component {
 
     public isAnswerChecked (answer) {
         if (_.get(this.props, 'data.multi')) {
-            return _.indexOf(_.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse'), answer.id) >= 0;
+            return _.indexOf(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), answer.id) >= 0;
         }
-        return _.get(this.props, 'sidebar.userInfo.currentVignette.currentResponse')[0] === answer.id;
+        return _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0] === answer.id;
     }
 
     public render () {

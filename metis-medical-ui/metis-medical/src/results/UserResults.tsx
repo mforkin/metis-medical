@@ -23,7 +23,7 @@ class UserResults extends React.Component {
     }
 
     public getSelectedVignetteId () {
-        return _.get(this.props, 'vignettes.vignette.id');
+        return _.get(this.props, 'content.selectedVignette.id');
     }
 
     public getVignetteChartData () {

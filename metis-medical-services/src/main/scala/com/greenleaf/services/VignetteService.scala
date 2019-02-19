@@ -47,15 +47,16 @@ case class Vignette (
 case class CandidateVignette (
                              specialtyId: Int,
                              name: String,
-                             stages: Seq[Stage]
+                             stages: Seq[Stage],
+                             seq: Int
                              )
 
 object VignetteService {
   lazy val db = ConnectionManager.db
 
   def create(vignette: Vignette) = {
-    val vignetteId = db.insertInto(VIGNETTE, VIGNETTE.NAME)
-        .values(vignette.data.name)
+    val vignetteId = db.insertInto(VIGNETTE, VIGNETTE.NAME, VIGNETTE.SEQ)
+        .values(vignette.data.name, vignette.data.seq)
         .returning.fetchOne().getId.toInt
     db.insertInto(VIGNETTE_SPECIALTY, VIGNETTE_SPECIALTY.VIGNETTE_ID, VIGNETTE_SPECIALTY.SPECIALTY_ID)
         .values(vignetteId, vignette.data.specialtyId)
@@ -72,6 +73,7 @@ object VignetteService {
 
     db.update(VIGNETTE)
       .set(VIGNETTE.NAME, vignette.data.name)
+      .set(VIGNETTE.SEQ, Int.box(vignette.data.seq))
       .where(VIGNETTE.ID.equal(vignette.id.get))
       .execute()
 
@@ -147,7 +149,8 @@ object VignetteService {
       CandidateVignette(
         r.getValue(VIGNETTE_SPECIALTY.SPECIALTY_ID).toInt,
         r.getValue(VIGNETTE.NAME),
-        Seq()
+        Seq(),
+        r.getValue(VIGNETTE.SEQ)
       ),
       status.get(vId)
     )

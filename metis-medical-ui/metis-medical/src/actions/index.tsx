@@ -230,6 +230,16 @@ export const VIGNETTE_NAME_CHANGE = (vignetteData, e) => {
     };
 };
 
+export const VIGNETTE_SEQ_CHANGE = (vignetteData, e) => {
+    return {
+        data: {
+            ...vignetteData,
+            seq: e.target.value
+        },
+        type: 'VIGNETTE_SEQ_CHANGE'
+    };
+};
+
 
 export const VIGNETTE_QUESTION_ADD = (stages, stageIdx) => {
     return {

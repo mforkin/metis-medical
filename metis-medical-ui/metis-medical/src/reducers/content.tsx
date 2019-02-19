@@ -9,6 +9,7 @@ const content = (
         selectedVignette: {
             data: {
                 name: '',
+                seq: -1,
                 specialtyId: -1,
                 stages: []
             },
@@ -82,6 +83,16 @@ const content = (
                 selectedVignette: {
                     data: action.data,
                     id: -1
+                }
+            };
+            break;
+            // CHANGED
+        case 'VIGNETTE_SEQ_CHANGE':
+            return {
+                ...state,
+                selectedVignette: {
+                    data: action.data,
+                    id: state.selectedVignette.id
                 }
             };
             break;

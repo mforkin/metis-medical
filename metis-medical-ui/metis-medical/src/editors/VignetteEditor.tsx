@@ -11,6 +11,7 @@ class VignetteEditor extends React.Component {
         super(props, context);
 
         this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleVigSeqChange = this.handleVigSeqChange.bind(this);
         this.handleSpecChange = this.handleSpecChange.bind(this);
         this.addStage = this.addStage.bind(this);
         this.addQuestion = this.addQuestion.bind(this);
@@ -30,8 +31,8 @@ class VignetteEditor extends React.Component {
     public handleSelectedVignetteChange (e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_SELECTED(
-                _.get(this.props, 'vignettes.vignette.data.specialtyId'),
-                _.get(this.props, 'vignettes.availableVignettes'),
+                _.get(this.props, 'content.selectedVignette.data.specialtyId'),
+                _.get(this.props, 'content.availableVignettes'),
                 e.target.value
             )
         )
@@ -40,8 +41,8 @@ class VignetteEditor extends React.Component {
     public submit () {
         _.get(this.props, 'dispatch')(
             Actions.createOrUpdateVignette(
-                _.get(this.props, 'vignettes.vignette'),
-                _.get(this.props, 'vignettes.selectedVignetteId')
+                _.get(this.props, 'content.selectedVignette'),
+                _.get(this.props, 'content.selectedVignette.id')
             )
         );
 
@@ -50,7 +51,7 @@ class VignetteEditor extends React.Component {
     public answerPropChange (propName, stageIdx, qIdx, aIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_ANSWER_PROP_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 propName,
                 stageIdx,
                 qIdx,
@@ -63,7 +64,7 @@ class VignetteEditor extends React.Component {
     public questionNameChange (stageIdx, qIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_QUESTION_NAME_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 qIdx,
                 e
@@ -74,7 +75,7 @@ class VignetteEditor extends React.Component {
     public questionSeqChange (stageIdx, qIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_QUESTION_SEQ_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 qIdx,
                 e
@@ -85,7 +86,7 @@ class VignetteEditor extends React.Component {
     public questionMultiChange (stageIdx, qIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_QUESTION_MULTI_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 qIdx,
                 e
@@ -96,7 +97,7 @@ class VignetteEditor extends React.Component {
     public questionTypeChange (stageIdx, qIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_QUESTION_TYPE_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 qIdx,
                 e
@@ -107,7 +108,7 @@ class VignetteEditor extends React.Component {
     public stageNameChange (stageIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_STAGE_NAME_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 e
             )
@@ -117,7 +118,7 @@ class VignetteEditor extends React.Component {
     public stageSeqChange (stageIdx, e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_STAGE_SEQ_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 e
             )
@@ -135,7 +136,7 @@ class VignetteEditor extends React.Component {
     public addStage () {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_STAGE_ADD(
-                _.get(this.props, 'vignettes.vignette.data.stages')
+                _.get(this.props, 'content.selectedVignette.data.stages')
             )
         );
     }
@@ -143,7 +144,7 @@ class VignetteEditor extends React.Component {
     public addQuestion (stageIdx) {
          _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_QUESTION_ADD(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx
             )
         );
@@ -152,7 +153,7 @@ class VignetteEditor extends React.Component {
     public addAnswer (stageIdx, questionIdx) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_ANSWER_ADD(
-                _.get(this.props, 'vignettes.vignette.data.stages'),
+                _.get(this.props, 'content.selectedVignette.data.stages'),
                 stageIdx,
                 questionIdx
             )
@@ -162,8 +163,17 @@ class VignetteEditor extends React.Component {
     public handleNameChange(e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_NAME_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data'),
+                _.get(this.props, 'content.selectedVignette.data'),
                 e
+            )
+        );
+    }
+
+    public handleVigSeqChange(e) {
+        _.get(this.props, 'dispatch')(
+            Actions.VIGNETTE_SEQ_CHANGE(
+                _.get(this.props, 'content.selectedVignette.data'),
+                parseFloat(e)
             )
         );
     }
@@ -171,8 +181,8 @@ class VignetteEditor extends React.Component {
     public handleSpecChange(e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_SPEC_CHANGE(
-                _.get(this.props, 'vignettes.vignette.data'),
-                _.get(this.props, 'vignettes.selectedVignetteId'),
+                _.get(this.props, 'content.selectedVignette.data'),
+                _.get(this.props, 'content.selectedVignette.data.id'),
                 e
             )
         );
@@ -195,7 +205,7 @@ class VignetteEditor extends React.Component {
                         <ControlLabel>Specialty</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.props, 'vignettes.vignette.data.specialtyId')}
+                            value={_.get(this.props, 'content.selectedVignette.data.specialtyId')}
                             placeholder="Enter Specialty"
                             onChange={this.handleSpecChange}
                         >
@@ -212,13 +222,13 @@ class VignetteEditor extends React.Component {
                         <ControlLabel>Select Vignette</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.props, 'vignettes.selectedVignetteId')}
+                            value={_.get(this.props, 'content.selectedVignetteId')}
                             placeholder="Select To Edit Existing"
                             onChange={this.handleSelectedVignetteChange}
                         >
                             <option value="-1">Create New</option>
                             {
-                                _.map(_.get(this.props, 'vignettes.availableVignettes'), (v) => (
+                                _.map(_.get(this.props, 'content.availableVignettes'), (v) => (
                                     <option value={_.get(v, 'id')}>{_.get(v, 'data.name')}</option>
                                 ))
                             }
@@ -231,15 +241,21 @@ class VignetteEditor extends React.Component {
                         <FormControl
                             type="text"
                             placeholder="Enter Name"
-                            value={_.get(this.props, 'vignettes.vignette.data.name')}
+                            value={_.get(this.props, 'content.selectedVignette.data.name')}
                             onChange={this.handleNameChange}
                         />
                         <FormControl.Feedback />
                         <HelpBlock>Testing</HelpBlock>
+                        <FormControl
+                            type="number"
+                            value={_.get(this.props, 'content.selectedVignette.data.seq')}
+                            onChange={this.handleVigSeqChange}
+                        />
                     </FormGroup>
+
                     <div>
                         {
-                            _.map(_.get(this.props, 'vignettes.vignette.data.stages'), (s, i) => (
+                            _.map(_.get(this.props, 'content.selectedVignette.data.stages'), (s, i) => (
                                 <Well>
                                     <FormGroup>
                                         <FormControl
