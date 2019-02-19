@@ -344,8 +344,8 @@ class VignetteEditor extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        specialties: _.get(state, 'specialties'),
-        vignettes: _.get(state, 'vignettes')
+        content: _.get(state, 'content'),
+        specialties: _.get(state, 'specialties')
     };
 }
 

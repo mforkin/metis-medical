@@ -114,9 +114,8 @@ class UserResults extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        results: _.get(state, 'results'),
-        sidebar: _.get(state, 'sidebar'),
-        vignettes: _.get(state, 'vignettes'),
+        content: _.get(state, 'content'),
+        results: _.get(state, 'results')
     };
 }
 

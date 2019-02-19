@@ -126,7 +126,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        sidebar: _.get(state, 'sidebar')
+        content: _.get(state, 'content')
     };
 }
 
