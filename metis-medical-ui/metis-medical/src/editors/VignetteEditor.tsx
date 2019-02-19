@@ -246,6 +246,7 @@ class VignetteEditor extends React.Component {
                         />
                         <FormControl.Feedback />
                         <HelpBlock>Testing</HelpBlock>
+                        <ControlLabel>Seq</ControlLabel>
                         <FormControl
                             type="number"
                             value={_.get(this.props, 'content.selectedVignette.data.seq')}

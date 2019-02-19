@@ -113,7 +113,7 @@ class Question extends React.Component {
             }));
 
             _.get(this.props, 'dispatch')(Actions.loadAvailableVignettes(
-                _.get(this.props, 'content.selectedVignette.id'),
+                _.get(this.props, 'content.specialtyId'),
                 undefined
             ));
         }

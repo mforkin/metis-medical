@@ -50,6 +50,7 @@ const content = (
                     id: action.selectedVignetteId || state.selectedVignette.id,
                     userInfo: {
                         currentResponse: -1,
+                        inProgress: (state.selectedVignette.userInfo && state.selectedVignette.userInfo.inProgress) || '',
                         iteration: 0,
                         mode: 'answer',
                         questionIdx: 0,
@@ -63,10 +64,11 @@ const content = (
             return {
                 ...state,
                 selectedVignette: {
-                    data: action.data.vignette,
+                    data: action.data.vignette.data,
                     id: action.data.selectedVignetteId,
                     userInfo: {
                         currentResponse: -1,
+                        inProgress: state.selectedVignette.userInfo.inProgress,
                         iteration: 0,
                         mode: 'answer',
                         questionIdx: 0,
@@ -110,7 +112,13 @@ const content = (
         case 'VIGNETTE_USER_DATA_LOADED':
             return {
                 ...state,
-                userInfo: action.data
+                selectedVignette: {
+                    ...state.selectedVignette,
+                    userInfo: {
+                        ...state.selectedVignette.userInfo,
+                        inProgress: _.get(action.data[0], 'inProgress')
+                    }
+                }
             };
             break;
         case 'VIGNETTE_STAGE_ADD':
