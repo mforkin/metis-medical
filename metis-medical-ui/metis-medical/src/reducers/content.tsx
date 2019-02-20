@@ -44,7 +44,7 @@ const content = (
                 selectedVignette: {
                     data: {
                         name: '',
-                        specialtyId: -1,
+                        specialtyId: state.specialtyId,
                         stages: []
                     },
                     id: action.selectedVignetteId || state.selectedVignette.id,
@@ -171,7 +171,7 @@ const content = (
                 selectedVignette: {
                     data: {
                         name: '',
-                        specialtyId: -1,
+                        specialtyId: action.stubNew ? action.data : -1,
                         stages: []
                     },
                     id: -1,

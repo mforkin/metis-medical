@@ -180,7 +180,7 @@ class VignetteEditor extends React.Component {
 
     public handleSpecChange(e) {
         _.get(this.props, 'dispatch')(
-            Actions.SPEC_CHANGE(e)
+            Actions.SPEC_CHANGE(e, true)
         );
 
         _.get(this.props, 'dispatch')(
@@ -202,7 +202,7 @@ class VignetteEditor extends React.Component {
                         <ControlLabel>Specialty</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.props, 'content.selectedVignette.data.specialtyId')}
+                            value={_.get(this.props, 'content.specialtyId')}
                             placeholder="Enter Specialty"
                             onChange={this.handleSpecChange}
                         >

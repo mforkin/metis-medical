@@ -516,9 +516,10 @@ export const VIGNETTE_STAGE_NAME_CHANGE = (stages, stageIdx, e) => {
 };
 
 // Sidebar
-export const SPEC_CHANGE = (e) => {
+export const SPEC_CHANGE = (e, createNew?) => {
     return {
         data: parseInt(e.target.value, 10),
+        stubNew: createNew,
         type: 'SPEC_CHANGE'
     };
 };
