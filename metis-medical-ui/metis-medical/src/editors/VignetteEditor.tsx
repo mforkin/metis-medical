@@ -173,19 +173,16 @@ class VignetteEditor extends React.Component {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_SEQ_CHANGE(
                 _.get(this.props, 'content.selectedVignette.data'),
-                parseFloat(e)
+                e
             )
         );
     }
 
     public handleSpecChange(e) {
         _.get(this.props, 'dispatch')(
-            Actions.VIGNETTE_SPEC_CHANGE(
-                _.get(this.props, 'content.selectedVignette.data'),
-                _.get(this.props, 'content.selectedVignette.data.id'),
-                e
-            )
+            Actions.SPEC_CHANGE(e)
         );
+
         _.get(this.props, 'dispatch')(
             Actions.loadAvailableVignettes(e.target.value, undefined)
         );

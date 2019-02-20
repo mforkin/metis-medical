@@ -205,21 +205,6 @@ export const loadAvailableVignettes = (e, selectId) => {
     }
 };
 
-export const VIGNETTE_SPEC_CHANGE = (vignetteData, selectedVignetteId, e) => {
-    const dataObj = {
-        ...vignetteData,
-        specialtyId: parseInt(e.target.value, 10)
-    }
-    if (selectedVignetteId !== -1) {
-        _.set(dataObj, 'name', "");
-        _.set(dataObj, 'stages', []);
-    }
-    return {
-        data: dataObj,
-        type: 'VIGNETTE_SPEC_CHANGE'
-    };
-};
-
 export const VIGNETTE_NAME_CHANGE = (vignetteData, e) => {
     return {
         data: {
@@ -234,7 +219,7 @@ export const VIGNETTE_SEQ_CHANGE = (vignetteData, e) => {
     return {
         data: {
             ...vignetteData,
-            seq: e.target.value
+            seq: parseFloat(e.target.value)
         },
         type: 'VIGNETTE_SEQ_CHANGE'
     };
@@ -531,10 +516,10 @@ export const VIGNETTE_STAGE_NAME_CHANGE = (stages, stageIdx, e) => {
 };
 
 // Sidebar
-export const SIDEBAR_SPEC_CHANGE = (e) => {
+export const SPEC_CHANGE = (e) => {
     return {
         data: parseInt(e.target.value, 10),
-        type: 'SIDEBAR_SPEC_CHANGE'
+        type: 'SPEC_CHANGE'
     };
 };
 

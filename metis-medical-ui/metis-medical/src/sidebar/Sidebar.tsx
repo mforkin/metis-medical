@@ -37,7 +37,7 @@ class Sidebar extends React.Component {
 
     public handleSpecChange (e) {
         _.get(this.props, 'dispatch')(
-            Actions.SIDEBAR_SPEC_CHANGE(e)
+            Actions.SPEC_CHANGE(e)
         );
 
         _.get(this.props, 'dispatch')(

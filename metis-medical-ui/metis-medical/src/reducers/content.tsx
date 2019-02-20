@@ -79,16 +79,6 @@ const content = (
             };
             break;
             // CHANGED
-        case 'VIGNETTE_SPEC_CHANGE':
-            return {
-                ...state,
-                selectedVignette: {
-                    data: action.data,
-                    id: -1
-                }
-            };
-            break;
-            // CHANGED
         case 'VIGNETTE_SEQ_CHANGE':
             return {
                 ...state,
@@ -171,7 +161,7 @@ const content = (
             }
             break;
             // CHANGED
-        case 'SIDEBAR_SPEC_CHANGE':
+        case 'SPEC_CHANGE':
             return {
                 ...state,
                 availableVignettes: [],
