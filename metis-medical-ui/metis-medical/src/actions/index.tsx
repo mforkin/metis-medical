@@ -192,7 +192,7 @@ export const LOAD_AVAILABLE_VIGNETTES = (d, selectId) => {
 
 export const loadAvailableVignettes = (e, selectId) => {
     return (dispatch) => {
-        fetch("/api/vignette/specialty/" + e)
+        return fetch("/api/vignette/specialty/" + e)
             .then((response) => {
                 return response.json();
             })
@@ -416,6 +416,19 @@ export const VIGNETTE_ANSWER_ADD = (stages, stageIdx, questionIdx) => {
         type: 'VIGNETTE_ANSWER_ADD'
     };
 };
+
+export const UPDATE_MODE = (mode) => {
+    return {
+        data: mode,
+        type: 'UPDATE_MODE'
+    };
+};
+
+export const UNSET_FEEDBACK = () => {
+    return {
+        type: 'UNSET_FEEDBACK'
+    };
+}
 
 export const VIGNETTE_ANSWER_PROP_CHANGE = (stages, propName, stageIdx, qIdx, aIdx, e) => {
     return {

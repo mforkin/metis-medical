@@ -17,21 +17,18 @@ class Sidebar extends React.Component {
         this.isVignetteInProgressLabel = this.isVignetteInProgressLabel.bind(this);
         this.modeSetter = this.modeSetter.bind(this);
         this.isSelectedClass = this.isSelectedClass.bind(this);
-
-        this.state = {
-            mode: 'quiz'
-        };
     }
 
     public isSelectedClass (mode) {
-        return "menu-item " + (_.get(this.state, 'mode') === mode ? 'selected' : 'not-selected');
+        return "menu-item " + (_.get(this.props, 'content.sidebarMode') === mode ? 'selected' : 'not-selected');
     }
 
     public modeSetter (mode) {
         const me = this;
         return (e) => {
+            _.get(me.props, 'dispatch')(Actions.UPDATE_MODE(mode));
             _.get(me.props, 'dispatch')(Actions.loadUserResults());
-            me.setState({ mode });
+            _.get(me.props, 'dispatch')(Actions.UNSET_FEEDBACK());
         };
     }
 

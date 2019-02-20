@@ -24,6 +24,7 @@ const content = (
                 stageIdx: 0
             }
         },
+        sidebarMode: 'quiz',
         specialtyId: -1,
         userInfo: {
             user: {
@@ -31,11 +32,27 @@ const content = (
                 specialtyId: -1,
                 username: ''
             }
-        }
+        },
+        vignetteId: -1
     },
     action
 ) => {
     switch (action.type) {
+        case 'UPDATE_MODE':
+            return {
+                ...state,
+                sidebarMode: action.data
+            };
+            break;
+        case 'UNSET_FEEDBACK': {
+            return {
+                ...state,
+                feedback: {
+                    id: ''
+                }
+            }
+            break;
+        }
         // vignette.orig
         case 'LOAD_AVAILABLE_VIGNETTES':
             return {
@@ -75,7 +92,8 @@ const content = (
                         score: 0,
                         stageIdx: 0
                     }
-                }
+                },
+                vignetteId: action.data.selectedVignetteId,
             };
             break;
             // CHANGED

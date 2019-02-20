@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Button, Checkbox, FormControl, FormGroup, Radio } from 'react-bootstrap';
 // import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as Actions from '../actions';
 
 class Question extends React.Component {
@@ -13,6 +14,12 @@ class Question extends React.Component {
 
         this.submit = this.submit.bind(this);
         this.next = this.next.bind(this);
+        this.modeSetter = this.modeSetter.bind(this);
+        this.isLast = this.isLast.bind(this);
+        this.selectNextVignette = this.selectNextVignette.bind(this);
+        this.getNextVignetteId = this.getNextVignetteId.bind(this);
+        this.hasNextVignette = this.hasNextVignette.bind(this);
+        this.getNextQuestionIdxFromSeq = this.getNextQuestionIdxFromSeq.bind(this);
         this.answerChanged = this.answerChanged.bind(this);
         this.numericAnswerChanged = this.numericAnswerChanged.bind(this);
         this.getAnswers = this.getAnswers.bind(this);
@@ -131,11 +138,15 @@ class Question extends React.Component {
     }
 
     public getSubmitLabel () {
-        return this.getMode() === 'answer' ? "Submit" : "Next";
+        return this.getMode() === 'answer' ? "Submit" : "Next Question";
     }
 
     public getSubmitFn () {
         return this.getMode() === 'answer' ? this.submit : this.next;
+    }
+
+    public isLast () {
+        return _.get(this.props, 'isLastQuestion') &&  _.get(this.props, 'isLastStage')
     }
 
     public getAnswerCheckbox (isAnswerChecked, a, props, answerChanged, cls) {
@@ -251,6 +262,134 @@ class Question extends React.Component {
         return _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0] === answer.id;
     }
 
+    public modeSetter (mode) {
+        const me = this;
+        return (e) => {
+            _.get(me.props, 'dispatch')(Actions.UPDATE_MODE(mode));
+            _.get(me.props, 'dispatch')(Actions.loadUserResults());
+            _.get(this.props, 'dispatch')(Actions.loadAvailableVignettes(
+                _.get(this.props, 'content.specialtyId'),
+                _.get(this.props, 'content.selectedVignette.id')
+            ));
+        };
+    }
+
+    public getNextVignetteId () {
+        const vignetteIds = _.sortBy(
+            _.map(
+                _.get(this.props, 'content.availableVignettes'),
+                (v) => {
+                    return {
+                        id: _.get(v, 'id'),
+                        seq: _.get(v, 'data.seq')
+                    };
+                }
+            ),
+            'seq'
+        );
+
+        const curIdx = _.findIndex(vignetteIds, (v) => _.get(v, 'id') === _.get(this.props, 'content.selectedVignette.id'));
+        const nextId = curIdx === vignetteIds.length ? void(0) : _.get(vignetteIds[curIdx + 1], 'id');
+        return nextId;
+    }
+
+    public getNextQuestionIdxFromSeq (stageSeq, questionSeq, iteration, vig) {
+        const stages = _.get(vig, 'data.stages')
+        const stageIndex = _.findIndex(stages, (s) => _.get(s, 'data.seq') === stageSeq)
+        const questions = _.get(stages[stageIndex], 'data.question')
+        const questionIndex = _.findIndex(questions, (q) => _.get(q, 'data.seq') === questionSeq)
+        const ret = {
+            questionIndex,
+            stageIndex
+        }
+        // last question in stage was answered
+        if (questionIndex === questions.length - 1) {
+            // if there is a new stage to go to, go to it, if not, reset!
+            if (stageIndex !== stages.length - 1) {
+                ret.stageIndex = stageIndex + 1
+                ret.questionIndex = 0
+                _.get(this.props, 'dispatch')(Actions.SIDEBAR_UPDATE_ITERATION(
+                    iteration
+                ));
+            } else {
+                ret.stageIndex = 0
+                ret.questionIndex = 0
+                _.get(this.props, 'dispatch')(Actions.SIDEBAR_UPDATE_ITERATION(
+                    iteration + 1
+                ));
+            }
+        } else {
+            ret.questionIndex = questionIndex + 1
+            _.get(this.props, 'dispatch')(Actions.SIDEBAR_UPDATE_ITERATION(
+                iteration
+            ));
+        }
+        return ret;
+    }
+
+    public selectNextVignette () {
+        const nextId = this.getNextVignetteId();
+        const availableV = _.get(this.props, 'dispatch')(
+            Actions.loadAvailableVignettes(
+                _.get(this.props, 'content.specialtyId'),
+                nextId
+            )
+        );
+
+        const me = this;
+
+        availableV.then(a => {
+            _.get(this.props, 'dispatch')(
+                Actions.VIGNETTE_SELECTED(
+                    _.get(this.props, 'content.specialtyId'),
+                    _.get(this.props, 'content.availableVignettes'),
+                    nextId
+                )
+            )
+
+            const loaded = _.get(this.props, 'dispatch')(
+                Actions.loadUserDataForVignette(
+                    nextId
+                )
+            );
+
+            loaded.then(l => {
+                const loadPromise = _.get(this.props, 'dispatch')(
+                    Actions.loadProgressForVignette(
+                        _.get(this.props, 'content.specialtyId'),
+                        nextId
+                    )
+                );
+
+                loadPromise.then(t => {
+                    // @TODO don't get vignette like this, change to redux dispatch
+                    const vignette = _.find(
+                        _.get(me.props, 'content.availableVignettes'),
+                        (v) => v.id === nextId
+                    );
+                    const progress = _.get(vignette, 'inProgress');
+                    // CHANGED const progress = _.get(_.get(me.props, 'vignettes.userData')[0], 'inProgress')
+                    if (progress) {
+                        const nextIndexes = me.getNextQuestionIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'), _.get(progress, '_3'), vignette)
+                        _.get(me.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
+                            nextIndexes.questionIndex,
+                            nextIndexes.stageIndex
+                        ));
+                    } else {
+                        _.get(me.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
+                            0,
+                            0
+                        ));
+                    }
+                });
+            });
+        })
+    }
+
+    public hasNextVignette () {
+        return this.getNextVignetteId() !== void(0);
+    }
+
     public render () {
         return (
             <div className='question'>
@@ -291,12 +430,36 @@ class Question extends React.Component {
                     )
                 }
                 {
+                    this.isLast() && this.getMode() === 'answered'? (
+                        <div>
+                            {
+                                this.hasNextVignette() ?
+                                (
+                                    <Button
+                                        onClick={this.selectNextVignette}
+                                    >
+                                        Next Vignette
+                                    </Button>
+                                )
+                                :
+                                (
+                                    <div>
+                                        All Vignettes Completed!
+                                    </div>
+                                )
+
+                            }
+                            <Link onClick={this.modeSetter('results')} to="/results">Results</Link>
+                        </div>
+                    ) :
                     (
-                        <Button
-                            onClick={this.getSubmitFn()}
-                        >
-                            {this.getSubmitLabel()}
-                        </Button>
+                        <div>
+                            <Button
+                                onClick={this.getSubmitFn()}
+                            >
+                                {this.getSubmitLabel()}
+                            </Button>
+                        </div>
                     )
                 }
             </div>
