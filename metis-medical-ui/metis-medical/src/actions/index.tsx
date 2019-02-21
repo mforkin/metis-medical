@@ -192,7 +192,7 @@ export const LOAD_AVAILABLE_VIGNETTES = (d, selectId) => {
 
 export const loadAvailableVignettes = (e, selectId) => {
     return (dispatch) => {
-        fetch("/api/vignette/specialty/" + e)
+        return fetch("/api/vignette/specialty/" + e)
             .then((response) => {
                 return response.json();
             })
@@ -205,21 +205,6 @@ export const loadAvailableVignettes = (e, selectId) => {
     }
 };
 
-export const VIGNETTE_SPEC_CHANGE = (vignetteData, selectedVignetteId, e) => {
-    const dataObj = {
-        ...vignetteData,
-        specialtyId: parseInt(e.target.value, 10)
-    }
-    if (selectedVignetteId !== -1) {
-        _.set(dataObj, 'name', "");
-        _.set(dataObj, 'stages', []);
-    }
-    return {
-        data: dataObj,
-        type: 'VIGNETTE_SPEC_CHANGE'
-    };
-};
-
 export const VIGNETTE_NAME_CHANGE = (vignetteData, e) => {
     return {
         data: {
@@ -227,6 +212,16 @@ export const VIGNETTE_NAME_CHANGE = (vignetteData, e) => {
             name: e.target.value
         },
         type: 'VIGNETTE_NAME_CHANGE'
+    };
+};
+
+export const VIGNETTE_SEQ_CHANGE = (vignetteData, e) => {
+    return {
+        data: {
+            ...vignetteData,
+            seq: parseFloat(e.target.value)
+        },
+        type: 'VIGNETTE_SEQ_CHANGE'
     };
 };
 
@@ -422,6 +417,19 @@ export const VIGNETTE_ANSWER_ADD = (stages, stageIdx, questionIdx) => {
     };
 };
 
+export const UPDATE_MODE = (mode) => {
+    return {
+        data: mode,
+        type: 'UPDATE_MODE'
+    };
+};
+
+export const UNSET_FEEDBACK = () => {
+    return {
+        type: 'UNSET_FEEDBACK'
+    };
+}
+
 export const VIGNETTE_ANSWER_PROP_CHANGE = (stages, propName, stageIdx, qIdx, aIdx, e) => {
     return {
         data: stages.map((d, i) => {
@@ -521,10 +529,11 @@ export const VIGNETTE_STAGE_NAME_CHANGE = (stages, stageIdx, e) => {
 };
 
 // Sidebar
-export const SIDEBAR_SPEC_CHANGE = (e) => {
+export const SPEC_CHANGE = (e, createNew?) => {
     return {
         data: parseInt(e.target.value, 10),
-        type: 'SIDEBAR_SPEC_CHANGE'
+        stubNew: createNew,
+        type: 'SPEC_CHANGE'
     };
 };
 

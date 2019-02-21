@@ -13,7 +13,7 @@ class Header extends React.Component {
                 <FontAwesomeIcon icon="notes-medical" />
                 METIS MEDICAL
                 <div className="user-info">
-                    {_.get(this.props, 'sidebar.userInfo.user.username')}
+                    {_.get(this.props, 'content.userInfo.user.username')}
                     <FontAwesomeIcon icon="user-md" />
                     <NavDropdown
                         pullRight
@@ -35,7 +35,7 @@ class Header extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        sidebar: _.get(state, 'sidebar')
+        content: _.get(state, 'content')
     };
 };
 

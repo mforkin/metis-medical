@@ -25,7 +25,7 @@ class Survey extends React.Component {
     public getStages () {
         const stages = _.get(
             this.props,
-            'vignettes.vignette.data.stages'
+            'content.selectedVignette.data.stages'
         );
 
         return stages || [];
@@ -34,14 +34,14 @@ class Survey extends React.Component {
     public getStageIndex () {
         return _.get(
             this.props,
-            'sidebar.userInfo.currentVignette.stageIdx'
+            'content.selectedVignette.userInfo.stageIdx'
         );
     }
 
     public getQuestionIndex () {
         return _.get(
             this.props,
-            'sidebar.userInfo.currentVignette.questionIdx'
+            'content.selectedVignette.userInfo.questionIdx'
         );
     }
 
@@ -82,9 +82,9 @@ class Survey extends React.Component {
 
     public isCompleted () {
         return this.isLastStageOfVignette() && this.isLastQuestionOfStage()
-            && _.get(this.getStageAtIndex(), 'data.seq') === _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._1')
-            && _.get(this.getQuestionAtIndex(), 'data.seq') === _.get(this.props, 'sidebar.userInfo.currentVignette.inProgress._2')
-            && _.get(this.props, 'vignettes.vignette.inProgress._3') === _.get(this.props, 'sidebar.userInfo.currentVignette.iteration')
+            && _.get(this.getStageAtIndex(), 'data.seq') === _.get(this.props, 'content.selectedVignette.userInfo.inProgress._1')
+            && _.get(this.getQuestionAtIndex(), 'data.seq') === _.get(this.props, 'content.selectedVignette.userInfo.inProgress._2')
+            && _.get(this.props, 'content.selectedVignette.userInfo.inProgress._3') === _.get(this.props, 'content.selectedVignette.userInfo.iteration')
     }
 
     public getRenderTpl () {
@@ -134,8 +134,7 @@ class Survey extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        sidebar: _.get(state, 'sidebar'),
-        vignettes: _.get(state, 'vignettes')
+        content: _.get(state, 'content')
     };
 }
 

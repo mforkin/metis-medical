@@ -32,6 +32,7 @@ ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 CREATE TABLE public.vignette (
     id serial NOT NULL,
     name text NOT NULL,
+    seq integer NOT NULL,
     CONSTRAINT "vignette_pk" PRIMARY KEY (id)
 )
 WITH (OIDS=FALSE);

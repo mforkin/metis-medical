@@ -23,7 +23,7 @@ class UserResults extends React.Component {
     }
 
     public getSelectedVignetteId () {
-        return _.get(this.props, 'vignettes.vignette.id');
+        return _.get(this.props, 'content.selectedVignette.id');
     }
 
     public getVignetteChartData () {
@@ -114,9 +114,8 @@ class UserResults extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        results: _.get(state, 'results'),
-        sidebar: _.get(state, 'sidebar'),
-        vignettes: _.get(state, 'vignettes'),
+        content: _.get(state, 'content'),
+        results: _.get(state, 'results')
     };
 }
 

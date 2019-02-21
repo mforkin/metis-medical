@@ -17,27 +17,24 @@ class Sidebar extends React.Component {
         this.isVignetteInProgressLabel = this.isVignetteInProgressLabel.bind(this);
         this.modeSetter = this.modeSetter.bind(this);
         this.isSelectedClass = this.isSelectedClass.bind(this);
-
-        this.state = {
-            mode: 'quiz'
-        };
     }
 
     public isSelectedClass (mode) {
-        return "menu-item " + (_.get(this.state, 'mode') === mode ? 'selected' : 'not-selected');
+        return "menu-item " + (_.get(this.props, 'content.sidebarMode') === mode ? 'selected' : 'not-selected');
     }
 
     public modeSetter (mode) {
         const me = this;
         return (e) => {
+            _.get(me.props, 'dispatch')(Actions.UPDATE_MODE(mode));
             _.get(me.props, 'dispatch')(Actions.loadUserResults());
-            me.setState({ mode });
+            _.get(me.props, 'dispatch')(Actions.UNSET_FEEDBACK());
         };
     }
 
     public handleSpecChange (e) {
         _.get(this.props, 'dispatch')(
-            Actions.SIDEBAR_SPEC_CHANGE(e)
+            Actions.SPEC_CHANGE(e)
         );
 
         _.get(this.props, 'dispatch')(
@@ -51,8 +48,8 @@ class Sidebar extends React.Component {
     public handleVigChange (e) {
         _.get(this.props, 'dispatch')(
             Actions.VIGNETTE_SELECTED(
-                _.get(this.props, 'vignettes.selectedSpecialtyId'),
-                _.get(this.props, 'vignettes.availableVignettes'),
+                _.get(this.props, 'content.specialtyId'),
+                _.get(this.props, 'content.availableVignettes'),
                 e.target.value
             )
         )
@@ -65,7 +62,7 @@ class Sidebar extends React.Component {
 
         const loadPromise = _.get(this.props, 'dispatch')(
             Actions.loadProgressForVignette(
-                _.get(this.props, 'sidebar.specialtyId'),
+                _.get(this.props, 'content.specialtyId'),
                 parseInt(e.target.value, 10)
             )
         );
@@ -77,10 +74,11 @@ class Sidebar extends React.Component {
         loadPromise.then(t => {
             // @TODO don't get vignette like this, change to redux dispatch
             const vignette = _.find(
-                _.get(me.props, 'vignettes.availableVignettes'),
+                _.get(me.props, 'content.availableVignettes'),
                 (v) => v.id === targetValue
             );
-            const progress = _.get(_.get(me.props, 'vignettes.userData')[0], 'inProgress')
+            const progress = _.get(me.props, 'content.selectedVignette.userInfo.inProgress')
+            // CHANGED const progress = _.get(_.get(me.props, 'vignettes.userData')[0], 'inProgress')
             if (progress) {
                 const nextIndexes = me.getNextQuestionIdxFromSeq(_.get(progress, '_1'), _.get(progress, '_2'), _.get(progress, '_3'), vignette)
                 _.get(me.props, 'dispatch')(Actions.SIDEBAR_NEXT_QUESTION(
@@ -169,7 +167,7 @@ class Sidebar extends React.Component {
                         <ControlLabel>Choose Speciality</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.props, 'sidebar.specialtyId')}
+                            value={_.get(this.props, 'content.specialtyId')}
                             placeholder="Select Specialty"
                             onChange={this.handleSpecChange}
                         >
@@ -188,13 +186,13 @@ class Sidebar extends React.Component {
                         <ControlLabel>Choose Vignette</ControlLabel>
                         <FormControl
                             componentClass="select"
-                            value={_.get(this.props, 'sidebar.vignetteId')}
+                            value={_.get(this.props, 'content.vignetteId')}
                             placeholder="Select Vignette"
                             onChange={this.handleVigChange}
                         >
                             <option value="-1"/>
                             {
-                                _.map(_.get(this.props, 'vignettes.availableVignettes'), (d) => (
+                                _.map(_.get(this.props, 'content.availableVignettes'), (d) => (
                                     <option key={d.id} value={d.id}>{d.data.name + this.isVignetteInProgressLabel(d)}</option>
                                 ))
                             }
@@ -205,12 +203,12 @@ class Sidebar extends React.Component {
                 <Link onClick={this.modeSetter('quiz')} className={this.isSelectedClass('quiz')} to="/">Quiz</Link>
                 <Link onClick={this.modeSetter('results')} className={this.isSelectedClass('results')} to="/results">Results</Link>
                 {
-                    _.get(this.props, 'sidebar.userInfo.user.isAdmin') ? (
+                    _.get(this.props, 'content.userInfo.user.isAdmin') ? (
                         <Link onClick={this.modeSetter('mv')} className={this.isSelectedClass('mv')} to="/edit">Manage Vignettes</Link>
                     ) : ""
                 }
                 {
-                    _.get(this.props, 'sidebar.userInfo.user.isAdmin') ? (
+                    _.get(this.props, 'content.userInfo.user.isAdmin') ? (
                         <Link onClick={this.modeSetter('ms')} className={this.isSelectedClass('ms')} to="/editSpecialties">Manage Specialties</Link>
                     ) : ""
                 }
@@ -221,9 +219,8 @@ class Sidebar extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        sidebar: _.get(state, 'sidebar'),
+        content: _.get(state, 'content'),
         specialties: _.get(state, 'specialties'),
-        vignettes: _.get(state, 'vignettes')
     };
 }
 

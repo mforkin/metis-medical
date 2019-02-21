@@ -57,7 +57,7 @@ class App extends React.Component {
                     .then(() => {
                         _.get(me.props, 'dispatch')(
                             Actions.loadAvailableVignettes(
-                                _.get(me.props, 'sidebar.specialtyId'),
+                                _.get(me.props, 'content.specialtyId'),
                                 undefined
                             )
                         )
@@ -126,7 +126,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        sidebar: _.get(state, 'sidebar')
+        content: _.get(state, 'content')
     };
 }
 

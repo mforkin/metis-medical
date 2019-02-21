@@ -32,7 +32,7 @@ class Stage extends React.Component {
     public getQuestionIdx () {
         return _.get(
             this.props,
-            'sidebar.userInfo.currentVignette.questionIdx'
+            'content.selectedVignette.userInfo.questionIdx'
         )
     }
 
@@ -45,7 +45,7 @@ class Stage extends React.Component {
             <div className='stage'>
                 <div className="header">
                     <div className="vignette-name">
-                        {_.get(this.props, 'vignettes.vignette.data.name')}
+                        {_.get(this.props, 'content.selectedVignette.data.name')}
                     </div>
                     {_.get(this.props, 'data.name') ?
                     <div className="vignette-text-cnt">
@@ -75,8 +75,7 @@ class Stage extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         ...ownProps,
-        sidebar: _.get(state, 'sidebar'),
-        vignettes: _.get(state, 'vignettes')
+        content: _.get(state, 'content')
     };
 }
 

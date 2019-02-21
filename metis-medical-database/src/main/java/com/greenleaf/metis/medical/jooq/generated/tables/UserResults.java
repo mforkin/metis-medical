@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserResults extends TableImpl<UserResultsRecord> {
 
-    private static final long serialVersionUID = -102031819;
+    private static final long serialVersionUID = -1233919018;
 
     /**
      * The reference instance of <code>public.user_results</code>
@@ -73,7 +73,7 @@ public class UserResults extends TableImpl<UserResultsRecord> {
     /**
      * The column <code>public.user_results.iteration</code>.
      */
-    public final TableField<UserResultsRecord, Integer> ITERATION = createField("iteration", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<UserResultsRecord, Integer> ITERATION = createField("iteration", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>public.user_results</code> table reference

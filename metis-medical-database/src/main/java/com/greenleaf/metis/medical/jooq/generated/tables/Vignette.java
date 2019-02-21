@@ -39,7 +39,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Vignette extends TableImpl<VignetteRecord> {
 
-    private static final long serialVersionUID = 1215324014;
+    private static final long serialVersionUID = 966694202;
 
     /**
      * The reference instance of <code>public.vignette</code>
@@ -63,6 +63,11 @@ public class Vignette extends TableImpl<VignetteRecord> {
      * The column <code>public.vignette.name</code>.
      */
     public final TableField<VignetteRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>public.vignette.seq</code>.
+     */
+    public final TableField<VignetteRecord, Integer> SEQ = createField("seq", org.jooq.impl.SQLDataType.INTEGER, this, "");
 
     /**
      * Create a <code>public.vignette</code> table reference
