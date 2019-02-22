@@ -296,11 +296,10 @@ class Stage extends React.Component {
                                             )
                                             :
                                             (
-                                                <div>
+                                                <div className="vig-complete">
                                                     All Vignettes Completed!
                                                 </div>
                                             )
-
                                         }
                                         <Button className="link-btn">
                                             <Link onClick={this.modeSetter('results')} to="/results">Results</Link>
