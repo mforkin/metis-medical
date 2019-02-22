@@ -150,7 +150,7 @@ object VignetteService {
         r.getValue(VIGNETTE_SPECIALTY.SPECIALTY_ID).toInt,
         r.getValue(VIGNETTE.NAME),
         Seq(),
-        r.getValue(VIGNETTE.SEQ)
+        r.getValue(VIGNETTE.SEQ).toInt
       ),
       status.get(vId)
     )
@@ -172,6 +172,7 @@ object VignetteService {
     //get All vignettes
     val vignettes = getBaseVignetteQuery
       .where(VIGNETTE_SPECIALTY.SPECIALTY_ID.equal(specialtyId))
+      .orderBy(VIGNETTE.SEQ.asc())
       .fetch.asScala
       .map(r => extractVignetteFromBaseQuery(r, vignetteProgress))
 

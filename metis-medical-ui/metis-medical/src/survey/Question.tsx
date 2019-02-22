@@ -2,10 +2,11 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Button, Checkbox, FormControl, FormGroup, Radio } from 'react-bootstrap';
+import { Checkbox, FormControl, FormGroup, Radio } from 'react-bootstrap';
+// import { Button, Checkbox, FormControl, FormGroup, Radio } from 'react-bootstrap';
 // import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import * as Actions from '../actions';
 
 class Question extends React.Component {
@@ -34,16 +35,15 @@ class Question extends React.Component {
         this.getAnswerRadio = this.getAnswerRadio.bind(this);
 
         this.state = {
-            iconSize: "lg",
-            numericResponse: undefined
+            iconSize: "lg"
         };
     }
 
     public numericAnswerChanged (e) {
         const answer = parseFloat(e.target.value);
-        this.setState({
-            numericResponse: answer
-        });
+        _.get(this.props, 'dispatch')(
+            Actions.NUMERIC_RESPONSE_CHANGED(answer)
+        );
 
         const rightAnswer = _.find(this.getAnswers(), (a) => a.data.isCorrect);
         const wrongAnswer = _.find(this.getAnswers(), (a) => !a.data.isCorrect);
@@ -92,7 +92,7 @@ class Question extends React.Component {
                 .map((r) => {
                     return {
                         id: r,
-                        meta: _.get(this.state, 'numericResponse')
+                        meta: _.get(this.props, 'content.numericResponse')
                     };
                 }),
             datetime: (new Date()).toISOString(),
@@ -124,6 +124,10 @@ class Question extends React.Component {
                 undefined
             ));
         }
+
+        _.get(this.props, 'dispatch')(
+            Actions.NUMERIC_RESPONSE_CHANGED('')
+        );
     }
 
 
@@ -271,6 +275,9 @@ class Question extends React.Component {
                 _.get(this.props, 'content.specialtyId'),
                 _.get(this.props, 'content.selectedVignette.id')
             ));
+            _.get(this.props, 'dispatch')(
+                Actions.NUMERIC_RESPONSE_CHANGED('')
+            );
         };
     }
 
@@ -338,6 +345,10 @@ class Question extends React.Component {
 
         const me = this;
 
+        _.get(this.props, 'dispatch')(
+            Actions.NUMERIC_RESPONSE_CHANGED('')
+        );
+
         availableV.then(a => {
             _.get(this.props, 'dispatch')(
                 Actions.VIGNETTE_SELECTED(
@@ -400,7 +411,7 @@ class Question extends React.Component {
                             <FormControl
                                 className="numeric-form-control"
                                 type="number"
-                                value={_.get(this.state, 'numericResponse')}
+                                value={_.get(this.props, 'content.numericResponse')}
                                 onChange={this.numericAnswerChanged}
                                 />
                             <div className="numeric-suffix">{this.getNumericSuffix(_.get(this.props, 'data'))}</div>
@@ -427,39 +438,6 @@ class Question extends React.Component {
                                 ))
                             }
                         </FormGroup>
-                    )
-                }
-                {
-                    this.isLast() && this.getMode() === 'answered'? (
-                        <div>
-                            {
-                                this.hasNextVignette() ?
-                                (
-                                    <Button
-                                        onClick={this.selectNextVignette}
-                                    >
-                                        Next Vignette
-                                    </Button>
-                                )
-                                :
-                                (
-                                    <div>
-                                        All Vignettes Completed!
-                                    </div>
-                                )
-
-                            }
-                            <Link onClick={this.modeSetter('results')} to="/results">Results</Link>
-                        </div>
-                    ) :
-                    (
-                        <div>
-                            <Button
-                                onClick={this.getSubmitFn()}
-                            >
-                                {this.getSubmitLabel()}
-                            </Button>
-                        </div>
                     )
                 }
             </div>

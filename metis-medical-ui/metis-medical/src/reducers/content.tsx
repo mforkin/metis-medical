@@ -6,6 +6,7 @@ const content = (
         feedback: {
             id: ''
         },
+        numericResponse: undefined,
         selectedVignette: {
             data: {
                 name: '',
@@ -38,6 +39,11 @@ const content = (
     action
 ) => {
     switch (action.type) {
+        case 'NUMERIC_RESPONSE_CHANGED':
+            return {
+                ...state,
+                numericResponse: action.data
+            };
         case 'UPDATE_MODE':
             return {
                 ...state,

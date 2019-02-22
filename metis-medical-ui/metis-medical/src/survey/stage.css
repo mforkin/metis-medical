@@ -4,6 +4,45 @@
     font-family: arial, sans-serif;
 }
 
+.content > div > div {
+    height: 100%;
+}
+
+div.survey {
+    height: 100%;
+}
+
+.survey .stage-cnt {
+    height: 100%;
+}
+
+.stage-cnt .stage {
+    height: calc(100% - 35px);
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.stage-cnt .controls {
+    height: 35px;
+    border-top: 1px solid #ccc;
+    padding: 4px;
+}
+
+.stage-cnt .controls button {
+    margin-right: 10px;
+}
+
+.stage-cnt .controls button.link-btn {
+    margin-right: 10px;
+    padding: 0;
+}
+
+.stage-cnt .controls button a {
+    padding: 0 10px;
+    color: #333;
+    line-height: 2.3;
+}
+
 .header .vignette-text-cnt {
     box-shadow: 0 0 8px 1px rgba(0,0,0,0.4);
     border-radius: 0;

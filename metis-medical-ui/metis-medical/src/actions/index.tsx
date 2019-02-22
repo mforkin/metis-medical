@@ -14,6 +14,13 @@ export const submitAnswer = (answer) => {
     };
 }
 
+export const NUMERIC_RESPONSE_CHANGED = (answer) => {
+    return {
+        data: answer,
+        type: 'NUMERIC_RESPONSE_CHANGED'
+    };
+}
+
 export const SIDEBAR_LAST_QUESTION_ANSWERED = (progress) => {
     return {
         data: progress,
