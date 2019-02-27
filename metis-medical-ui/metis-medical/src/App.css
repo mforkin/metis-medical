@@ -87,6 +87,14 @@ html, body {
     height: 100%
 }
 
+.res-cnt .chart-cnt {
+    height: calc(100% - 50px);
+}
+
+.res-cnt .res-dash-filters {
+    height: 50px;
+}
+
 .q-chart-cnt {
     height: 100%;
     width: 350px;

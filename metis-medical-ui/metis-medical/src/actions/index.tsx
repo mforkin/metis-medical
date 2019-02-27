@@ -1,5 +1,12 @@
 import * as _ from 'lodash';
 
+export const ATTEMPT_TYPE_CHANGE = (attemptType) => {
+    return {
+        data: attemptType,
+        type: 'ATTEMPT_TYPE_CHANGE'
+    }
+}
+
 // Sidebar Actions
 export const submitAnswer = (answer) => {
     return (dispatch) => {

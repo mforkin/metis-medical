@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
+import { FormGroup, Radio } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FlexibleXYPlot, HorizontalGridLines, VerticalBarSeries, VerticalGridLines, XAxis, YAxis } from 'react-vis';
 import * as Actions from '../actions';
@@ -10,8 +11,15 @@ class UserResults extends React.Component {
         this.getVignetteDetails = this.getVignetteDetails.bind(this);
         this.getVignetteChartData = this.getVignetteChartData.bind(this);
         this.getSelectedVignetteId = this.getSelectedVignetteId.bind(this);
+        this.attemptTypeChange = this.attemptTypeChange.bind(this);
+        this.tabChanged = this.tabChanged.bind(this);
+        this.checker = this.checker.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
+
+        this.state = {
+            key: 'vignette'
+        }
     }
 
     public getQuestionDetails () {
@@ -72,39 +80,78 @@ class UserResults extends React.Component {
         return ret;
     }
 
+    public attemptTypeChange (e) {
+        const resultFilter = e.target.value;
+
+        _.get(this.props, 'dispatch')(
+            Actions.ATTEMPT_TYPE_CHANGE(resultFilter)
+        )
+    }
+
+    public tabChanged (key) {
+        this.setState({key})
+    }
+
+    public checker (key) {
+        return _.get(this.props, 'content.results.filters.attemptType') === key
+    }
+
     public render () {
         return (
             <div className="res-cnt">
-                <div className="flexi-cnt">
-                    <FlexibleXYPlot xType="ordinal">
-                        <VerticalGridLines />
-                        <HorizontalGridLines />
-                        <XAxis title="Number of Questions Answered Correctly" />
-                        <YAxis
-                            tickFormat={this.yTickFormat}
-                            title="Count of Participants"
-                            />
-                        <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getVignetteChartData()} />
-                    </FlexibleXYPlot>
+                <div className="res-dash-filters">
+                    <div className="general-filters">
+                        <div className="dashboard-type">
+                            Test
+                        </div>
+                    </div>
+                    <div className="detail-filters">
+                        <div className="attempt-type">
+                            <FormGroup>
+                                <Radio checked={this.checker('best')} name="attempttype" value="best" onClick={this.attemptTypeChange}>
+                                    Best
+                                </Radio>
+                                <Radio checked={this.checker('last')} name="attempttype" value="last" onClick={this.attemptTypeChange}>
+                                    Last
+                                </Radio>
+                                <Radio checked={this.checker('all')} name="attempttype" value="all" onClick={this.attemptTypeChange}>
+                                    All
+                                </Radio>
+                            </FormGroup>
+                        </div>
+                    </div>
                 </div>
-                <div className="q-details">
-                    {
-                        _.map(this.getQuestionChartData(), d => (
-                            <div className='q-chart-cnt'>
-                                <FlexibleXYPlot xType="ordinal">
-                                    <VerticalGridLines />
-                                    <HorizontalGridLines />
-                                    <XAxis title="Selected Answer" />
-                                    <YAxis
-                                        tickFormat={this.yTickFormat}
-                                        title="Count of Participants"
-                                        />
-                                    <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={d} />
-                                </FlexibleXYPlot>
-                            </div>
-                        ))
-                    }
-
+                <div className="chart-cnt">
+                    <div className="flexi-cnt">
+                        <FlexibleXYPlot xType="ordinal">
+                            <VerticalGridLines />
+                            <HorizontalGridLines />
+                            <XAxis title="Number of Questions Answered Correctly" />
+                            <YAxis
+                                tickFormat={this.yTickFormat}
+                                title="Count of Participants"
+                                />
+                            <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getVignetteChartData()} />
+                        </FlexibleXYPlot>
+                    </div>
+                    <div className="q-details">
+                        {
+                            _.map(this.getQuestionChartData(), d => (
+                                <div className='q-chart-cnt'>
+                                    <FlexibleXYPlot xType="ordinal">
+                                        <VerticalGridLines />
+                                        <HorizontalGridLines />
+                                        <XAxis title="Selected Answer" />
+                                        <YAxis
+                                            tickFormat={this.yTickFormat}
+                                            title="Count of Participants"
+                                            />
+                                        <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={d} />
+                                    </FlexibleXYPlot>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         )

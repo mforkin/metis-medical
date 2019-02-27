@@ -7,6 +7,11 @@ const content = (
             id: ''
         },
         numericResponse: undefined,
+        results: {
+            filters: {
+                attemptType: 'best'
+            }
+        },
         selectedVignette: {
             data: {
                 name: '',
@@ -39,6 +44,18 @@ const content = (
     action
 ) => {
     switch (action.type) {
+        case 'ATTEMPT_TYPE_CHANGE':
+            return {
+                ...state,
+                results: {
+                    ...state.results,
+                    filters: {
+                        ...state.results.filters,
+                        attemptType: action.data
+                    }
+                }
+            }
+            break;
         case 'NUMERIC_RESPONSE_CHANGED':
             return {
                 ...state,
