@@ -206,7 +206,7 @@ class Question extends React.Component {
                 }
                 response.class = _.get(answer, 'data.isCorrect') ? 'success' : 'danger';
             } else {
-                response.message = "Correct! This is not a valid solution. "  + _.get(answer, 'data.incorrectResponse')
+                response.message = "Correct! This is not an appropriate choice of medication. "  + _.get(answer, 'data.incorrectResponse')
             }
         }
         return response;

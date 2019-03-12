@@ -20,14 +20,14 @@ class Calculator extends React.Component {
             currentEntries: {},
             ratios: {
                 "Codeine - Oral (mg/day)": 0.15,
-                "Fentanyl - Transdermal (mcg/hr)": 2.4,
+                // "Fentanyl - Transdermal (mcg/hr)": 2.4,
                 "Hydrocodone - Oral (mg/day)": 1,
                 "Hydromorphone - Oral (mg/day)": 4,
                 "Methadone - Oral (mg/day)": 3,
                 "Morphine - Oral (mg/day)": 1,
                 "Oxycodone - Oral (mg/day)": 1.5,
                 "Oxymorphone - Oral (mg/day)": 3,
-                "Tapentadol (mg/day)": 0.4,
+                // "Tapentadol (mg/day)": 0.4,
                 "Tramadol (mg/day)": 0.1
             }
         }
@@ -64,7 +64,7 @@ class Calculator extends React.Component {
     }
 
     public calcPiece (k) {
-        return (_.get(this.state, 'ratios')[k] * (parseFloat(_.get(this.state, 'currentEntries')[k] || 0) || 0)).toFixed(5);
+        return (_.get(this.state, 'ratios')[k] * (parseFloat(_.get(this.state, 'currentEntries')[k] || 0) || 0)).toFixed(4);
     }
 
     public calcTotal () {
@@ -113,11 +113,16 @@ class Calculator extends React.Component {
                     }
                 </FormGroup>
                 <div className='footer'>
-                    <div className="badge-holder">
-                        <Badge> Total: {this.calcTotal()} </Badge>
+                    <div className='footer-header'>
+                        Oral Morphine Equivalent
                     </div>
-                    <div className='clear-holder'>
-                        <Button bsStyle="danger" onClick={this.clear}>Clear</Button>
+                    <div className='footer-body'>
+                        <div className="badge-holder">
+                            <Badge> Total: {this.calcTotal()} mg</Badge>
+                        </div>
+                        <div className='clear-holder'>
+                            <Button bsStyle="danger" onClick={this.clear}>Clear</Button>
+                        </div>
                     </div>
                 </div>
             </div>

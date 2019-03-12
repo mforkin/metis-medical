@@ -10,7 +10,7 @@
 }
 
 .calculator .header {
-    font-family: sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 12px;
     font-weight: bold;
     color: #fff;
@@ -23,8 +23,22 @@
 .calculator .footer {
     background: #333;
     vertical-align: center;
-    padding: 5px 3px;
+    height: 58px;
+}
+
+.calculator .footer .footer-header {
+    height: 25px;
+    background-color: #337ab7;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    padding-top: 2px;
+    text-align: center;
+}
+
+.calculator .footer .footer-body {
     height: 33px;
+    padding: 5px 3px;
 }
 
 .calculator .footer button {
