@@ -200,8 +200,8 @@ class Sidebar extends React.Component {
                         <FormControl.Feedback />
                     </FormGroup>
                 </div>
-                <Link onClick={this.modeSetter('quiz')} className={this.isSelectedClass('quiz')} to="/">Quiz</Link>
-                <Link onClick={this.modeSetter('results')} className={this.isSelectedClass('results')} to="/results">Results</Link>
+                <Link onClick={this.modeSetter('quiz')} className={this.isSelectedClass('quiz')} to="/">Go To Quiz</Link>
+                <Link onClick={this.modeSetter('results')} className={this.isSelectedClass('results')} to="/results">Go To Results</Link>
                 {
                     _.get(this.props, 'content.userInfo.user.isAdmin') ? (
                         <Link onClick={this.modeSetter('mv')} className={this.isSelectedClass('mv')} to="/edit">Manage Vignettes</Link>
