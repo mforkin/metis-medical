@@ -109,6 +109,45 @@ html, body {
     float: right;
 }
 
+.res-cnt .full-chart {
+    flex: 5;
+    padding: 10px;
+}
+
+.res-cnt .callout {
+    flex: 1;
+    border: 1px solid #337ab7;
+    padding: 10px;
+    height: 30%;
+    box-shadow: 0 0 10px 2px #337ab7;
+}
+
+.res-cnt .callout .callout-left {
+    float: left;
+    margin-top: 10px;
+}
+
+.res-cnt .callout .callout-item > div {
+    display: inline-block;
+}
+
+.res-cnt .callout .callout-right {
+    float: right;
+    border: 1px solid #337ab7;
+    border-radius: 1000px;
+    margin: -25px;
+    background: white;
+    padding: 12px;
+    box-shadow: 0 0 8px 2px #337ab7;
+}
+
+.res-dash-cnt {
+    margin-top: 15px;
+    height: calc(100% - 65px);
+    width: 100%;
+    display: flex;
+}
+
 .q-chart-cnt {
     height: 100%;
     width: 350px;

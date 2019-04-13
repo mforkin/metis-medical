@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { FormGroup, Radio } from 'react-bootstrap';
@@ -111,6 +112,62 @@ class UserResults extends React.Component {
     }
 
     public render () {
+        return (
+            <div className="res-cnt">
+                <div className="res-dash-filters">
+                    <div className="detail-filters">
+                        <div className="attempt-type">
+                            <label>Attempt:</label>
+                            <FormGroup>
+                                <Radio checked={this.checker('best')} name="attempttype" value="best" onClick={this.attemptTypeChange}>
+                                    Best
+                                </Radio>
+                                <Radio checked={this.checker('last')} name="attempttype" value="last" onClick={this.attemptTypeChange}>
+                                    Most Recent
+                                </Radio>
+                            </FormGroup>
+                        </div>
+                        <div className="result-mode">
+                            <label>Mode:</label>
+                            <FormGroup>
+                                <Radio checked={this.modeChecker('vignette')} name="resultmode" value="vignette" onClick={this.resultModeChange}>
+                                    Vignette
+                                </Radio>
+                                <Radio checked={this.modeChecker('specialty')} name="resultmode" value="specialty" onClick={this.resultModeChange}>
+                                    Specialty
+                                </Radio>
+                                <Radio checked={this.modeChecker('iteration')} name="resultmode" value="iteration" onClick={this.resultModeChange}>
+                                    Iteration
+                                </Radio>
+                            </FormGroup>
+                        </div>
+                    </div>
+                </div>
+                <div className="res-dash-cnt">
+                    <div className="full-chart inline">
+                        Full Chart Here
+                    </div>
+                    <div className="most-recent callout inline">
+                        <div className="callout-left">
+                            <div className="callout-item">
+                                <div className="callout-info">
+                                    <FontAwesomeIcon icon="info-circle"/>
+                                </div>
+                                <div className="callout-item-value">
+                                    Q1: <FontAwesomeIcon icon={["far", "check-circle"]} size="lg" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="callout-right">
+                            66%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    public renderIt () {
         return (
             <div className="res-cnt">
                 <div className="res-dash-filters">
