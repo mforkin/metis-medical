@@ -1,5 +1,12 @@
 import * as _ from 'lodash';
 
+export const RESULT_MODE_CHANGE = (mode) => {
+    return {
+        data: mode,
+        type: 'RESULT_MODE_CHANGE'
+    }
+}
+
 export const ATTEMPT_TYPE_CHANGE = (attemptType) => {
     return {
         data: attemptType,

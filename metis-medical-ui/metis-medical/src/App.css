@@ -95,6 +95,20 @@ html, body {
     height: 50px;
 }
 
+.res-cnt .detail-filters > div {
+    display: inline-block;
+}
+
+.res-cnt .detail-filters > div div.radio {
+    display: inline-block;
+    margin: 0;
+    padding: 0 5px 0 0;
+}
+
+.res-cnt .detail-filters .result-mode {
+    float: right;
+}
+
 .q-chart-cnt {
     height: 100%;
     width: 350px;

@@ -12,8 +12,10 @@ class UserResults extends React.Component {
         this.getVignetteChartData = this.getVignetteChartData.bind(this);
         this.getSelectedVignetteId = this.getSelectedVignetteId.bind(this);
         this.attemptTypeChange = this.attemptTypeChange.bind(this);
+        this.resultModeChange = this.resultModeChange.bind(this);
         this.tabChanged = this.tabChanged.bind(this);
         this.checker = this.checker.bind(this);
+        this.modeChecker = this.modeChecker.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
 
@@ -88,6 +90,14 @@ class UserResults extends React.Component {
         )
     }
 
+    public resultModeChange (e) {
+        const resultFilter = e.target.value;
+
+        _.get(this.props, 'dispatch')(
+            Actions.RESULT_MODE_CHANGE(resultFilter)
+        )
+    }
+
     public tabChanged (key) {
         this.setState({key})
     }
@@ -96,26 +106,37 @@ class UserResults extends React.Component {
         return _.get(this.props, 'content.results.filters.attemptType') === key
     }
 
+    public modeChecker (key) {
+        return _.get(this.props, 'content.results.filters.resultMode') === key
+    }
+
     public render () {
         return (
             <div className="res-cnt">
                 <div className="res-dash-filters">
-                    <div className="general-filters">
-                        <div className="dashboard-type">
-                            Test
-                        </div>
-                    </div>
                     <div className="detail-filters">
                         <div className="attempt-type">
+                            <label>Attempt:</label>
                             <FormGroup>
                                 <Radio checked={this.checker('best')} name="attempttype" value="best" onClick={this.attemptTypeChange}>
                                     Best
                                 </Radio>
                                 <Radio checked={this.checker('last')} name="attempttype" value="last" onClick={this.attemptTypeChange}>
-                                    Last
+                                    Most Recent
                                 </Radio>
-                                <Radio checked={this.checker('all')} name="attempttype" value="all" onClick={this.attemptTypeChange}>
-                                    All
+                            </FormGroup>
+                        </div>
+                        <div className="result-mode">
+                            <label>Mode:</label>
+                            <FormGroup>
+                                <Radio checked={this.modeChecker('vignette')} name="resultmode" value="vignette" onClick={this.resultModeChange}>
+                                    Vignette
+                                </Radio>
+                                <Radio checked={this.modeChecker('specialty')} name="resultmode" value="specialty" onClick={this.resultModeChange}>
+                                    Specialty
+                                </Radio>
+                                <Radio checked={this.modeChecker('iteration')} name="resultmode" value="iteration" onClick={this.resultModeChange}>
+                                    Iteration
                                 </Radio>
                             </FormGroup>
                         </div>
