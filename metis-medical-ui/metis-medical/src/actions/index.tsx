@@ -126,6 +126,24 @@ export const loadSpecialties = () => {
     }
 };
 
+export const LATEST_USER_RESULTS = (data) => {
+    return {
+        data,
+        type: 'LATEST_USER_RESULTS'
+    };
+};
+
+export const getLatestCompleted = (vId) => {
+    return (dispatch) => {
+        return fetch("api/user/latestCompleted/" + vId)
+            .then(response => response.json())
+            .then(data => {
+                dispatch(LATEST_USER_RESULTS(data));
+                return data;
+            })
+    }
+};
+
 // Vignette Actions
 
 export const loadUserDataForVignette = (vId) => {

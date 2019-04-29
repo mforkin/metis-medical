@@ -21,4 +21,8 @@ class UserAPI extends API {
   get("/results") {
     Ok(UserService.getResults)
   }
+
+  get("/latestCompleted/:vignetteId") {
+    Ok(UserService.getLatestCompletedResult(params.as[Int]("vignetteId")))
+  }
 }

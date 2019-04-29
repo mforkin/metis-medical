@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
+import org.jooq.impl.DSL.max
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.{User => SUser}
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -169,7 +170,14 @@ object UserService {
 
   }
 
-  def getInfoForVignette (vId: Int) = {
+  def getLatestCompletedResult (vId: Int) = {
+    val mostRecent = getInfoForVignette(vId)
+    val secondMostRecent = getInfoForVignette(vId, 1)
+
+    if (mostRecent.size < secondMostRecent.size) secondMostRecent else mostRecent
+  }
+
+  def getInfoForVignette (vId: Int, offset: Int = 0) = {
     val userName = getInfo.userName
     db.select(
       USER_RESULTS_ANSWERS.ANSWER_ID,
@@ -191,7 +199,7 @@ object UserService {
         )
       )
       .and(USER_RESULTS.ITERATION.in(
-        db.select(USER_RESULTS.ITERATION.max())
+        db.select(max(USER_RESULTS.ITERATION).sub(offset))
           .from(USER_RESULTS)
           .join(USER_RESULTS_ANSWERS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
           .join(ANSWER).on(ANSWER.ID.equal(USER_RESULTS_ANSWERS.ANSWER_ID))

@@ -159,6 +159,36 @@ class Sidebar extends React.Component {
         return label
     }
 
+    public getResultsTpl () {
+        const results = _.get(this.props, 'results.latest');
+        if (_.size(results) > 0 && _.get(this.props, 'content.selectedVignette.userInfo.iteration') === _.get(results[0], 'iteration')) {
+            const stats = _.reduce(results, (tot, r) => {
+                return {
+                    correct: _.get(tot, 'correct') + (_.get(r, 'isCorrect') ? 1 : 0),
+                    total: _.get(tot, 'total') + 1
+                }
+            }, {total: 0, correct: 0})
+            return (
+                <div>
+                    <div>
+                        Score: {_.get(stats, 'correct')} / {_.get(stats, 'total')}
+                    </div>
+                    {
+                        _.map(results, (r, i) => {
+                            return (
+                                <div>
+                                    {i}: {_.get(r, 'isCorrect').toString()}
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            );
+        } else {
+            return (<div/>);
+        }
+    }
+
     public render() {
         return (
             <div className='sidebar'>
@@ -212,6 +242,9 @@ class Sidebar extends React.Component {
                         <Link onClick={this.modeSetter('ms')} className={this.isSelectedClass('ms')} to="/editSpecialties">Manage Specialties</Link>
                     ) : ""
                 }
+                {
+                    this.getResultsTpl()
+                }
             </div>
         );
     }
@@ -220,7 +253,8 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         content: _.get(state, 'content'),
-        specialties: _.get(state, 'specialties'),
+        results: _.get(state, 'results'),
+        specialties: _.get(state, 'specialties')
     };
 }
 

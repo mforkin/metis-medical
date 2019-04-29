@@ -28,6 +28,7 @@ class Stage extends React.Component {
         this.submit = this.submit.bind(this);
         this.next = this.next.bind(this);
         this.getNextQuestionIdxFromSeq = this.getNextQuestionIdxFromSeq.bind(this);
+        this.getLatestCompleted = this.getLatestCompleted.bind(this);
 
     }
 
@@ -133,8 +134,20 @@ class Stage extends React.Component {
         }));
     }
 
+    public getLatestCompleted () {
+        _.get(this.props, 'dispatch')(
+            Actions.getLatestCompleted(
+                _.get(this.props, 'content.selectedVignette.id')
+            )
+        );
+    }
+
     public isLast () {
-        return _.get(this.props, 'isLastQuestion') &&  _.get(this.props, 'isLastStage')
+        const isLast = _.get(this.props, 'isLastQuestion') &&  _.get(this.props, 'isLastStage')
+        if (this.getMode() === 'answered') {
+            this.getLatestCompleted();
+        }
+        return isLast;
     }
 
     public getMode () {
