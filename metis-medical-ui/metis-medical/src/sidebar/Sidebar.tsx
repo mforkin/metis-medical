@@ -1,3 +1,5 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
@@ -17,6 +19,10 @@ class Sidebar extends React.Component {
         this.isVignetteInProgressLabel = this.isVignetteInProgressLabel.bind(this);
         this.modeSetter = this.modeSetter.bind(this);
         this.isSelectedClass = this.isSelectedClass.bind(this);
+
+        this.state = {
+            iconSize: "lg"
+        };
     }
 
     public isSelectedClass (mode) {
@@ -169,15 +175,17 @@ class Sidebar extends React.Component {
                 }
             }, {total: 0, correct: 0})
             return (
-                <div>
+                <div className="alert-box on">
                     <div>
                         Score: {_.get(stats, 'correct')} / {_.get(stats, 'total')}
                     </div>
                     {
                         _.map(results, (r, i) => {
+                            const isCorrect = _.get(r, 'isCorrect');
+                            const icon: IconProp = isCorrect ? ["far", "check-circle"] : ["far", "times-circle"];
                             return (
                                 <div>
-                                    {i}: {_.get(r, 'isCorrect').toString()}
+                                    Question {i}: <FontAwesomeIcon icon={icon} size={_.get(this.state, 'iconSize')} />
                                 </div>
                             )
                         })
@@ -185,7 +193,7 @@ class Sidebar extends React.Component {
                 </div>
             );
         } else {
-            return (<div/>);
+            return (<div className="alert-box" />);
         }
     }
 

@@ -179,7 +179,7 @@ object UserService {
 
   def getInfoForVignette (vId: Int, offset: Int = 0) = {
     val userName = getInfo.userName
-    db.select(
+    val info = db.select(
       USER_RESULTS_ANSWERS.ANSWER_ID,
       USER_RESULTS.SUBMISSION_DATETIME,
       QUESTION.ID,
@@ -209,22 +209,43 @@ object UserService {
           .where(VIGNETTE.ID.equal(vId))
           .and(USER_RESULTS.USERNAME.equal(userName))
       ))
-      .fetch.asScala.foldLeft(Map[(Int, Int, String), UserResult]())((tot, r) => {
+      .fetch.asScala.foldLeft(Map[(Int, Int, String), (UserResult, Int)]())((tot, r) => {
       val t = r.getValue(USER_RESULTS.SUBMISSION_DATETIME).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
       val sId = r.getValue(STAGE.ID).toInt
       val qId =  r.getValue(QUESTION.ID).toInt
-      tot.updated((sId, qId, t), UserResult(
+      tot.updated((sId, qId, t), (UserResult(
         sId,
         qId,
         t,
         (tot.get(sId, qId, t) match {
-          case Some(ur) => ur.answerId
+          case Some((ur, _)) => ur.answerId
           case None => Seq[Int]()
         }) ++ Seq(r.getValue(USER_RESULTS_ANSWERS.ANSWER_ID).toInt),
-        Boolean.unbox(r.getValue(ANSWER.IS_CORRECT)),
+        (tot.get(sId, qId, t) match {
+          case Some((ur, _)) => ur.isCorrect
+          case None => true
+        }) && Boolean.unbox(r.getValue(ANSWER.IS_CORRECT)),
         r.getValue(USER_RESULTS.ITERATION).toInt
-      ))
-    }).values.toSeq
+      ), tot.get(sId, qId, t) match {
+        case Some((ur, cnt)) => if (ur.isCorrect) cnt + 1 else cnt
+        case None => if (Boolean.unbox(r.getValue(ANSWER.IS_CORRECT))) 1 else 0
+      }))
+    })
+
+    info.foldLeft(Seq[UserResult]()) {
+      case (tot, ((sId, qId, _), (ur, cnt))) => {
+        val correctQIds = db.select(
+          ANSWER.ID
+        ).from(QUESTION)
+          .join(ANSWER).on(QUESTION.ID.equal(ANSWER.QUESTION_ID))
+          .join(STAGE).on(STAGE.ID.equal(QUESTION.STAGE_ID))
+          .where(ANSWER.IS_CORRECT)
+          .and(QUESTION.ID.equal(qId))
+          .and(STAGE.ID.equal(sId))
+          .fetch()
+        tot :+ ur.copy(isCorrect = ur.answerId.size == correctQIds.size && ur.isCorrect)
+      }
+    }
   }
 
   // Could probably do a fancier query, but this is going to be fine performance wise and is easier to understand

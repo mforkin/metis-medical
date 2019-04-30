@@ -33,3 +33,22 @@
     background-color: #333;
     border-radius: 5px;
 }
+
+.sidebar .alert-box {
+    position: absolute;
+    bottom: 0;
+    margin: 0 0 10px 0;
+    border: 1px solid #333;
+    box-shadow: 0 0 8px 3px rgba(0,0,0,0.3);
+    padding: 2px;
+    width: 95%;
+    background: #fff;
+    opacity: 0;
+    font-family: 'Montserrat', sans-serif;
+    transition: opacity 0s ease 0s;
+}
+
+.sidebar .alert-box.on {
+    opacity: 1;
+    transition: opacity 1s ease 0s;
+}
