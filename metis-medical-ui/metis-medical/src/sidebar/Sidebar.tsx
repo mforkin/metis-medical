@@ -176,20 +176,35 @@ class Sidebar extends React.Component {
             }, {total: 0, correct: 0})
             return (
                 <div className="alert-box on">
-                    <div>
-                        Score: {_.get(stats, 'correct')} / {_.get(stats, 'total')}
+                    <div className="alert-header">
+                        <div className="alert-header-info">
+                            <FontAwesomeIcon icon={["fas", "info-circle"]} />
+                        </div>
+                        <div className="alert-header-txt">Results</div>
+                        <div className="alert-header-res">
+                            {_.get(stats, 'correct')} / {_.get(stats, 'total')}
+                        </div>
                     </div>
-                    {
-                        _.map(results, (r, i) => {
-                            const isCorrect = _.get(r, 'isCorrect');
-                            const icon: IconProp = isCorrect ? ["far", "check-circle"] : ["far", "times-circle"];
-                            return (
-                                <div>
-                                    Question {i}: <FontAwesomeIcon icon={icon} size={_.get(this.state, 'iconSize')} />
-                                </div>
-                            )
-                        })
-                    }
+                    <div className="alert-content">
+                        {
+                            _.map(results, (r, i) => {
+                                const isCorrect = _.get(r, 'isCorrect');
+                                const icon: IconProp = isCorrect ? ["far", "check-circle"] : ["far", "times-circle"];
+                                const iconCls = isCorrect ? 'correct' : 'incorrect';
+                                return (
+                                    <div>
+                                        <div className="question-col">
+                                            Question {i}
+                                        </div>
+                                        <div className="alert-sep">:</div>
+                                        <div className={'icon-col ' + iconCls}>
+                                            <FontAwesomeIcon icon={icon} size={_.get(this.state, 'iconSize')} />
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             );
         } else {

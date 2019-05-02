@@ -40,7 +40,6 @@
     margin: 0 0 10px 0;
     border: 1px solid #333;
     box-shadow: 0 0 8px 3px rgba(0,0,0,0.3);
-    padding: 2px;
     width: 95%;
     background: #fff;
     opacity: 0;
@@ -51,4 +50,54 @@
 .sidebar .alert-box.on {
     opacity: 1;
     transition: opacity 1s ease 0s;
+}
+
+.sidebar .alert-box .alert-header {
+    background-color: #333;
+    color: #ccc;
+    text-align: center;
+    box-shadow: 0px 1px 4px 1px rgba(0,0,0,0.6);
+}
+
+.sidebar .alert-box .alert-header .alert-header-info {
+    width: 20%;
+    display: inline-block;
+    text-align: left;
+    padding-left: 5px;
+}
+
+.sidebar .alert-box .alert-header .alert-header-txt {
+    width: 60%;
+    display: inline-block;
+}
+
+.sidebar .alert-box .alert-header .alert-header-res {
+    width: 20%;
+    display: inline-block;
+    text-align: right;
+    padding-right: 5px;
+}
+
+.sidebar .alert-box .alert-content {
+    padding: 3px;
+}
+
+.sidebar .alert-box .alert-content .question-col {
+    width: 80px;
+    display: inline-block;
+}
+
+.sidebar .alert-box .alert-content .icon-col {
+    display: inline-block;
+    color: red;
+    margin-left: 5px;
+}
+
+.sidebar .alert-box .alert-sep {
+    display: inline-block;
+}
+
+.sidebar .alert-box .alert-content .icon-col.correct {
+    display: inline-block;
+    color: green;
 }
