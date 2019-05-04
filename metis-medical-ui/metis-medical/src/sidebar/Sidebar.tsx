@@ -2,7 +2,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
-import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { ControlLabel, FormControl, FormGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as Actions from '../actions';
@@ -178,7 +178,17 @@ class Sidebar extends React.Component {
                 <div className="alert-box on">
                     <div className="alert-header">
                         <div className="alert-header-info">
-                            <FontAwesomeIcon icon={["fas", "info-circle"]} />
+                            <OverlayTrigger
+                                key={"top"}
+                                placement={"top"}
+                                overlay={
+                                    <Tooltip id={`res-info-tooltip`}>
+                                        Select the "RESULTS" button for a more detailed breakdown.
+                                    </Tooltip>
+                                }
+                            >
+                                <FontAwesomeIcon icon={["fas", "info-circle"]} />
+                            </OverlayTrigger>
                         </div>
                         <div className="alert-header-txt">Results</div>
                         <div className="alert-header-res">
