@@ -592,6 +592,23 @@ export const LOAD_RESULTS = (data) => {
     };
 };
 
+export const LOAD_ALL_RESULTS = (data) => {
+    return {
+        data,
+        type: 'LOAD_ALL_RESULTS'
+    };
+};
+
+export const loadAllResults = () => {
+    return (dispatch) => {
+        return fetch("/api/user/results/raw")
+            .then(response => response.json())
+            .then((data) => {
+                dispatch(LOAD_ALL_RESULTS(data));
+            });
+    }
+};
+
 export const loadUserResults = () => {
     return (dispatch) => {
         return fetch("/api/user/results")

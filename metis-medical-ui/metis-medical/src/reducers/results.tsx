@@ -1,8 +1,14 @@
 import * as _ from 'lodash';
 
 
-const results = (state = { results: [], latest: [] }, action) => {
+const results = (state = { results: [], latest: [], all: [] }, action) => {
     switch (action.type) {
+        case 'LOAD_ALL_RESULTS':
+            return {
+                ...state,
+                all: _.get(action, 'data'),
+            };
+            break;
         case 'LOAD_RESULTS':
             return {
                 ...state,

@@ -138,6 +138,8 @@ html, body {
     margin: -25px;
     background: white;
     padding: 12px;
+    padding-top: 13px;
+    font-weight: bold;
     box-shadow: 0 0 8px 2px #337ab7;
 }
 

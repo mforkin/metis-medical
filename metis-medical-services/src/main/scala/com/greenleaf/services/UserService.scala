@@ -170,6 +170,95 @@ object UserService {
 
   }
 
+  case class AllResultAnswers (
+                                specialtyId: Int, vignetteId: Int, stageId: Int, questionId: Int, questionSeq: Int, iterationId: Int,
+                                usersCorrect: Int, totalUsers: Int
+                              )
+  case class UserResultAnswers (
+                             specialtyId: Int, vignetteId: Int, stageId: Int, questionId: Int, questionSeq: Int, iterationId: Int, userId: String,
+                             isCorrect: Boolean, answersCorrect: Int, isMulti: Boolean
+                           )
+
+  def getBaseResultQuery () = {
+    db.select(
+      VIGNETTE_SPECIALTY.SPECIALTY_ID,
+      STAGE.VIGNETTE_ID,
+      STAGE.ID,
+      QUESTION.ID,
+      QUESTION.SEQ,
+      USER_RESULTS.ITERATION,
+      ANSWER.ID,
+      ANSWER.IS_CORRECT,
+      USER_RESULTS.USERNAME,
+      QUESTION.MULTI
+    ).from(USER_RESULTS)
+      .join(USER_RESULTS_ANSWERS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
+      .join(ANSWER).on(USER_RESULTS_ANSWERS.ANSWER_ID.equal(ANSWER.ID))
+      .join(QUESTION).on(ANSWER.QUESTION_ID.equal(QUESTION.ID))
+      .join(STAGE).on(STAGE.ID.equal(QUESTION.STAGE_ID))
+      .join(VIGNETTE_SPECIALTY).on(VIGNETTE_SPECIALTY.VIGNETTE_ID.equal(STAGE.VIGNETTE_ID))
+  }
+
+  def getAllAnswers () = {
+    val baseResults = getBaseResultQuery()
+      .fetch.asScala
+      .foldLeft(Map[(Int, Int, Int, Int, String), UserResultAnswers]())((tot, r) => {
+        val (vId, sId, qId, iId, u) = (
+          r.getValue(STAGE.VIGNETTE_ID).toInt,
+          r.getValue(STAGE.ID).toInt,
+          r.getValue(QUESTION.ID).toInt,
+          r.getValue(USER_RESULTS.ITERATION).toInt,
+          r.getValue(USER_RESULTS.USERNAME)
+        )
+        val specialtyId = r.getValue(VIGNETTE_SPECIALTY.SPECIALTY_ID).toInt
+        val qSeq = r.getValue(QUESTION.SEQ).toInt
+        val isCorrect = Boolean.unbox(r.getValue(ANSWER.IS_CORRECT))
+        val isMulti = Boolean.unbox(r.getValue(QUESTION.MULTI))
+        tot.get((vId, sId, qId, iId, u)) match {
+          case Some(res) =>
+            tot.updated((vId, sId, qId, iId, u), UserResultAnswers(
+              specialtyId, vId, sId, qId, qSeq, iId, u, isCorrect && res.isCorrect, res.answersCorrect + 1, isMulti
+            ))
+          case None =>
+            tot.updated((vId, sId, qId, iId, u), UserResultAnswers(
+              specialtyId, vId, sId, qId, qSeq, iId, u, isCorrect, 1, isMulti
+            ))
+        }
+      }).values
+
+    val numCorrectAnswers = mutable.Map[(Int, Int, Int), Int]()
+    baseResults.map(r => {
+      if (r.isMulti) {
+        numCorrectAnswers.get(r.vignetteId, r.stageId, r.questionId) match {
+          case Some(l) =>
+            if (r.answersCorrect == l) {
+              r
+            } else {
+              r.copy(isCorrect = false)
+            }
+          case None =>
+            val correctQIds = db.select(
+              ANSWER.ID
+            ).from(QUESTION)
+              .join(ANSWER).on(QUESTION.ID.equal(ANSWER.QUESTION_ID))
+              .join(STAGE).on(STAGE.ID.equal(QUESTION.STAGE_ID))
+              .where(ANSWER.IS_CORRECT)
+              .and(QUESTION.ID.equal(r.questionId))
+              .and(STAGE.ID.equal(r.stageId))
+              .fetch().size
+            numCorrectAnswers.put((r.vignetteId, r.stageId, r.questionId), correctQIds)
+            if (r.answersCorrect == correctQIds) {
+              r
+            } else {
+              r.copy(isCorrect = false)
+            }
+        }
+      } else {
+        r
+      }
+    })
+  }
+
   def getLatestCompletedResult (vId: Int) = {
     val mostRecent = getInfoForVignette(vId)
     val secondMostRecent = getInfoForVignette(vId, 1)
