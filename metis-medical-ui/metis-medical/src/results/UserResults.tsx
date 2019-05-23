@@ -19,7 +19,9 @@ class UserResults extends React.Component {
         this.modeChecker = this.modeChecker.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
-        _.get(this.props, 'dispatch')(Actions.loadAllResults());
+        _.get(this.props, 'dispatch')(Actions.loadAllResults(
+            _.get(this.props, 'content.userInfo.user.username')
+        ));
 
         this.state = {
             key: 'vignette'

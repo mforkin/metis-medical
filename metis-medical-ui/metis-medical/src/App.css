@@ -141,6 +141,8 @@ html, body {
     padding-top: 13px;
     font-weight: bold;
     box-shadow: 0 0 8px 2px #337ab7;
+    height: 50px;
+    width: 50px;
 }
 
 .res-dash-cnt {
