@@ -23,6 +23,10 @@ class DefaultServlet extends ScalatraServlet with ScalateSupport {
 
   }
 
+  get("/results") {
+    redirect("/")
+  }
+
 //  notFound {
 //    serveStaticResource().getOrElse {
 //      response.setStatus(404)

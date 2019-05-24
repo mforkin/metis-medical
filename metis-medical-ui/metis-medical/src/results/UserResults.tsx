@@ -17,6 +17,7 @@ class UserResults extends React.Component {
         this.tabChanged = this.tabChanged.bind(this);
         this.checker = this.checker.bind(this);
         this.modeChecker = this.modeChecker.bind(this);
+        this.getCardScore = this.getCardScore.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
         _.get(this.props, 'dispatch')(Actions.loadAllResults(
@@ -114,6 +115,15 @@ class UserResults extends React.Component {
         return _.get(this.props, 'content.results.filters.resultMode') === key
     }
 
+    public getCardScore () {
+        const score = _.get(this.props, 'content.results.filters.attemptType') === 'best' ?
+            _.get(this.props, 'results.best') : _.get(this.props, 'results.mostRecent');
+
+        console.log(score);
+
+        return '7%';
+    }
+
     public render () {
         return (
             <div className="res-cnt">
@@ -162,7 +172,7 @@ class UserResults extends React.Component {
                             </div>
                         </div>
                         <div className="callout-right">
-                            66%
+                            {this.getCardScore()}
                         </div>
                     </div>
                 </div>
