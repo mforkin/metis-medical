@@ -12,12 +12,20 @@ const getUserBest = (userId, data) => {
                 if (qd[0].isCorrect) {
                     s.num = s.num + 1;
                 }
+                s.iterId = qd[0].iterationId;
                 return s;
-            }, {num: 0, denom: 0})
+            }, {num: 0, denom: 0, iterId: -1})
             return score;
         });
 
-        bv[vignetteId] = _.maxBy(scoreByIter, i => i.num / i.denom)
+        const best = _.maxBy(scoreByIter, i => i.num / i.denom)
+
+        bv[vignetteId] = _.filter(dataForVignette, f => _.get(f, 'iterationId') === _.get(best, 'iterId'))
+        _.forEach(bv[vignetteId], d => {
+            _.set(d, 'num', _.get(best, 'num'))
+            _.set(d, 'denom', _.get(best, 'denom'))
+        })
+
         return bv;
     }, {});
     return bestByVignette;
@@ -27,8 +35,19 @@ const getMostRecent = (userId, data) => {
     const filteredToUser = _.filter(data, r => r.userId === userId);
     const groupedByVignette = _.groupBy(filteredToUser, r => r.vignetteId)
     const mostRecentByVignette = _.reduce(groupedByVignette, (mr, dataForVignette, vignetteId) => {
-        const maxIteration = _.maxBy(dataForVignette, f => _.get(f, 'iterationId'))
-        mr[vignetteId] = _.filter(mr, f => _.get(f, 'iterationId') === maxIteration)
+        const maxIteration = _.get(_.maxBy(dataForVignette, f => _.get(f, 'iterationId')), 'iterationId')
+        mr[vignetteId] = _.filter(dataForVignette, f => _.get(f, 'iterationId') === maxIteration)
+        const score = _.reduce(mr[vignetteId], (s, qd) => {
+            s.denom = s.denom + 1;
+            if (qd.isCorrect) {
+                s.num = s.num + 1;
+            }
+            return s;
+        }, {num: 0, denom: 0})
+        _.forEach(mr[vignetteId], d => {
+            _.set(d, 'num', _.get(score, 'num'));
+            _.set(d, 'denom', _.get(score, 'denom'));
+        })
         return mr;
     }, {});
     return mostRecentByVignette;
