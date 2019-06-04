@@ -120,6 +120,7 @@ html, body {
     padding: 10px;
     height: 30%;
     box-shadow: 0 0 10px 2px #337ab7;
+    background-color: aliceblue;
 }
 
 .res-cnt .callout .callout-left {
@@ -127,8 +128,32 @@ html, body {
     margin-top: 10px;
 }
 
+.res-cnt .callout .callout-info {
+    margin-right: 5px;
+}
+
+.res-cnt .callout .callout-info:hover {
+    cursor: pointer;
+}
+
 .res-cnt .callout .callout-item > div {
     display: inline-block;
+}
+
+.res-cnt .callout .callout-item-value span {
+    margin-left: 5px;
+}
+
+.res-cnt .callout .callout-item-value svg.background-icon {
+    border-radius: 20px;
+}
+
+.res-cnt .callout .callout-item-value svg.correct {
+    background-color: #dff0d8;
+}
+
+.res-cnt .callout .callout-item-value svg.incorrect {
+    background-color: #f2dede;
 }
 
 .res-cnt .callout .callout-right {
@@ -137,8 +162,8 @@ html, body {
     border-radius: 50%;
     margin: -25px;
     background: white;
-    padding: 12px;
     padding-top: 13px;
+    text-align: center;
     font-weight: bold;
     box-shadow: 0 0 8px 2px #337ab7;
     height: 50px;

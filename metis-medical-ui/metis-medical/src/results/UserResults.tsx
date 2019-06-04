@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
-import { FormGroup, Radio } from 'react-bootstrap';
+import { FormGroup, OverlayTrigger, Radio, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FlexibleXYPlot, HorizontalGridLines, VerticalBarSeries, VerticalGridLines, XAxis, YAxis } from 'react-vis';
 import * as Actions from '../actions';
@@ -18,6 +18,8 @@ class UserResults extends React.Component {
         this.checker = this.checker.bind(this);
         this.modeChecker = this.modeChecker.bind(this);
         this.getCardScore = this.getCardScore.bind(this);
+        this.getRawScores = this.getRawScores.bind(this);
+        this.getSelectedRawScores = this.getSelectedRawScores.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
         _.get(this.props, 'dispatch')(Actions.loadAllResults(
@@ -115,13 +117,23 @@ class UserResults extends React.Component {
         return _.get(this.props, 'content.results.filters.resultMode') === key
     }
 
-    public getCardScore () {
-        const score = _.get(this.props, 'content.results.filters.attemptType') === 'best' ?
+    public getRawScores () {
+        return _.get(this.props, 'content.results.filters.attemptType') === 'best' ?
             _.get(this.props, 'results.best') : _.get(this.props, 'results.mostRecent');
+    }
 
-        console.log(score);
+    public getSelectedRawScores () {
+        return _.get(this.getRawScores(), this.getSelectedVignetteId())
+    }
 
-        return '7%';
+    public getCardScore () {
+        const vigScore = this.getSelectedRawScores()
+
+        if (vigScore) {
+            return Math.round(vigScore[0].num / vigScore[0].denom * 100) + '%';
+        }
+
+        return -1;
     }
 
     public render () {
@@ -162,14 +174,34 @@ class UserResults extends React.Component {
                     </div>
                     <div className="most-recent callout inline">
                         <div className="callout-left">
-                            <div className="callout-item">
-                                <div className="callout-info">
-                                    <FontAwesomeIcon icon="info-circle"/>
-                                </div>
-                                <div className="callout-item-value">
-                                    Q1: <FontAwesomeIcon icon={["far", "check-circle"]} size="lg" />
-                                </div>
-                            </div>
+                            {
+                                _.map(this.getSelectedRawScores(), (s) => {
+                                    return (
+                                        <div className="callout-item">
+                                            <div className="callout-info">
+                                                <OverlayTrigger
+                                                    key={"top"}
+                                                    placement={"top"}
+                                                    overlay={
+                                                        <Tooltip id={`res-question-tooltip`}>
+                                                            Click for Question Details
+                                                        </Tooltip>
+                                                    }
+                                                >
+                                                    <FontAwesomeIcon icon={["fas", "info-circle"]} />
+                                                </OverlayTrigger>
+                                            </div>
+                                            <div className="callout-item-value">
+                                                Question {_.get(s, 'questionSeq') + 1}:
+                                                <span className="fa-layers fa-fw">
+                                                    <FontAwesomeIcon inverse className={_.get(s, 'isCorrect') ? 'background-icon correct' : 'background-icon incorrect'} color={_.get(s, 'isCorrect') ? '#3c763d' : '#a94442'} icon={["far", "circle"]} size="lg" />
+                                                    <FontAwesomeIcon color={_.get(s, 'isCorrect') ? '#3c763d' : '#a94442'} icon={["far", _.get(s, 'isCorrect') ? "check-circle" : "times-circle"]} size="lg" />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            }
                         </div>
                         <div className="callout-right">
                             {this.getCardScore()}
