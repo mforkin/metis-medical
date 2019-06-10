@@ -92,7 +92,9 @@ html, body {
 }
 
 .res-cnt .res-dash-filters {
-    height: 50px;
+    height: 60px;
+    padding: 5px;
+    border-bottom: 2px solid #333;
 }
 
 .res-cnt .detail-filters > div {
@@ -116,11 +118,9 @@ html, body {
 
 .res-cnt .callout {
     flex: 1;
-    border: 1px solid #337ab7;
+    border: 4px solid #337ab7;
     padding: 10px;
     height: 30%;
-    box-shadow: 0 0 10px 2px #337ab7;
-    background-color: aliceblue;
 }
 
 .res-cnt .callout .callout-left {
@@ -158,21 +158,21 @@ html, body {
 
 .res-cnt .callout .callout-right {
     float: right;
-    border: 1px solid #337ab7;
+    border: 4px solid #337ab7;
     border-radius: 50%;
-    margin: -25px;
+    margin: -42px;
     background: white;
-    padding-top: 13px;
+    padding-top: 15px;
     text-align: center;
     font-weight: bold;
-    box-shadow: 0 0 8px 2px #337ab7;
-    height: 50px;
-    width: 50px;
+    height: 60px;
+    width: 60px;
+    font-size: 16px;
 }
 
 .res-dash-cnt {
-    margin-top: 15px;
-    height: calc(100% - 65px);
+    margin-top: 40px;
+    height: calc(100% - 85px);
     width: 100%;
     display: flex;
 }
