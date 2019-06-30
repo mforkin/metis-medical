@@ -116,7 +116,7 @@ class UserResults extends React.Component {
                 return {
                     correct,
                     id: q.questionId,
-                    x: q.questionSeq,
+                    x: q.questionId,
                     y: correct / n
                 };
             });
@@ -255,9 +255,9 @@ class UserResults extends React.Component {
                         <FlexibleXYPlot xType="ordinal">
                             <VerticalGridLines />
                             <HorizontalGridLines />
-                            <XAxis title="Percent Correct per Question" />
+                            <XAxis title="Question Number" />
                             <YAxis
-                                tickFormat={this.yTickFormat(1)}
+                                tickFormat={this.yTickFormat(2)}
                                 title="Percentage Answering Correctly"
                                 />
                             <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
