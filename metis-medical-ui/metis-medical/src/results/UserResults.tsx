@@ -20,6 +20,7 @@ class UserResults extends React.Component {
         this.getCardScore = this.getCardScore.bind(this);
         this.getRawScores = this.getRawScores.bind(this);
         this.getSelectedRawScores = this.getSelectedRawScores.bind(this);
+        this.getPercentAnsweredCorrectly = this.getPercentAnsweredCorrectly.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
         _.get(this.props, 'dispatch')(Actions.loadAllResults(
@@ -79,14 +80,95 @@ class UserResults extends React.Component {
         return res;
     }
 
-    public yTickFormat (t) {
-        let ret = '';
-        const tick = parseFloat(t);
-        if (tick % 1 === 0) {
-            ret = tick.toFixed(0);
+    public getPercentAnsweredCorrectly () {
+        const groupByUser = _.groupBy(_.get(this.props, 'results.all').filter(a => a.vignetteId === this.getSelectedVignetteId()), (r) => r.userId);
+        let results = {};
+
+        if (this.checker('best')) {
+            results = this.getBestAnswers(groupByUser)
+        } else {
+            _.forEach(groupByUser, (ress, userId) => {
+                _.forEach(ress, r => {
+                    if (!results[userId] || (results[userId] && results[userId][0].iterationId < r.iterationId)) {
+                        results[userId] = [r];
+                    } else if (results[userId][0].iterationId === r.iterationId) {
+                        results[userId].push(r);
+                    }
+                })
+            })
         }
 
-        return ret;
+        const res: any = _.values(results);
+
+        if (res.length > 0) {
+            return res[0].map(q => {
+                let correct = 0;
+                let n = 0
+                _.forEach(results, (ress, userId) => {
+                    _.forEach(ress, r => {
+                        if (_.get(r, 'questionId') === _.get(q, 'questionId') && _.get(r, 'isCorrect')) {
+                            correct = correct + 1;
+                        }
+                        n = n + 1;
+                    });
+                })
+
+                return {
+                    correct,
+                    id: q.questionId,
+                    x: q.questionSeq,
+                    y: correct / n
+                };
+            });
+        } else {
+            return [];
+        }
+    }
+
+    public getBestAnswers (groupByUser) {
+        const results = {};
+        const bestResults = {};
+        _.forEach(groupByUser, (ress, userId) => {
+            _.forEach(ress, r => {
+                if (!results[userId] || !results[userId][r.iterationId]) {
+                    results[userId] = {};
+                    results[userId][r.iterationId] = [r]
+                } else {
+                    results[userId][r.iterationId].push(r);
+                }
+            })
+        });
+
+        _.forEach(results, (v, k) => {
+            _.forEach(v, (r, i) => {
+                const a: any = r
+                const c = _.sumBy(a, rec => _.get(rec, 'isCorrect') ? 1 : 0);
+                if (!bestResults[k] || bestResults[k].numCorrect < c) {
+                    bestResults[k] = { numCorrect: c, records: r };
+                }
+            });
+        });
+
+        _.forEach(results, (v, k) => {
+            results[k] = bestResults[k].records;
+        });
+
+        return results;
+    }
+
+    public yTickFormat (i) {
+        const f = (t) => {
+            let ret = '';
+            const tick = parseFloat(t);
+            if ((!i || i === 0) && tick % 1 === 0) {
+                ret = tick.toFixed(i || 0);
+            } else {
+                ret = tick.toFixed(i || 0);
+            }
+
+            return ret;
+        }
+        return f;
     }
 
     public attemptTypeChange (e) {
@@ -170,7 +252,16 @@ class UserResults extends React.Component {
                 </div>
                 <div className="res-dash-cnt">
                     <div className="full-chart inline">
-                        Full Chart Here
+                        <FlexibleXYPlot xType="ordinal">
+                            <VerticalGridLines />
+                            <HorizontalGridLines />
+                            <XAxis title="Percent Correct per Question" />
+                            <YAxis
+                                tickFormat={this.yTickFormat(1)}
+                                title="Percentage Answering Correctly"
+                                />
+                            <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
+                        </FlexibleXYPlot>
                     </div>
                     <div className="most-recent callout inline">
                         <div className="callout-left">
