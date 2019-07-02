@@ -101,25 +101,27 @@ class UserResults extends React.Component {
         const res: any = _.values(results);
 
         if (res.length > 0) {
-            return res[0].map(q => {
+            return _.sortBy(res[0].map(q => {
                 let correct = 0;
                 let n = 0
                 _.forEach(results, (ress, userId) => {
                     _.forEach(ress, r => {
-                        if (_.get(r, 'questionId') === _.get(q, 'questionId') && _.get(r, 'isCorrect')) {
-                            correct = correct + 1;
+                        if (_.get(r, 'questionId') === _.get(q, 'questionId')) {
+                             if (_.get(r, 'isCorrect')) {
+                                correct = correct + 1;
+                             }
+                             n = n + 1;
                         }
-                        n = n + 1;
                     });
                 })
 
                 return {
                     correct,
                     id: q.questionId,
-                    x: q.questionId,
+                    x: q.questionSeq + 1,
                     y: correct / n
                 };
-            });
+            }), r => r.x);
         } else {
             return [];
         }
@@ -130,8 +132,8 @@ class UserResults extends React.Component {
         const bestResults = {};
         _.forEach(groupByUser, (ress, userId) => {
             _.forEach(ress, r => {
-                if (!results[userId] || !results[userId][r.iterationId]) {
-                    results[userId] = {};
+                if (!results[userId]) { results[userId] = {}; }
+                if (!results[userId][r.iterationId]) {
                     results[userId][r.iterationId] = [r]
                 } else {
                     results[userId][r.iterationId].push(r);
@@ -156,14 +158,23 @@ class UserResults extends React.Component {
         return results;
     }
 
-    public yTickFormat (i) {
+    public yTickFormat (i, type) {
         const f = (t) => {
             let ret = '';
-            const tick = parseFloat(t);
+            let tick = parseFloat(t);
+
+            if (type === 'percent') {
+                tick = tick * 100
+            }
+
             if ((!i || i === 0) && tick % 1 === 0) {
                 ret = tick.toFixed(i || 0);
             } else {
                 ret = tick.toFixed(i || 0);
+            }
+
+            if (type === 'percent') {
+                ret = ret + '%';
             }
 
             return ret;
@@ -205,7 +216,8 @@ class UserResults extends React.Component {
     }
 
     public getSelectedRawScores () {
-        return _.get(this.getRawScores(), this.getSelectedVignetteId())
+        const s = _.get(this.getRawScores(), this.getSelectedVignetteId())
+        return s ? _.sortBy(s, r => r.questionSeq) : s;
     }
 
     public getCardScore () {
@@ -257,7 +269,7 @@ class UserResults extends React.Component {
                             <HorizontalGridLines />
                             <XAxis title="Question Number" />
                             <YAxis
-                                tickFormat={this.yTickFormat(2)}
+                                tickFormat={this.yTickFormat(0, 'percent')}
                                 title="Percentage Answering Correctly"
                                 />
                             <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
