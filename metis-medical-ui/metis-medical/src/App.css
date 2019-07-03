@@ -123,6 +123,11 @@ html, body {
     height: 30%;
 }
 
+.alert.alert-info.res-callout-alert {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
 .res-cnt .callout .callout-left {
     float: left;
     margin-top: 10px;

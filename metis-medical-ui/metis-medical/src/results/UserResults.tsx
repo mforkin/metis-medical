@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
 import * as React from 'react';
-import { FormGroup, OverlayTrigger, Radio, Tooltip } from 'react-bootstrap';
+import { Alert, FormGroup, OverlayTrigger, Radio, Tooltip } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { FlexibleXYPlot, HorizontalGridLines, VerticalBarSeries, VerticalGridLines, XAxis, YAxis } from 'react-vis';
 import * as Actions from '../actions';
@@ -21,6 +21,7 @@ class UserResults extends React.Component {
         this.getRawScores = this.getRawScores.bind(this);
         this.getSelectedRawScores = this.getSelectedRawScores.bind(this);
         this.getPercentAnsweredCorrectly = this.getPercentAnsweredCorrectly.bind(this);
+        this.questionClicked = this.questionClicked.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
         _.get(this.props, 'dispatch')(Actions.loadAllResults(
@@ -230,6 +231,15 @@ class UserResults extends React.Component {
         return -1;
     }
 
+    public questionClicked (s) {
+        const me = this;
+        return () => {
+            const a = s;
+            console.log(a);
+            console.log(me);
+        }
+    }
+
     public render () {
         return (
             <div className="res-cnt">
@@ -255,9 +265,6 @@ class UserResults extends React.Component {
                                 <Radio checked={this.modeChecker('specialty')} name="resultmode" value="specialty" onClick={this.resultModeChange}>
                                     Specialty
                                 </Radio>
-                                <Radio checked={this.modeChecker('iteration')} name="resultmode" value="iteration" onClick={this.resultModeChange}>
-                                    Iteration
-                                </Radio>
                             </FormGroup>
                         </div>
                     </div>
@@ -277,6 +284,9 @@ class UserResults extends React.Component {
                     </div>
                     <div className="most-recent callout inline">
                         <div className="callout-left">
+                            <Alert bsStyle="info" className="res-callout-alert">
+                                Click <FontAwesomeIcon icon={["fas", "info-circle"]} /> for details
+                            </Alert>
                             {
                                 _.map(this.getSelectedRawScores(), (s) => {
                                     return (
@@ -291,7 +301,7 @@ class UserResults extends React.Component {
                                                         </Tooltip>
                                                     }
                                                 >
-                                                    <FontAwesomeIcon icon={["fas", "info-circle"]} />
+                                                <div onClick={this.questionClicked(s)}><FontAwesomeIcon icon={["fas", "info-circle"]}/></div>
                                                 </OverlayTrigger>
                                             </div>
                                             <div className="callout-item-value">
