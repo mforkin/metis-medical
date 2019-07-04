@@ -121,12 +121,13 @@ class Stage extends React.Component {
     }
 
     public submit (e) {
+        const me = this;
         _.get(this.props, 'dispatch')(Actions.submitAnswer({
             answerMetaInfo: _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')
                 .map((r) => {
                     return {
                         id: r,
-                        meta: _.get(this.state, 'numericResponse')
+                        meta: _.get(me.props, 'content.numericResponse')
                     };
                 }),
             datetime: (new Date()).toISOString(),

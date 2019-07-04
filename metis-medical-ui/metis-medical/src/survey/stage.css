@@ -56,13 +56,16 @@ div.survey {
     margin-top: 5px;
 }
 
-.header .stage-text {
+.header .stage-text, .results-stage .stage-text {
     font-size: 16px;
     font-weight: normal;
     font-family: arial, sans-serif;
     white-space: pre-line;
 }
 
+.question h2 {
+    font-family: "Montserrat";
+}
 .question .alert {
     width: fit-content;
 }

@@ -33,6 +33,8 @@ class Question extends React.Component {
         this.isAnswerChecked = this.isAnswerChecked.bind(this);
         this.getAnswerCheckbox = this.getAnswerCheckbox.bind(this);
         this.getAnswerRadio = this.getAnswerRadio.bind(this);
+        this.getFeedbackId = this.getFeedbackId.bind(this);
+        this.getRawCurrentResponse = this.getRawCurrentResponse.bind(this);
 
         this.state = {
             iconSize: "lg"
@@ -65,16 +67,16 @@ class Question extends React.Component {
         const selectedAnswerId = parseInt(e.target.value, 10);
 
         if (_.get(this.props, 'data.multi')) {
-             const idx = _.indexOf(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), selectedAnswerId);
+             const idx = _.indexOf(this.getRawCurrentResponse(), selectedAnswerId);
              if (idx >= 0) {
-                _.remove(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), i => i === selectedAnswerId);
+                _.remove(this.getRawCurrentResponse(), i => i === selectedAnswerId);
                 _.get(this.props, 'dispatch')(
                     Actions.SIDEBAR_RESPONSE_CHANGED(
-                        _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')
+                        this.getRawCurrentResponse()
                     )
                 );
              } else {
-                const cur = _.get(this.props, 'content.selectedVignette.userInfo.currentResponse');
+                const cur = this.getRawCurrentResponse();
                 _.get(this.props, 'dispatch')(
                     Actions.SIDEBAR_RESPONSE_CHANGED(
                         cur.concat([selectedAnswerId])
@@ -88,7 +90,7 @@ class Question extends React.Component {
 
     public submit (e) {
         _.get(this.props, 'dispatch')(Actions.submitAnswer({
-            answerMetaInfo: _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')
+            answerMetaInfo: this.getRawCurrentResponse()
                 .map((r) => {
                     return {
                         id: r,
@@ -138,7 +140,33 @@ class Question extends React.Component {
     }
 
     public getMode () {
-        return _.get(this.props, 'content.selectedVignette.userInfo.mode');
+        const overrideMode = _.get(this.props, 'overrideMode');
+        if (overrideMode) {
+            return overrideMode;
+        } else {
+            return _.get(this.props, 'content.selectedVignette.userInfo.mode');
+        }
+    }
+
+    public getFeedbackId () {
+        const fbOverride = _.get(this.props, 'feedbackOverride');
+        if (fbOverride) {
+            return fbOverride
+        } else {
+            const fb = _.get(this.props, 'content.feedback.id');
+            return fb;
+        }
+    }
+
+    public getRawCurrentResponse () {
+        const crOverride = _.get(this.props, 'responseOverride');
+        if (crOverride) {
+            return crOverride;
+        } else {
+            const cr =  _.get(this.props, 'content.selectedVignette.userInfo.currentResponse');
+            console.log(cr);
+            return cr;
+        }
     }
 
     public getSubmitLabel () {
@@ -193,8 +221,8 @@ class Question extends React.Component {
 
     public getResponse (answer, isMulti) {
         const response = { message: '', class: '' };
-        if (_.get(this.props, 'content.feedback.id')) {
-            if (_.indexOf(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), _.get(answer, 'id')) >= 0 || _.get(answer, 'data.isCorrect')) {
+        if (this.getFeedbackId()) {
+            if (_.indexOf(this.getRawCurrentResponse(), _.get(answer, 'id')) >= 0 || _.get(answer, 'data.isCorrect')) {
                 let prefix = 'Incorrect. ';
                 response.message = prefix + _.get(answer, 'data.incorrectResponse');
                 if (_.get(answer, 'data.isCorrect')) {
@@ -226,8 +254,8 @@ class Question extends React.Component {
 
     public getNumericResponseIcon () {
         let response;
-        if (_.get(this.props, 'content.feedback.id')) {
-            const curAnswerId = _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0];
+        if (this.getFeedbackId()) {
+            const curAnswerId = this.getRawCurrentResponse()[0];
             const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
             if (cur.data.isCorrect) {
                 response = (<FontAwesomeIcon icon={["far", "check-circle"]} size={_.get(this.state, 'iconSize')} />)
@@ -240,8 +268,8 @@ class Question extends React.Component {
 
     public getNumericResponse () {
         const response = { message: '', class: '' };
-        if (_.get(this.props, 'content.feedback.id')) {
-            const curAnswerId = _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0];
+        if (this.getFeedbackId()) {
+            const curAnswerId = this.getRawCurrentResponse()[0];
             const cur = _.find(this.getAnswers(), (a) => a.id === curAnswerId)
             if (cur.data.isCorrect) {
                 response.message = 'Correct! ' + cur.data.correctResponse;
@@ -261,9 +289,9 @@ class Question extends React.Component {
 
     public isAnswerChecked (answer) {
         if (_.get(this.props, 'data.multi')) {
-            return _.indexOf(_.get(this.props, 'content.selectedVignette.userInfo.currentResponse'), answer.id) >= 0;
+            return _.indexOf(this.getRawCurrentResponse(), answer.id) >= 0;
         }
-        return _.get(this.props, 'content.selectedVignette.userInfo.currentResponse')[0] === answer.id;
+        return this.getRawCurrentResponse()[0] === answer.id;
     }
 
     public modeSetter (mode) {

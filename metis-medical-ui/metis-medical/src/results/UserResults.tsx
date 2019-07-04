@@ -5,6 +5,7 @@ import { Alert, FormGroup, OverlayTrigger, Radio, Tooltip } from 'react-bootstra
 import { connect } from 'react-redux';
 import { FlexibleXYPlot, HorizontalGridLines, VerticalBarSeries, VerticalGridLines, XAxis, YAxis } from 'react-vis';
 import * as Actions from '../actions';
+import Question from '../survey/Question';
 
 class UserResults extends React.Component {
     constructor (props, context) {
@@ -22,6 +23,7 @@ class UserResults extends React.Component {
         this.getSelectedRawScores = this.getSelectedRawScores.bind(this);
         this.getPercentAnsweredCorrectly = this.getPercentAnsweredCorrectly.bind(this);
         this.questionClicked = this.questionClicked.bind(this);
+        this.getQuestionTpl = this.getQuestionTpl.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
         _.get(this.props, 'dispatch')(Actions.loadAllResults(
@@ -29,7 +31,8 @@ class UserResults extends React.Component {
         ));
 
         this.state = {
-            key: 'vignette'
+            key: 'vignette',
+            selectedQuestion: null
         }
     }
 
@@ -231,12 +234,68 @@ class UserResults extends React.Component {
         return -1;
     }
 
-    public questionClicked (s) {
+    public questionClicked (q) {
         const me = this;
         return () => {
-            const a = s;
-            console.log(a);
-            console.log(me);
+            const stagesData = _.get(me.props, 'content.selectedVignette.data.stages');
+            const stage = _.filter(stagesData, s => _.get(s, 'id') === _.get(q, 'stageId'))[0];
+            const stageText = _.get(stage, 'data.name');
+            const question = _.filter(_.get(stage, 'data.question'), qd => _.get(qd, 'id') === _.get(q, 'questionId'))[0];
+            const questionData = _.get(question, 'data');
+            const questionText = _.get(questionData, 'text');
+            const answers = _.get(questionData, 'answers');
+            const userAnswers = _.get(q, 'answers')
+
+
+            const meta = _.get(q, 'answerMeta');
+            if (meta) {
+                _.get(this.props, 'dispatch')(
+                    Actions.NUMERIC_RESPONSE_CHANGED(
+                        parseFloat(meta[0])
+                    )
+                );
+            } else {
+                _.get(this.props, 'dispatch')(
+                    Actions.NUMERIC_RESPONSE_CHANGED(void(0))
+                );
+            }
+
+
+            me.setState({
+                key: _.get(me.state, 'key'),
+                selectedQuestion: {
+                    answers,
+                    question,
+                    questionData,
+                    questionText,
+                    stageText,
+                    userAnswers
+                }
+            })
+
+        }
+    }
+
+    public getQuestionTpl () {
+        const sq = _.get(this.state, 'selectedQuestion');
+        if (!sq) {
+            return (<div/>);
+        } else {
+            return (
+                <div className="header results-stage">
+                    <div className="vignette-text-cnt stage-text">{_.get(sq, "stageText")}</div>
+                    <Question
+                        data={
+                            _.get(sq, 'questionData')
+                        }
+                        overrideMode="answered"
+                        feedbackOverride={1}
+                        responseOverride={_.get(sq, 'userAnswers')}
+                        isLastQuestion={false}
+                        isLastStage={false}
+                    />
+                </div>
+            );
         }
     }
 
@@ -271,16 +330,21 @@ class UserResults extends React.Component {
                 </div>
                 <div className="res-dash-cnt">
                     <div className="full-chart inline">
-                        <FlexibleXYPlot xType="ordinal">
-                            <VerticalGridLines />
-                            <HorizontalGridLines />
-                            <XAxis title="Question Number" />
-                            <YAxis
-                                tickFormat={this.yTickFormat(0, 'percent')}
-                                title="Percentage Answering Correctly"
-                                />
-                            <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
-                        </FlexibleXYPlot>
+                        <div className="half">
+                            <FlexibleXYPlot xType="ordinal">
+                                <VerticalGridLines />
+                                <HorizontalGridLines />
+                                <XAxis title="Question Number" />
+                                <YAxis
+                                    tickFormat={this.yTickFormat(0, 'percent')}
+                                    title="Percentage Answering Correctly"
+                                    />
+                                <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
+                            </FlexibleXYPlot>
+                        </div>
+                        <div className="half">
+                            {this.getQuestionTpl()}
+                        </div>
                     </div>
                     <div className="most-recent callout inline">
                         <div className="callout-left">

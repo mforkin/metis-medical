@@ -9,7 +9,7 @@ const content = (
         numericResponse: undefined,
         results: {
             filters: {
-                attemptType: 'best',
+                attemptType: 'last',
                 resultMode: 'vignette'
             }
         },

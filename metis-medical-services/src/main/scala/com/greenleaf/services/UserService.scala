@@ -176,7 +176,7 @@ object UserService {
                               )
   case class UserResultAnswers (
                              specialtyId: Int, vignetteId: Int, stageId: Int, questionId: Int, questionSeq: Int, iterationId: Int, userId: String,
-                             isCorrect: Boolean, answersCorrect: Int, isMulti: Boolean
+                             isCorrect: Boolean, answersCorrect: Int, isMulti: Boolean, answers: Seq[Int], answerMeta: Seq[String]
                            )
 
   def getBaseResultQuery () = {
@@ -190,7 +190,8 @@ object UserService {
       ANSWER.ID,
       ANSWER.IS_CORRECT,
       USER_RESULTS.USERNAME,
-      QUESTION.MULTI
+      QUESTION.MULTI,
+      USER_RESULTS_ANSWERS.META
     ).from(USER_RESULTS)
       .join(USER_RESULTS_ANSWERS).on(USER_RESULTS.ID.equal(USER_RESULTS_ANSWERS.USER_RESULTS_ID))
       .join(ANSWER).on(USER_RESULTS_ANSWERS.ANSWER_ID.equal(ANSWER.ID))
@@ -203,12 +204,14 @@ object UserService {
     val baseResults = getBaseResultQuery()
       .fetch.asScala
       .foldLeft(Map[(Int, Int, Int, Int, String), UserResultAnswers]())((tot, r) => {
-        val (vId, sId, qId, iId, u) = (
+        val (vId, sId, qId, iId, u, aId, meta) = (
           r.getValue(STAGE.VIGNETTE_ID).toInt,
           r.getValue(STAGE.ID).toInt,
           r.getValue(QUESTION.ID).toInt,
           r.getValue(USER_RESULTS.ITERATION).toInt,
-          r.getValue(USER_RESULTS.USERNAME)
+          r.getValue(USER_RESULTS.USERNAME),
+          r.getValue(ANSWER.ID).toInt,
+          r.getValue(USER_RESULTS_ANSWERS.META)
         )
         val specialtyId = r.getValue(VIGNETTE_SPECIALTY.SPECIALTY_ID).toInt
         val qSeq = r.getValue(QUESTION.SEQ).toInt
@@ -217,11 +220,11 @@ object UserService {
         tot.get((vId, sId, qId, iId, u)) match {
           case Some(res) =>
             tot.updated((vId, sId, qId, iId, u), UserResultAnswers(
-              specialtyId, vId, sId, qId, qSeq, iId, u, isCorrect && res.isCorrect, res.answersCorrect + 1, isMulti
+              specialtyId, vId, sId, qId, qSeq, iId, u, isCorrect && res.isCorrect, res.answersCorrect + 1, isMulti, res.answers ++ Seq(aId), res.answerMeta ++ Seq(meta)
             ))
           case None =>
             tot.updated((vId, sId, qId, iId, u), UserResultAnswers(
-              specialtyId, vId, sId, qId, qSeq, iId, u, isCorrect, 1, isMulti
+              specialtyId, vId, sId, qId, qSeq, iId, u, isCorrect, 1, isMulti, Seq(aId), Seq(meta)
             ))
         }
       }).values
