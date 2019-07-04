@@ -24,11 +24,16 @@ class UserResults extends React.Component {
         this.getPercentAnsweredCorrectly = this.getPercentAnsweredCorrectly.bind(this);
         this.questionClicked = this.questionClicked.bind(this);
         this.getQuestionTpl = this.getQuestionTpl.bind(this);
+        this.getSelectedSpecScores = this.getSelectedSpecScores.bind(this);
+        this.getSelectedSpecId = this.getSelectedSpecId.bind(this);
+        this.getSelectedSpecName = this.getSelectedSpecName.bind(this);
+        this.getSpecIdFromName = this.getSpecIdFromName.bind(this);
 
         _.get(this.props, 'dispatch')(Actions.loadUserResults());
         _.get(this.props, 'dispatch')(Actions.loadAllResults(
             _.get(this.props, 'content.userInfo.user.username')
         ));
+        _.get(this.props, 'dispatch')(Actions.loadAllSpecResults());
 
         this.state = {
             key: 'vignette',
@@ -46,6 +51,22 @@ class UserResults extends React.Component {
 
     public getSelectedVignetteId () {
         return _.get(this.props, 'content.selectedVignette.id');
+    }
+
+    public getSelectedSpecId () {
+        return _.get(this.props, 'content.selectedVignette.data.specialtyId');
+    }
+
+    public getSelectedSpecName () {
+        const sId = this.getSelectedSpecId();
+        const s = _.get(this.props, 'specialties.specialties').filter(sp => _.get(sp, 'data.id') === sId)[0];
+        return _.get(s, 'data.name');
+    }
+
+    public getSpecIdFromName (name) {
+        const s = _.invert(_.get(this.props, 'specialties.specialties'));
+
+        return _.get(s, name);
     }
 
     public getVignetteChartData () {
@@ -224,6 +245,21 @@ class UserResults extends React.Component {
         return s ? _.sortBy(s, r => r.questionSeq) : s;
     }
 
+    public getSelectedSpecScores () {
+        const s = _.get(this.props, 'results.specResults');
+        if (this.checker('best')) {
+            return {
+                tot: _.get(s, 'bestTot'),
+                vignettes: _.get(s, 'bestByVignette')
+            };
+        } else {
+            return {
+                tot: _.get(s, 'recentTot'),
+                vignettes: _.get(s, 'recentByVignette')
+            };
+        }
+    }
+
     public getCardScore () {
         const vigScore = this.getSelectedRawScores()
 
@@ -315,17 +351,7 @@ class UserResults extends React.Component {
                                 </Radio>
                             </FormGroup>
                         </div>
-                        <div className="result-mode">
-                            <label>Mode:</label>
-                            <FormGroup>
-                                <Radio checked={this.modeChecker('vignette')} name="resultmode" value="vignette" onClick={this.resultModeChange}>
-                                    Vignette
-                                </Radio>
-                                <Radio checked={this.modeChecker('specialty')} name="resultmode" value="specialty" onClick={this.resultModeChange}>
-                                    Specialty
-                                </Radio>
-                            </FormGroup>
-                        </div>
+                        <div className="result-mode"/>
                     </div>
                 </div>
                 <div className="res-dash-cnt">
@@ -382,6 +408,32 @@ class UserResults extends React.Component {
                         </div>
                         <div className="callout-right">
                             {this.getCardScore()}
+                        </div>
+                        <div>
+                            {
+                                _.map(
+                                    _.get(this.getSelectedSpecScores(), 'vignettes'),
+                                    (v, k) => {
+                                        const tot = _.get(this.getSelectedSpecScores(), 'tot.' + this.getSpecIdFromName(k))
+                                        const totPercent = _.get(tot, 'numCorrect') / _.get(tot, 'numQuestions') * 100
+                                        return (
+                                            <div>
+                                                <div>{k}: {totPercent.toFixed(1)}% (n={_.get(tot, 'numRespondents')})</div>
+                                                    {
+                                                        _.map(v, (stats, vName) => {
+                                                            const metric = _.get(stats, 'numCorrect') / _.get(stats, 'numQuestions') * 100
+                                                            return (
+                                                                <div>
+                                                                    {vName}: {metric.toFixed(1)}% (n={_.get(stats, 'numRespondents')})
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                            </div>
+                                        );
+                                    }
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -462,7 +514,8 @@ class UserResults extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         content: _.get(state, 'content'),
-        results: _.get(state, 'results')
+        results: _.get(state, 'results'),
+        specialties: _.get(state, 'specialties')
     };
 }
 

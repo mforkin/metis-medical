@@ -600,12 +600,29 @@ export const LOAD_ALL_RESULTS = (data, userId) => {
     };
 };
 
+export const LOAD_ALL_SPEC_RESULTS = (data) => {
+    return {
+        data,
+        type: 'LOAD_ALL_SPEC_RESULTS'
+    };
+};
+
 export const loadAllResults = (userId) => {
     return (dispatch) => {
         return fetch("/api/user/results/raw")
             .then(response => response.json())
             .then((data) => {
                 dispatch(LOAD_ALL_RESULTS(data, userId));
+            });
+    }
+};
+
+export const loadAllSpecResults = () => {
+    return (dispatch) => {
+        return fetch("/api/specialty/results")
+            .then(response => response.json())
+            .then((data) => {
+                dispatch(LOAD_ALL_SPEC_RESULTS(data));
             });
     }
 };

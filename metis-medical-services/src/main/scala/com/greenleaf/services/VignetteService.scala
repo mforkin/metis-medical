@@ -135,6 +135,10 @@ object VignetteService {
     vignette
   }
 
+  def getAllVignettes = {
+    getBaseVignetteQuery.fetch.asScala.map(r => extractVignetteFromBaseQuery(r, Map())).map(r => (r.id.get, r.data))
+  }
+
   def getBaseVignetteQuery = {
     db
       .select()

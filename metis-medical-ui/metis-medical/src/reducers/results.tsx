@@ -53,7 +53,7 @@ const getMostRecent = (userId, data) => {
     return mostRecentByVignette;
 }
 
-const results = (state = { results: [], latest: [], all: [], best: {}, mostRecent: {} }, action) => {
+const results = (state = { results: [], latest: [], all: [], best: {}, mostRecent: {}, specResults: {} }, action) => {
     switch (action.type) {
         case 'LOAD_ALL_RESULTS':
             const data = _.get(action, 'data')
@@ -63,6 +63,12 @@ const results = (state = { results: [], latest: [], all: [], best: {}, mostRecen
                 all: data,
                 best: getUserBest(userId, data),
                 mostRecent: getMostRecent(userId, data)
+            };
+            break;
+        case 'LOAD_ALL_SPEC_RESULTS':
+            return {
+                ...state,
+                specResults: _.get(action, 'data')
             };
             break;
         case 'LOAD_RESULTS':

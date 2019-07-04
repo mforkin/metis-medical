@@ -23,4 +23,8 @@ class SpecialityAPI extends API {
   get("/:id") {
     Ok(SpecialtyService.getSpecialty(params.as[Int]("id")))
   }
+
+  get("/results") {
+    Ok(SpecialtyService.getResults)
+  }
 }
