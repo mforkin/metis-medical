@@ -55,6 +55,15 @@
         <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <db.host>metis-medical.crm5sq6goefs.us-east-2.rds.amazonaws.com</db.host>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
