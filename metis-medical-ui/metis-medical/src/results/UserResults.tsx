@@ -15,7 +15,7 @@ class UserResults extends React.Component {
         this.getSelectedVignetteId = this.getSelectedVignetteId.bind(this);
         this.attemptTypeChange = this.attemptTypeChange.bind(this);
         this.resultModeChange = this.resultModeChange.bind(this);
-        this.tabChanged = this.tabChanged.bind(this);
+        // this.tabChanged = this.tabChanged.bind(this);
         this.checker = this.checker.bind(this);
         this.modeChecker = this.modeChecker.bind(this);
         this.getCardScore = this.getCardScore.bind(this);
@@ -37,6 +37,7 @@ class UserResults extends React.Component {
 
         this.state = {
             key: 'vignette',
+            resultSelectedAnswerVignetteId: null,
             selectedQuestion: null
         }
     }
@@ -223,9 +224,9 @@ class UserResults extends React.Component {
         )
     }
 
-    public tabChanged (key) {
-        this.setState({key})
-    }
+    // public tabChanged (key) {
+    //     this.setState({key})
+    // }
 
     public checker (key) {
         return _.get(this.props, 'content.results.filters.attemptType') === key
@@ -299,6 +300,7 @@ class UserResults extends React.Component {
 
             me.setState({
                 key: _.get(me.state, 'key'),
+                resultSelectedAnswerVignetteId: me.getSelectedVignetteId(),
                 selectedQuestion: {
                     answers,
                     question,
@@ -314,7 +316,7 @@ class UserResults extends React.Component {
 
     public getQuestionTpl () {
         const sq = _.get(this.state, 'selectedQuestion');
-        if (!sq) {
+        if (!sq || _.get(this.state, 'resultSelectedAnswerVignetteId') !== this.getSelectedVignetteId()) {
             return (<div/>);
         } else {
             return (
