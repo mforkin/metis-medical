@@ -287,7 +287,7 @@ class VignetteEditor extends React.Component {
                                                     checked={_.get(q, 'data.multi')}
                                                     onChange={this.wrap('questionMultiChange', i, j)}>Multi-Select Answers?</Checkbox>
                                                 <Checkbox
-                                                    checked={_.get(q, 'data.questionType')}
+                                                    checked={_.get(q, 'data.questionType') === 'numeric'}
                                                     onChange={this.wrap('questionTypeChange', i, j)}>Is-Numeric Answer?</Checkbox>
                                                 <div>
                                                 {
