@@ -112,7 +112,7 @@ html, body {
 }
 
 .res-cnt .full-chart {
-    flex: 5;
+    flex: 9;
     padding: 10px;
 }
 
@@ -121,10 +121,19 @@ html, body {
 }
 
 .res-cnt .callout {
-    flex: 1;
     border: 4px solid #337ab7;
     padding: 10px;
     height: 30%;
+}
+
+.res-cnt .callout-spec {
+    overflow-y: auto;
+}
+
+.res-cnt .callout.callout-spec {
+    border-color: #993441;
+    margin-top: 20px;
+    height: 60%;
 }
 
 .alert.alert-info.res-callout-alert {
@@ -163,6 +172,48 @@ html, body {
 
 .res-cnt .callout .callout-item-value svg.incorrect {
     background-color: #f2dede;
+}
+
+
+.res-cnt .callout-spec .spec-name {
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Montserrat";
+}
+
+.res-cnt .callout-spec .spec-vig-name {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: "Montserrat";
+}
+
+.res-cnt .spec-percent {
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.res-cnt .spec-n {
+    font-size: 10px;
+    display: inline-block;
+}
+
+.res-cnt .callout .callout-item > div.spec-breaker {
+    border-bottom: 1px solid #000;
+    margin: 3px;
+    display: block;
+}
+
+.res-cnt .callout .callout-item > div.spec-breaker.dash {
+    border-bottom: 1px dashed #000;
+}
+
+.res-cnt .spec-stats {
+    padding-left: 10px;
+}
+
+.res-cnt .most-recent {
+    flex: 2 1;
 }
 
 .res-cnt .callout .callout-right {

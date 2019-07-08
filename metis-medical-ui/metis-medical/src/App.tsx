@@ -83,17 +83,17 @@ class App extends React.Component {
         return (
             <Grid className="app">
                 <Row className="header">
-                    <Col xs={12} md={12}>
+                    <Col xs={12} md={12} lg={12}>
                         <Header />
                     </Col>
                 </Row>
                 <Row>
                     <Router>
                         <div className="content">
-                            <Col xsHidden={true} md={2} lg={2}>
+                            <Col xs={2} md={2} lg={2}>
                                 <Sidebar />
                             </Col>
-                            <Col xs={12} md={_.get(this.state,'calculatorMode') ? 8 : 10} lg={_.get(this.state,'calculatorMode') ? 8 : 10}>
+                            <Col xs={_.get(this.state,'calculatorMode') ? 8 : 10} md={_.get(this.state,'calculatorMode') ? 8 : 10} lg={_.get(this.state,'calculatorMode') ? 8 : 10}>
                                 <div className="content main-pane">
                                     <div>
                                       <Route exact={true} path="/" component={Home} />
@@ -109,7 +109,7 @@ class App extends React.Component {
                                     </div>
                                 </div>
                             </Col>
-                            <Col className="calc-cnt" lgHidden={!_.get(this.state,'calculatorMode')} mdHidden={!_.get(this.state,'calculatorMode')} md={2} lg={2}>
+                            <Col className="calc-cnt" xsHidden={!_.get(this.state,'calculatorMode')} lgHidden={!_.get(this.state,'calculatorMode')} mdHidden={!_.get(this.state,'calculatorMode')} md={2} lg={2} xs={2}>
                                 <Calculator />
                             </Col>
                         </div>

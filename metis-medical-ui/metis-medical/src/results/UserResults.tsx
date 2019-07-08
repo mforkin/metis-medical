@@ -358,14 +358,17 @@ class UserResults extends React.Component {
                 </div>
                 <div className="res-dash-cnt">
                     <div className="full-chart inline">
+                        <Alert bsStyle="info" className="res-callout-alert">
+                            Get some perspective! This chart shows the percentage of respondents that answered each question correctly.
+                             It is filtered by each respondent's "best" or "most recent" answer as marked above.
+                        </Alert>
                         <div className="half">
                             <FlexibleXYPlot xType="ordinal">
                                 <VerticalGridLines />
                                 <HorizontalGridLines />
-                                <XAxis title="Question Number" />
+                                <XAxis />
                                 <YAxis
                                     tickFormat={this.yTickFormat(0, 'percent')}
-                                    title="Percentage Answering Correctly"
                                     />
                                 <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
                             </FlexibleXYPlot>
@@ -374,44 +377,46 @@ class UserResults extends React.Component {
                             {this.getQuestionTpl()}
                         </div>
                     </div>
-                    <div className="most-recent callout inline">
-                        <div className="callout-left">
-                            <Alert bsStyle="info" className="res-callout-alert">
-                                Click <FontAwesomeIcon icon={["fas", "info-circle"]} /> for details
-                            </Alert>
-                            {
-                                _.map(this.getSelectedRawScores(), (s) => {
-                                    return (
-                                        <div className="callout-item">
-                                            <div className="callout-info">
-                                                <OverlayTrigger
-                                                    key={"top"}
-                                                    placement={"top"}
-                                                    overlay={
-                                                        <Tooltip id={`res-question-tooltip`}>
-                                                            Click for Question Details
-                                                        </Tooltip>
-                                                    }
-                                                >
-                                                <div onClick={this.questionClicked(s)}><FontAwesomeIcon icon={["fas", "info-circle"]}/></div>
-                                                </OverlayTrigger>
+                    <div className="most-recent inline">
+                        <div className="callout">
+                            <div className="callout-left">
+                                <Alert bsStyle="info" className="res-callout-alert">
+                                    Click <FontAwesomeIcon icon={["fas", "info-circle"]} /> for details
+                                </Alert>
+                                {
+                                    _.map(this.getSelectedRawScores(), (s) => {
+                                        return (
+                                            <div className="callout-item">
+                                                <div className="callout-info">
+                                                    <OverlayTrigger
+                                                        key={"top"}
+                                                        placement={"top"}
+                                                        overlay={
+                                                            <Tooltip id={`res-question-tooltip`}>
+                                                                Click for Question Details
+                                                            </Tooltip>
+                                                        }
+                                                    >
+                                                    <div onClick={this.questionClicked(s)}><FontAwesomeIcon icon={["fas", "info-circle"]}/></div>
+                                                    </OverlayTrigger>
+                                                </div>
+                                                <div className="callout-item-value">
+                                                    Question {_.get(s, 'questionSeq') + 1}:
+                                                    <span className="fa-layers fa-fw">
+                                                        <FontAwesomeIcon inverse className={_.get(s, 'isCorrect') ? 'background-icon correct' : 'background-icon incorrect'} color={_.get(s, 'isCorrect') ? '#3c763d' : '#a94442'} icon={["far", "circle"]} size="lg" />
+                                                        <FontAwesomeIcon color={_.get(s, 'isCorrect') ? '#3c763d' : '#a94442'} icon={["far", _.get(s, 'isCorrect') ? "check-circle" : "times-circle"]} size="lg" />
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <div className="callout-item-value">
-                                                Question {_.get(s, 'questionSeq') + 1}:
-                                                <span className="fa-layers fa-fw">
-                                                    <FontAwesomeIcon inverse className={_.get(s, 'isCorrect') ? 'background-icon correct' : 'background-icon incorrect'} color={_.get(s, 'isCorrect') ? '#3c763d' : '#a94442'} icon={["far", "circle"]} size="lg" />
-                                                    <FontAwesomeIcon color={_.get(s, 'isCorrect') ? '#3c763d' : '#a94442'} icon={["far", _.get(s, 'isCorrect') ? "check-circle" : "times-circle"]} size="lg" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            }
+                                        );
+                                    })
+                                }
+                            </div>
+                            <div className="callout-right">
+                                {this.getCardScore()}
+                            </div>
                         </div>
-                        <div className="callout-right">
-                            {this.getCardScore()}
-                        </div>
-                        <div>
+                        <div className="callout callout-spec">
                             {
                                 _.map(
                                     _.get(this.getSelectedSpecScores(), 'vignettes'),
@@ -419,18 +424,36 @@ class UserResults extends React.Component {
                                         const tot = _.get(this.getSelectedSpecScores(), 'tot.' + this.getSpecIdFromName(k))
                                         const totPercent = _.get(tot, 'numCorrect') / _.get(tot, 'numQuestions') * 100
                                         return (
-                                            <div>
-                                                <div>{k}: {totPercent.toFixed(1)}% (n={_.get(tot, 'numRespondents')})</div>
+                                            <div className="callout-item">
+                                                <div className="spec-name">{k}</div>
+                                                <div>
+                                                    <div className="spec-percent">
+                                                        {totPercent.toFixed(1)}%&nbsp;
+                                                    </div>
+                                                    <div className="spec-n">
+                                                        (n={_.get(tot, 'numRespondents')})
+                                                    </div>
+                                                </div>
+                                                <div className="spec-breaker dash" />
+                                                <div>
                                                     {
                                                         _.map(v, (stats, vName) => {
                                                             const metric = _.get(stats, 'numCorrect') / _.get(stats, 'numQuestions') * 100
                                                             return (
                                                                 <div>
-                                                                    {vName}: {metric.toFixed(1)}% (n={_.get(stats, 'numRespondents')})
+                                                                    <div className="spec-vig-name">
+                                                                        {vName}
+                                                                    </div>
+                                                                    <div className="spec-stats">
+                                                                        <div className="spec-percent">{metric.toFixed(1)}%&nbsp;</div>
+                                                                        <div className="spec-n">(n={_.get(stats, 'numRespondents')})</div>
+                                                                    </div>
                                                                 </div>
                                                             )
                                                         })
                                                     }
+                                                </div>
+                                                <div className="spec-breaker" />
                                             </div>
                                         );
                                     }
