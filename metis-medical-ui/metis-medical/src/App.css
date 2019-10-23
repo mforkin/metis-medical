@@ -52,6 +52,10 @@ html, body {
     height: 100%;
 }
 
+.feedback-cnt {
+    text-align: center;
+}
+
 .calculator-button {
     position: absolute;
     top: 2px;

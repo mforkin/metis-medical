@@ -315,6 +315,16 @@ class Stage extends React.Component {
                                                 </div>
                                             )
                                         }
+                                        {
+                                            this.hasNextVignette() ?
+                                            ""
+                                            :
+                                            (
+                                                <Button className="link-btn">
+                                                    <Link onClick={this.modeSetter('feedback')} to="/feedback">Give Feedback</Link>
+                                                </Button>
+                                            )
+                                        }
                                         <Button className="link-btn">
                                             <Link onClick={this.modeSetter('results')} to="/results">Results</Link>
                                         </Button>

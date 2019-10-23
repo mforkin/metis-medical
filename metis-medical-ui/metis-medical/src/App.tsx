@@ -11,6 +11,7 @@ import * as Actions from './actions';
 import Calculator from './calculator/Calculator';
 import SpecialtyEditor from './editors/SpecialtyEditor';
 import VignetteEditor from './editors/VignetteEditor';
+import Feedback from './feedback/Feedback';
 import Header from './header/Header';
 import UserResults from './results/UserResults';
 import Sidebar from './sidebar/Sidebar';
@@ -100,6 +101,7 @@ class App extends React.Component {
                                       <Route path="/edit" component={VignetteEditor} />
                                       <Route path="/editSpecialties" component={SpecialtyEditor} />
                                       <Route path="/results" component={UserResults} />
+                                      <Route path="/feedback" component={Feedback} />
                                     </div>
                                     <div className="calculator-button">
                                         <Button bsStyle="primary" onClick={this.toggleCalculatorMode}>

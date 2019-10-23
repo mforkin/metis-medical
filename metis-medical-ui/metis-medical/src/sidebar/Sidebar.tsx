@@ -275,6 +275,7 @@ class Sidebar extends React.Component {
                         <Link onClick={this.modeSetter('ms')} className={this.isSelectedClass('ms')} to="/editSpecialties">Manage Specialties</Link>
                     ) : ""
                 }
+                <Link onClick={this.modeSetter('feedback')} className={this.isSelectedClass('feedback')} to="/feedback">Give Feedback</Link>
                 {
                     this.getResultsTpl()
                 }
