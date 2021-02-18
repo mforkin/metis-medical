@@ -18,6 +18,8 @@
     text-align: center;
     text-transform: uppercase;
     height: 34px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .calculator .footer {
