@@ -38,7 +38,7 @@
         <db.port>5432</db.port>
         <db.url.base>jdbc:postgresql://${db.host}:${db.port}</db.url.base>
         <db.resource.name>MetisDS</db.resource.name>
-        <db.name>metis</db.name>
+        <db.name>metis_test</db.name>
         <jooq.version>3.11.5</jooq.version>
         <hikaricp.version>3.1.0</hikaricp.version>
 

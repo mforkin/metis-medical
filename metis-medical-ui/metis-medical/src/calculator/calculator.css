@@ -34,6 +34,9 @@
     font-size: 13px;
     padding-top: 2px;
     text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .calculator .footer .footer-body {
