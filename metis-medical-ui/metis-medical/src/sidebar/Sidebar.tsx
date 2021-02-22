@@ -34,7 +34,12 @@ class Sidebar extends React.Component {
         return (e) => {
             _.get(me.props, 'dispatch')(Actions.UPDATE_MODE(mode));
             _.get(me.props, 'dispatch')(Actions.loadUserResults());
+            _.get(me.props, 'dispatch')(Actions.loadAvailableVignettes(
+                _.get(me.props, 'content.specialtyId'),
+                _.get(me.props, 'content.selectedVignette.id')
+            ));
             _.get(me.props, 'dispatch')(Actions.UNSET_FEEDBACK());
+            _.get(me.props, 'dispatch')(Actions.NUMERIC_RESPONSE_CHANGED(''));
         };
     }
 
