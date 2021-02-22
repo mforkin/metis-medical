@@ -40,6 +40,15 @@ class Sidebar extends React.Component {
             ));
             _.get(me.props, 'dispatch')(Actions.UNSET_FEEDBACK());
             _.get(me.props, 'dispatch')(Actions.NUMERIC_RESPONSE_CHANGED(''));
+            if (mode === 'quiz') {
+                setTimeout(() => {
+                    me.handleVigChange({
+                        target: {
+                            value: _.get(me.props, 'content.selectedVignette.id')
+                        }
+                    });
+                }, 200);
+            }
         };
     }
 
