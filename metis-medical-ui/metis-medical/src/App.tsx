@@ -118,7 +118,12 @@ class App extends React.Component {
                     </Router>
                 </Row>
                 <Row className="footer">
-                    <div>
+                    <div className="left-block">
+                        <a target="_blank" href="https://www.mdcalc.com/morphine-milligram-equivalents-mme-calculator">
+                            MME Calculator
+                        </a>
+                    </div>
+                    <div className="right-block">
                         <FontAwesomeIcon icon="notes-medical" />
                     </div>
                 </Row>
