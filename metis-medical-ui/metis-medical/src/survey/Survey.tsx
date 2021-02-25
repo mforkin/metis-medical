@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as React from 'react';
+import { Alert } from 'react-bootstrap';
 // import { ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Stage from './Stage';
@@ -80,11 +81,18 @@ class Survey extends React.Component {
         return this.getStages().length - 1 === this.getStageIndex()
     }
 
+    public getTotalQuestions () {
+        return this.getStages().reduce((total, s) => _.get(s, 'data.question').length + total, 0)
+    }
+
     public isCompleted () {
-        return this.isLastStageOfVignette() && this.isLastQuestionOfStage()
-            && _.get(this.getStageAtIndex(), 'data.seq') === _.get(this.props, 'content.selectedVignette.userInfo.inProgress._1')
-            && _.get(this.getQuestionAtIndex(), 'data.seq') === _.get(this.props, 'content.selectedVignette.userInfo.inProgress._2')
-            && _.get(this.props, 'content.selectedVignette.userInfo.inProgress._3') === _.get(this.props, 'content.selectedVignette.userInfo.iteration')
+        return  _.get(this.props, 'content.selectedVignette.userInfo.inProgress._3') > 0 || (
+            _.get(this.props, 'content.selectedVignette.userInfo.inProgress._1') === (this.getStages().length - 1) &&
+            _.get(this.props, 'content.selectedVignette.userInfo.inProgress._2') === (this.getTotalQuestions() - 1));
+//         return this.isLastStageOfVignette() && this.isLastQuestionOfStage()
+//             && _.get(this.getStageAtIndex(), 'data.seq') === _.get(this.props, 'content.selectedVignette.userInfo.inProgress._1')
+//             && _.get(this.getQuestionAtIndex(), 'data.seq') === _.get(this.props, 'content.selectedVignette.userInfo.inProgress._2')
+//             && _.get(this.props, 'content.selectedVignette.userInfo.inProgress._3') === _.get(this.props, 'content.selectedVignette.userInfo.iteration')
     }
 
     public getRenderTpl () {
@@ -116,10 +124,9 @@ class Survey extends React.Component {
 
     public getCompletedTpl () {
         return (
-            <div>
-                <div>Vignette Completed!</div>
-                <div>Results</div>
-            </div>
+            <Alert bsStyle="info" className="res-callout-alert">
+                Vignette Completed! Select a new vignette from the sidebar to take another quiz.
+            </Alert>
         );
     }
 
