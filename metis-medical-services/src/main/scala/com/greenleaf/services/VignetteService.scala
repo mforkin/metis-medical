@@ -1,7 +1,11 @@
 package com.greenleaf.services
 
+import java.util.Random
+
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
+import com.greenleaf.metis.medical.jooq.generated.tables.records.VignetteSpecialtyRecord
+import com.typesafe.config.ConfigFactory
 import org.jooq.Record
 
 import collection.JavaConverters._
@@ -53,6 +57,10 @@ case class CandidateVignette (
 
 object VignetteService {
   lazy val db = ConnectionManager.db
+
+  val conf = ConfigFactory.load()
+  val phase = conf.getInt("phase")
+  val random = new Random()
 
   def create(vignette: Vignette) = {
     val vignetteId = db.insertInto(VIGNETTE, VIGNETTE.NAME, VIGNETTE.SEQ)
@@ -170,12 +178,55 @@ object VignetteService {
     expandVignette(vignettes)
   }
 
+  private def generateRandomVignettes (username: String) = {
+    val totalVignettes = db.selectFrom(VIGNETTE_SPECIALTY).fetch.asScala
+    val vignetteBySpecialty = totalVignettes.groupBy(_.getSpecialtyId)
+
+    // assuming two phases
+    val numVignettesForPhase1 = totalVignettes.size / 2
+
+    val (phase1Vignettes, remainingVignettes) = (0 until numVignettesForPhase1).foldLeft((Set[VignetteSpecialtyRecord](), vignetteBySpecialty.values.map(_.toArray).toList)) {
+      case ((phase1, remaining), i) =>
+        val curSpecialtyIdx = i % remaining.size
+        val choices = remaining(curSpecialtyIdx)
+        val choice = random.nextInt(choices.length)
+        val remainingChoices: List[Array[VignetteSpecialtyRecord]] = List(choices.take(choice) ++ choices.drop(choice + 1))
+        val remainingBegin: List[Array[VignetteSpecialtyRecord]] = remaining.take(curSpecialtyIdx)
+        val remainingEnd: List[Array[VignetteSpecialtyRecord]] = remaining.drop(curSpecialtyIdx + 1)
+        val remainingSpecialtyChoices: List[Array[VignetteSpecialtyRecord]] = remainingBegin ++ remainingChoices ++ remainingEnd
+        (phase1 + choices(choice), remainingSpecialtyChoices)
+    }
+
+    val phase2Vignettes = remainingVignettes.flatten
+
+    db.
+      insertInto(USER_AVAILABLE_VIGNETTES, USER_AVAILABLE_VIGNETTES.USERNAME, USER_AVAILABLE_VIGNETTES.PHASE_1, USER_AVAILABLE_VIGNETTES.PHASE_2)
+      .values(username, phase1Vignettes.map(_.getVignetteId).mkString(","), phase2Vignettes.map(_.getVignetteId).mkString(","))
+      .execute()
+
+    (phase1Vignettes.map(_.getVignetteId.toInt), phase2Vignettes.map(_.getVignetteId.toInt).toSet)
+  }
   def getVignettesBySpecialty(specialtyId: Int, username: String) = {
     //get user info
     val vignetteProgress = UserService.getCurrentVignettePositions(username)
-    //get All vignettes
+
+    val userAvailableVignettes = db
+      .selectFrom(USER_AVAILABLE_VIGNETTES)
+      .where(USER_AVAILABLE_VIGNETTES.USERNAME.equal(username)).fetch.asScala
+
+    val (phase1, phase2) = userAvailableVignettes.headOption match {
+      case Some(vignettes) =>
+        (vignettes.getPhase_1.split(",").map(_.toInt).toSet, vignettes.getPhase_2.split(",").map(_.toInt).toSet)
+      case None =>
+        generateRandomVignettes(username)
+    }
+
+    val availableVignettes = if (phase == 1) phase1 else phase2
+
+    //get All vignettes for user
     val vignettes = getBaseVignetteQuery
       .where(VIGNETTE_SPECIALTY.SPECIALTY_ID.equal(specialtyId))
+      .and(VIGNETTE_SPECIALTY.VIGNETTE_ID.in(availableVignettes.asJavaCollection))
       .orderBy(VIGNETTE.SEQ.asc())
       .fetch.asScala
       .map(r => extractVignetteFromBaseQuery(r, vignetteProgress))

@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle as farCheckCircle, faCheckSquare as farCheckSquare, faCircle as farCircle, faSquare as farSquare, faTimesCircle as farTimesCircle} from '@fortawesome/free-regular-svg-icons';
+import { faCheckCircle as farCheckCircle, faCheckSquare as farCheckSquare, faCircle as farCircle, faHandPointLeft, faHandPointRight, faSquare as farSquare, faTimesCircle as farTimesCircle} from '@fortawesome/free-regular-svg-icons';
 import { faAngleDoubleLeft, faAngleDoubleRight, faCalculator, faCheckCircle, faCheckSquare, faChevronDown, faCircle, faInfoCircle, faNotesMedical, faSquare, faTimesCircle, faUserMd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as _ from 'lodash';
@@ -45,6 +45,8 @@ class App extends React.Component {
         library.add(faCircle);
         library.add(faCheckSquare);
         library.add(faInfoCircle);
+        library.add(faHandPointLeft);
+        library.add(faHandPointRight);
 
         library.add(farCheckCircle);
         library.add(farTimesCircle);

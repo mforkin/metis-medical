@@ -9,6 +9,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
+import com.greenleaf.metis.medical.jooq.generated.tables.UserAvailableVignettes;
 import com.greenleaf.metis.medical.jooq.generated.tables.UserResults;
 import com.greenleaf.metis.medical.jooq.generated.tables.UserResultsAnswers;
 import com.greenleaf.metis.medical.jooq.generated.tables.Users;
@@ -40,7 +41,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = 2099518774;
+    private static final long serialVersionUID = -1769243558;
 
     /**
      * The reference instance of <code>public</code>
@@ -71,6 +72,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.stage</code>.
      */
     public final Stage STAGE = com.greenleaf.metis.medical.jooq.generated.tables.Stage.STAGE;
+
+    /**
+     * The table <code>public.user_available_vignettes</code>.
+     */
+    public final UserAvailableVignettes USER_AVAILABLE_VIGNETTES = com.greenleaf.metis.medical.jooq.generated.tables.UserAvailableVignettes.USER_AVAILABLE_VIGNETTES;
 
     /**
      * The table <code>public.user_results</code>.
@@ -144,6 +150,7 @@ public class Public extends SchemaImpl {
             Question.QUESTION,
             Specialty.SPECIALTY,
             Stage.STAGE,
+            UserAvailableVignettes.USER_AVAILABLE_VIGNETTES,
             UserResults.USER_RESULTS,
             UserResultsAnswers.USER_RESULTS_ANSWERS,
             Users.USERS,

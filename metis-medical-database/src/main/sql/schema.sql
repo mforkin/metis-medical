@@ -114,8 +114,20 @@ CREATE TABLE public.user_results_answers (
 )
 WITH (OIDS=FALSE);
 
+CREATE TABLE public.user_available_vignettes (
+    phase_1 varchar(1000) NOT NULL,
+    phase_2 varchar(1000) NOT NULL,
+    username varchar(1000) NOT NULL,
+    CONSTRAINT "uav_pk" PRIMARY KEY (username)
+)
+WITH (OIDS=FALSE);
+
 ALTER TABLE public.user_results_answers ADD CONSTRAINT user_results_answer_answer_fk FOREIGN KEY (answer_id)
 REFERENCES public.answer (id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
+ALTER TABLE public.user_available_vignettes ADD CONSTRAINT user_available_vignettes FOREIGN KEY (username)
+REFERENCES public.users (username) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
 ALTER TABLE public.user_results_answers ADD CONSTRAINT user_results_results_fk FOREIGN KEY (user_results_id)

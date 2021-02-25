@@ -359,20 +359,9 @@ class UserResults extends React.Component {
                 <div className="res-dash-cnt">
                     <div className="full-chart inline">
                         <Alert bsStyle="info" className="res-callout-alert">
-                            Get some perspective! This chart shows the percentage of respondents that answered each question correctly.
-                             It is filtered by each respondent's "best" or "most recent" answer as marked above.
+                            <FontAwesomeIcon icon={["far", "hand-point-left"]} /> In the sidebar, choose your specialty and vignette to review.
+                            Then click on a question in the box to see how you answered <FontAwesomeIcon icon={["far", "hand-point-right"]} />
                         </Alert>
-                        <div className="half">
-                            <FlexibleXYPlot xType="ordinal">
-                                <VerticalGridLines />
-                                <HorizontalGridLines />
-                                <XAxis />
-                                <YAxis
-                                    tickFormat={this.yTickFormat(0, 'percent')}
-                                    />
-                                <VerticalBarSeries color="#337ab7" stroke="#276eaa" data={this.getPercentAnsweredCorrectly()} />
-                            </FlexibleXYPlot>
-                        </div>
                         <div className="half">
                             {this.getQuestionTpl()}
                         </div>
@@ -386,7 +375,7 @@ class UserResults extends React.Component {
                                 {
                                     _.map(this.getSelectedRawScores(), (s) => {
                                         return (
-                                            <div className="callout-item">
+                                            <div onClick={this.questionClicked(s)} className="callout-item callout-item-hover">
                                                 <div className="callout-info">
                                                     <OverlayTrigger
                                                         key={"top"}
@@ -397,7 +386,7 @@ class UserResults extends React.Component {
                                                             </Tooltip>
                                                         }
                                                     >
-                                                    <div onClick={this.questionClicked(s)}><FontAwesomeIcon icon={["fas", "info-circle"]}/></div>
+                                                    <div><FontAwesomeIcon icon={["fas", "info-circle"]}/></div>
                                                     </OverlayTrigger>
                                                 </div>
                                                 <div className="callout-item-value">
@@ -415,50 +404,6 @@ class UserResults extends React.Component {
                             <div className="callout-right">
                                 {this.getCardScore()}
                             </div>
-                        </div>
-                        <div className="callout callout-spec">
-                            {
-                                _.map(
-                                    _.get(this.getSelectedSpecScores(), 'vignettes'),
-                                    (v, k) => {
-                                        const tot = _.get(this.getSelectedSpecScores(), 'tot.' + this.getSpecIdFromName(k))
-                                        const totPercent = _.get(tot, 'numCorrect') / _.get(tot, 'numQuestions') * 100
-                                        return (
-                                            <div className="callout-item">
-                                                <div className="spec-name">{k}</div>
-                                                <div>
-                                                    <div className="spec-percent">
-                                                        {totPercent.toFixed(1)}%&nbsp;
-                                                    </div>
-                                                    <div className="spec-n">
-                                                        (n={_.get(tot, 'numRespondents')})
-                                                    </div>
-                                                </div>
-                                                <div className="spec-breaker dash" />
-                                                <div>
-                                                    {
-                                                        _.map(v, (stats, vName) => {
-                                                            const metric = _.get(stats, 'numCorrect') / _.get(stats, 'numQuestions') * 100
-                                                            return (
-                                                                <div>
-                                                                    <div className="spec-vig-name">
-                                                                        {vName}
-                                                                    </div>
-                                                                    <div className="spec-stats">
-                                                                        <div className="spec-percent">{metric.toFixed(1)}%&nbsp;</div>
-                                                                        <div className="spec-n">(n={_.get(stats, 'numRespondents')})</div>
-                                                                    </div>
-                                                                </div>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                                <div className="spec-breaker" />
-                                            </div>
-                                        );
-                                    }
-                                )
-                            }
                         </div>
                     </div>
                 </div>

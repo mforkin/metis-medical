@@ -166,6 +166,10 @@ html, body {
     display: inline-block;
 }
 
+.res-cnt .callout .callout-item.callout-item-hover:hover {
+    cursor: pointer;
+}
+
 .res-cnt .callout .callout-item-value span {
     margin-left: 5px;
 }
