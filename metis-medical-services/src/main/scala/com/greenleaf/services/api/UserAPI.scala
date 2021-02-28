@@ -1,6 +1,8 @@
 package com.greenleaf.services.api
 
-import com.greenleaf.services.{User, UserService}
+import java.util.UUID
+
+import com.greenleaf.services.{OnlyUser, User, UserPassword, UserService}
 import org.scalatra.Ok
 
 class UserAPI extends API {
@@ -15,7 +17,20 @@ class UserAPI extends API {
 
   post("/") {
     val b = readJsonFromBody(request.body)
-    UserService.createUser(b.extract[User], "admin")
+    val password = b.extract[UserPassword].password
+    UserService.createUser(b.extract[User], password)
+  }
+
+  post("/reset/") {
+    val b = readJsonFromBody(request.body)
+    val userName = b.extract[OnlyUser].userName
+    UserService.generateResetRequest(userName, base + root + "/reset/")
+  }
+
+  put("/reset/:resetHash") {
+    val b = readJsonFromBody(request.body)
+    val password = b.extract[UserPassword].password
+    UserService.updateUser(password, params.as[String]("resetHash"))
   }
 
   get("/results") {

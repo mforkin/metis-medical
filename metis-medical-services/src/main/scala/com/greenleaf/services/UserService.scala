@@ -1,9 +1,14 @@
 package com.greenleaf.services
 
+import java.io.ByteArrayOutputStream
 import java.time.format.DateTimeFormatter
+import java.util.{Properties, UUID}
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
+import com.typesafe.config.ConfigFactory
+import javax.mail.internet.{InternetAddress, MimeMessage}
+import org.apache.commons.mail.{DefaultAuthenticator, SimpleEmail}
 import org.jooq.impl.DSL.max
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.{User => SUser}
@@ -15,13 +20,60 @@ import scala.collection.mutable
 case class DataPoint(id: String, x: String, y: Int)
 
 case class User (userName: String, specialtyId: Int, isAdmin: Option[Boolean])
+case class UserPassword (password: String)
+case class OnlyUser (userName: String)
 case class UserResult (stageId: Int, questionId: Int, datetime: String, answerId: Seq[Int], isCorrect: Boolean, iteration: Int)
 object UserService {
+  val emailConfig = ConfigFactory.load().getConfig("email")
+  val emailUser = emailConfig.getString("userName")
+  val emailPassword = emailConfig.getString("password")
+
   lazy val db = ConnectionManager.db
 
   lazy val users: mutable.ListBuffer[User] = mutable.ListBuffer()
 
   val encoder = new BCryptPasswordEncoder()
+
+  def generateResetRequest (userName: String, baseUrl: String): Unit = {
+    val hash = UUID.randomUUID().toString
+    db.insertInto(RESET_HASHES, RESET_HASHES.USERNAME, RESET_HASHES.HASH)
+      .values(userName, hash)
+      .execute()
+
+    sendResetMessage(hash, userName, baseUrl)
+  }
+
+  def sendResetMessage(hash: String, userName: String, baseUrl: String): Unit = {
+    val from = "Metis Medical"
+    val to = userName
+    val subject = "Password Reset Link"
+    val content = s"$userName,\n\nFollow this link to reset your password:\n" +
+    s"$baseUrl$hash" +
+    "\n\n Thank You,\n\nMetis Medical Support Team"
+
+    val email = new SimpleEmail()
+    email.setHostName("smtp.googlemail.com")
+    email.setSmtpPort(465)
+    email.setAuthenticator(new DefaultAuthenticator(emailUser, emailPassword))
+    email.setSSLOnConnect(true)
+    email.setFrom(from)
+    email.setSubject(subject)
+    email.setMsg(content)
+    email.addTo(to)
+    email.send()
+  }
+
+  def updateUser(password: String, resetHash: String): Int = {
+    db.selectFrom(RESET_HASHES).where(RESET_HASHES.HASH.equal(resetHash)).fetch.asScala.headOption match {
+      case Some(resetOption) =>
+        db.update(USERS).set(USERS.PASSWORD, encoder.encode(password)).where(USERS.USERNAME.equal(resetOption.getUsername)).execute
+        db.deleteFrom(RESET_HASHES)
+          .where(RESET_HASHES.USERNAME.equal(resetOption.getUsername)).and(RESET_HASHES.HASH.equal(resetHash))
+          .execute()
+      case None =>
+        throw new Exception("Invalid Hash")
+    }
+  }
 
   def createUser(user: User, password: String) = {
     if (

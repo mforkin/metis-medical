@@ -122,11 +122,21 @@ CREATE TABLE public.user_available_vignettes (
 )
 WITH (OIDS=FALSE);
 
+CREATE TABLE public.reset_hashes (
+    hash varchar(1000) NOT NULL,
+    username varchar(1000) NOT NULL,
+    CONSTRAINT "rh_pk" PRIMARY KEY (username)
+);
+
+ALTER TABLE public.reset_hashes ADD CONSTRAINT reset_hashes_fk FOREIGN KEY (username)
+REFERENCES public.users (username) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
+
 ALTER TABLE public.user_results_answers ADD CONSTRAINT user_results_answer_answer_fk FOREIGN KEY (answer_id)
 REFERENCES public.answer (id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 
-ALTER TABLE public.user_available_vignettes ADD CONSTRAINT user_available_vignettes FOREIGN KEY (username)
+ALTER TABLE public.user_available_vignettes ADD CONSTRAINT user_available_vignettes_fk FOREIGN KEY (username)
 REFERENCES public.users (username) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION NOT DEFERRABLE;
 

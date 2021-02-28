@@ -39,6 +39,7 @@
         <s:intercept-url pattern="/styles.css" access="permitAll()" />
         <s:intercept-url pattern="/api/specialty" access="permitAll()" method="GET"/>
         <s:intercept-url pattern="/api/user" access="permitAll()" method="POST"/>
+        <s:intercept-url pattern="/api/user" access="permitAll()" method="PUT"/>
         <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" method="GET" />
         <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" method="PUT" />
         <s:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" method="POST" />

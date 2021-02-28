@@ -7,6 +7,7 @@ package com.greenleaf.metis.medical.jooq.generated;
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
+import com.greenleaf.metis.medical.jooq.generated.tables.ResetHashes;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
 import com.greenleaf.metis.medical.jooq.generated.tables.UserAvailableVignettes;
@@ -18,6 +19,7 @@ import com.greenleaf.metis.medical.jooq.generated.tables.VignetteSpecialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.AnswerRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.AuthoritiesRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.QuestionRecord;
+import com.greenleaf.metis.medical.jooq.generated.tables.records.ResetHashesRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.SpecialtyRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.StageRecord;
 import com.greenleaf.metis.medical.jooq.generated.tables.records.UserAvailableVignettesRecord;
@@ -67,6 +69,7 @@ public class Keys {
     public static final UniqueKey<AnswerRecord> QUESTION_ANSWER_PK = UniqueKeys0.QUESTION_ANSWER_PK;
     public static final UniqueKey<AuthoritiesRecord> IX_AUTH_USERNAME = UniqueKeys0.IX_AUTH_USERNAME;
     public static final UniqueKey<QuestionRecord> QUESTION_PK = UniqueKeys0.QUESTION_PK;
+    public static final UniqueKey<ResetHashesRecord> RH_PK = UniqueKeys0.RH_PK;
     public static final UniqueKey<SpecialtyRecord> SPECIALTY_PK = UniqueKeys0.SPECIALTY_PK;
     public static final UniqueKey<StageRecord> STAGE_PK = UniqueKeys0.STAGE_PK;
     public static final UniqueKey<UserAvailableVignettesRecord> UAV_PK = UniqueKeys0.UAV_PK;
@@ -83,6 +86,7 @@ public class Keys {
     public static final ForeignKey<AnswerRecord, QuestionRecord> ANSWER__QUES_ANSWER_FK = ForeignKeys0.ANSWER__QUES_ANSWER_FK;
     public static final ForeignKey<AuthoritiesRecord, UsersRecord> AUTHORITIES__FK_AUTH_USR = ForeignKeys0.AUTHORITIES__FK_AUTH_USR;
     public static final ForeignKey<QuestionRecord, StageRecord> QUESTION__QUES_STAG_FK = ForeignKeys0.QUESTION__QUES_STAG_FK;
+    public static final ForeignKey<ResetHashesRecord, UsersRecord> RESET_HASHES__RESET_HASHES_FK = ForeignKeys0.RESET_HASHES__RESET_HASHES_FK;
     public static final ForeignKey<StageRecord, VignetteRecord> STAGE__STAGE_VIG_FK = ForeignKeys0.STAGE__STAGE_VIG_FK;
     public static final ForeignKey<UserAvailableVignettesRecord, UsersRecord> USER_AVAILABLE_VIGNETTES__USER_AVAILABLE_VIGNETTES = ForeignKeys0.USER_AVAILABLE_VIGNETTES__USER_AVAILABLE_VIGNETTES;
     public static final ForeignKey<UserResultsRecord, UsersRecord> USER_RESULTS__USER_ANSWER_USER_FK = ForeignKeys0.USER_RESULTS__USER_ANSWER_USER_FK;
@@ -109,6 +113,7 @@ public class Keys {
         public static final UniqueKey<AnswerRecord> QUESTION_ANSWER_PK = Internal.createUniqueKey(Answer.ANSWER, "question_answer_pk", Answer.ANSWER.ID);
         public static final UniqueKey<AuthoritiesRecord> IX_AUTH_USERNAME = Internal.createUniqueKey(Authorities.AUTHORITIES, "ix_auth_username", Authorities.AUTHORITIES.USERNAME, Authorities.AUTHORITIES.AUTHORITY);
         public static final UniqueKey<QuestionRecord> QUESTION_PK = Internal.createUniqueKey(Question.QUESTION, "question_pk", Question.QUESTION.ID);
+        public static final UniqueKey<ResetHashesRecord> RH_PK = Internal.createUniqueKey(ResetHashes.RESET_HASHES, "rh_pk", ResetHashes.RESET_HASHES.USERNAME);
         public static final UniqueKey<SpecialtyRecord> SPECIALTY_PK = Internal.createUniqueKey(Specialty.SPECIALTY, "specialty_pk", Specialty.SPECIALTY.ID);
         public static final UniqueKey<StageRecord> STAGE_PK = Internal.createUniqueKey(Stage.STAGE, "stage_pk", Stage.STAGE.ID);
         public static final UniqueKey<UserAvailableVignettesRecord> UAV_PK = Internal.createUniqueKey(UserAvailableVignettes.USER_AVAILABLE_VIGNETTES, "uav_pk", UserAvailableVignettes.USER_AVAILABLE_VIGNETTES.USERNAME);
@@ -123,6 +128,7 @@ public class Keys {
         public static final ForeignKey<AnswerRecord, QuestionRecord> ANSWER__QUES_ANSWER_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.QUESTION_PK, Answer.ANSWER, "answer__ques_answer_fk", Answer.ANSWER.QUESTION_ID);
         public static final ForeignKey<AuthoritiesRecord, UsersRecord> AUTHORITIES__FK_AUTH_USR = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, Authorities.AUTHORITIES, "authorities__fk_auth_usr", Authorities.AUTHORITIES.USERNAME);
         public static final ForeignKey<QuestionRecord, StageRecord> QUESTION__QUES_STAG_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.STAGE_PK, Question.QUESTION, "question__ques_stag_fk", Question.QUESTION.STAGE_ID);
+        public static final ForeignKey<ResetHashesRecord, UsersRecord> RESET_HASHES__RESET_HASHES_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, ResetHashes.RESET_HASHES, "reset_hashes__reset_hashes_fk", ResetHashes.RESET_HASHES.USERNAME);
         public static final ForeignKey<StageRecord, VignetteRecord> STAGE__STAGE_VIG_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.VIGNETTE_PK, Stage.STAGE, "stage__stage_vig_fk", Stage.STAGE.VIGNETTE_ID);
         public static final ForeignKey<UserAvailableVignettesRecord, UsersRecord> USER_AVAILABLE_VIGNETTES__USER_AVAILABLE_VIGNETTES = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, UserAvailableVignettes.USER_AVAILABLE_VIGNETTES, "user_available_vignettes__user_available_vignettes", UserAvailableVignettes.USER_AVAILABLE_VIGNETTES.USERNAME);
         public static final ForeignKey<UserResultsRecord, UsersRecord> USER_RESULTS__USER_ANSWER_USER_FK = Internal.createForeignKey(com.greenleaf.metis.medical.jooq.generated.Keys.USERS_PK, UserResults.USER_RESULTS, "user_results__user_answer_user_fk", UserResults.USER_RESULTS.USERNAME);

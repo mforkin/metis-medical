@@ -5,6 +5,7 @@ import org.scalatra.ScalatraServlet
 
 trait API extends ScalatraServlet with JsonSerialization {
   val root: String
+  lazy val base = s"https://$serverHost:$serverPort/"
 
   before() {
     response.setHeader("X-Content-Type-Options", "nosniff")

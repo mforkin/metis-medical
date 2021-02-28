@@ -7,6 +7,7 @@ package com.greenleaf.metis.medical.jooq.generated;
 import com.greenleaf.metis.medical.jooq.generated.tables.Answer;
 import com.greenleaf.metis.medical.jooq.generated.tables.Authorities;
 import com.greenleaf.metis.medical.jooq.generated.tables.Question;
+import com.greenleaf.metis.medical.jooq.generated.tables.ResetHashes;
 import com.greenleaf.metis.medical.jooq.generated.tables.Specialty;
 import com.greenleaf.metis.medical.jooq.generated.tables.Stage;
 import com.greenleaf.metis.medical.jooq.generated.tables.UserAvailableVignettes;
@@ -41,7 +42,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1769243558;
+    private static final long serialVersionUID = 1148180276;
 
     /**
      * The reference instance of <code>public</code>
@@ -62,6 +63,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.question</code>.
      */
     public final Question QUESTION = com.greenleaf.metis.medical.jooq.generated.tables.Question.QUESTION;
+
+    /**
+     * The table <code>public.reset_hashes</code>.
+     */
+    public final ResetHashes RESET_HASHES = com.greenleaf.metis.medical.jooq.generated.tables.ResetHashes.RESET_HASHES;
 
     /**
      * The table <code>public.specialty</code>.
@@ -148,6 +154,7 @@ public class Public extends SchemaImpl {
             Answer.ANSWER,
             Authorities.AUTHORITIES,
             Question.QUESTION,
+            ResetHashes.RESET_HASHES,
             Specialty.SPECIALTY,
             Stage.STAGE,
             UserAvailableVignettes.USER_AVAILABLE_VIGNETTES,
