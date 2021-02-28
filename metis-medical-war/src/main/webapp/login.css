@@ -51,6 +51,23 @@ body {
     position: relative;
 }
 
+.forgot-link {
+    color: #337ab7;
+    margin: 0 10px;
+    font-size: 15px;
+}
+
+.forgot-link:hover {
+    cursor: pointer
+}
+
+.login-inputs {
+    margin-bottom: 5px;
+}
+.login-btn-grp {
+    padding-top: 10px;
+}
+
 #login-feedback {
     margin-top: 15px;
 }
@@ -92,7 +109,7 @@ body {
     padding-right: 1.5em
 }
 
-button.reg {
+button.reg, input.reg {
     float: right;
     margin-top: 15px;
 }

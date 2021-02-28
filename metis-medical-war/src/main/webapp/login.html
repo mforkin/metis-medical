@@ -21,12 +21,12 @@
                         Login
                     </div>
                     <form id="login-form" action="/j_spring_security_check" method="POST">
-                        <div class="input-group">
-                            <input class="form-control" id="j_username" name="j_username" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
-                            <input class="form-control" type="password" name="j_password" placeholder="Password" value="" />
-                        </div>
                         <div>
-                            <div onclick="forgot()">Forgot Password</div>
+                            <input class="login-inputs form-control" id="j_username" name="j_username" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
+                            <input class="login-inputs form-control" type="password" name="j_password" placeholder="Password" value="" />
+                        </div>
+                        <div class="login-btn-grp">
+                            <span class="forgot-link" onclick="forgot()">Forgot Password</span>
                             <input class="reg btn btn-primary" type="submit" value="LOGIN"/>
                         </div>
                     </form>
@@ -110,20 +110,21 @@
                 if (!userName || userName === '') {
                     const e = document.getElementById("login-feedback");
                     e.innerHTML = "";
-                    e.append("Enter email and click 'Forgot Password' again.");
+                    e.append("Enter email address above and click 'Forgot Password' again.");
                     e.setAttribute("class", "alert alert-danger");
-                }
-                fetch("/api/user/reset", {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        userName: userName
+                } else {
+                    fetch("/api/user/reset", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            userName: userName
+                        })
+                    }).then(() => {
+                        const e = document.getElementById("login-feedback");
+                        e.innerHTML = "";
+                        e.append("Check email for password reset link.");
+                        e.setAttribute("class", "alert alert-success");
                     })
-                }).then(() => {
-                    const e = document.getElementById("login-feedback");
-                    e.innerHTML = "";
-                    e.append("Check email for password reset link.");
-                    e.setAttribute("class", "alert alert-success");
-                })
+                }
             }
         </script>
     </body>
