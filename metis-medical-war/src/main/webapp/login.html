@@ -22,12 +22,13 @@
                     </div>
                     <form id="login-form" action="/j_spring_security_check" method="POST">
                         <div class="input-group">
-                            <input class="form-control" id="j_username" name="j_username" type="text" placeholder="UVA ID (e.g. mst3k)"/>
-                            <div class="input-group-btn">
-                                <input class="btn btn-primary" type="submit" value="LOGIN"/>
-                            </div>
+                            <input class="form-control" id="j_username" name="j_username" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
+                            <input class="form-control" type="password" name="j_password" placeholder="Password" value="" />
                         </div>
-                        <input type="password" name="j_password" placeholder="Password" value="admin" style="display:none;" />
+                        <div>
+                            <div onclick="forgot()">Forgot Password</div>
+                            <input class="reg btn btn-primary" type="submit" value="LOGIN"/>
+                        </div>
                     </form>
                     <div id="login-feedback"></div>
                 </div>
@@ -38,7 +39,7 @@
                         User Registration
                     </div>
                     <div class="input-group">
-                        <input class="form-control" id="register-user-name" name="userName" type="text" placeholder="UVA ID (e.g. mst3k)"/>
+                        <input class="form-control" id="register-user-name" name="userName" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
                         <div class="input-group-btn">
                             <select class="btn btn-info" id="specialties" name="specialtyId"></select>
                         </div>
@@ -64,7 +65,7 @@
             if (/error/.test(window.location.href)) {
                 const e = document.getElementById("login-feedback")
                 e.innerHTML = "";
-                e.append("Invalid user. Please check username or register!")
+                e.append("Invalid login. Please check username/password or register!")
                 e.setAttribute("class", "alert alert-danger")
             }
 
@@ -103,6 +104,26 @@
                         document.getElementById("j_username").value = userName;
                         swapLogin();
                     })
+            }
+            function forgot () {
+                const userName = document.getElementById("j_username").value;
+                if (!userName || userName === '') {
+                    const e = document.getElementById("login-feedback");
+                    e.innerHTML = "";
+                    e.append("Enter email and click 'Forgot Password' again.");
+                    e.setAttribute("class", "alert alert-danger");
+                }
+                fetch("/api/user/reset", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        userName: userName
+                    })
+                }).then(() => {
+                    const e = document.getElementById("login-feedback");
+                    e.innerHTML = "";
+                    e.append("Check email for password reset link.");
+                    e.setAttribute("class", "alert alert-success");
+                })
             }
         </script>
     </body>

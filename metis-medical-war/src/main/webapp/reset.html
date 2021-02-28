@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <title>Metis Medical</title>
+        <link type="text/css" rel="stylesheet" href="login.css">
+        <link type="text/css" rel="stylesheet" href="bootstrap.min.css">
+        <script type="text/javascript" src="bootstrap.min.js"></script>
+        <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+    </head>
+    <body class="login-background">
+        <div class="loginpage-header">
+            METIS MEDICAL - Password Reset
+        </div>
+        <div class="content-wrapper">
+            <div class="content">
+                <div class="login" id="login-cnt">
+                    <div class="header">
+                        Update Password
+                    </div>
+                    <input class="form-control" type="password" id="password" name="password" placeholder="Enter new password"/>
+                    <button class="reg btn btn-primary" onclick="reset()">Reset</button>
+                </div>
+                <div id="login-feedback"></div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function reset () {
+                const hash = new URLSearchParams(window.location.search).get('hash');
+                fetch ("/api/user/reset/" + hash, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        password: document.getElementById("password").value
+                    })
+                }).then((res) => {
+                    const e = document.getElementById("login-feedback");
+                    e.innerHTML = "";
+                    e.append("Password reset completed! You will be redirected in 5 seconds.");
+                    e.setAttribute("class", "alert alert-success");
+                    //setTimeout(() => {
+                    //    window.location.href = "/"
+                    //}, 5000);
+                });
+            }
+        </script>
+    </body>
+</html>

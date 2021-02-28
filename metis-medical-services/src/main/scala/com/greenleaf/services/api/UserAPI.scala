@@ -21,10 +21,10 @@ class UserAPI extends API {
     UserService.createUser(b.extract[User], password)
   }
 
-  post("/reset/") {
+  post("/reset") {
     val b = readJsonFromBody(request.body)
     val userName = b.extract[OnlyUser].userName
-    UserService.generateResetRequest(userName, base + root + "/reset/")
+    UserService.generateResetRequest(userName, base + "reset.html?hash=")
   }
 
   put("/reset/:resetHash") {

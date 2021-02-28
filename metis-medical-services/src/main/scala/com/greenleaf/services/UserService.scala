@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 import collection.JavaConverters._
 import scala.collection.mutable
+import scala.util.{Failure, Success, Try}
 
 case class DataPoint(id: String, x: String, y: Int)
 
@@ -36,6 +37,9 @@ object UserService {
 
   def generateResetRequest (userName: String, baseUrl: String): Unit = {
     val hash = UUID.randomUUID().toString
+    if (db.selectFrom(RESET_HASHES).where(RESET_HASHES.USERNAME.equal(userName)).fetch.isNotEmpty) {
+      db.deleteFrom(RESET_HASHES).where(RESET_HASHES.USERNAME.equal(userName)).execute()
+    }
     db.insertInto(RESET_HASHES, RESET_HASHES.USERNAME, RESET_HASHES.HASH)
       .values(userName, hash)
       .execute()
@@ -51,16 +55,24 @@ object UserService {
     s"$baseUrl$hash" +
     "\n\n Thank You,\n\nMetis Medical Support Team"
 
-    val email = new SimpleEmail()
-    email.setHostName("smtp.googlemail.com")
-    email.setSmtpPort(465)
-    email.setAuthenticator(new DefaultAuthenticator(emailUser, emailPassword))
-    email.setSSLOnConnect(true)
-    email.setFrom(from)
-    email.setSubject(subject)
-    email.setMsg(content)
-    email.addTo(to)
-    email.send()
+    Try {
+      val email = new SimpleEmail()
+      email.setHostName("smtp.googlemail.com")
+      email.setSmtpPort(465)
+      email.setAuthenticator(new DefaultAuthenticator(emailUser, emailPassword))
+      email.setSSLOnConnect(true)
+      email.setFrom(emailUser, from)
+      email.setSubject(subject)
+      email.setMsg(content)
+      email.addTo(to)
+      email.send()
+    } match {
+      case Success(_) =>
+        true
+      case Failure(ex) =>
+        ex.printStackTrace()
+        false
+    }
   }
 
   def updateUser(password: String, resetHash: String): Int = {
