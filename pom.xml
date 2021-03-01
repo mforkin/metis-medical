@@ -61,7 +61,8 @@
         <profile>
             <id>prod</id>
             <properties>
-                <db.host>metis-medical.crm5sq6goefs.us-east-2.rds.amazonaws.com</db.host>
+                <db.host>ec2-18-191-15-219.us-east-2.compute.amazonaws.com</db.host>
+                <db.name>metis</db.name>
             </properties>
         </profile>
     </profiles>
