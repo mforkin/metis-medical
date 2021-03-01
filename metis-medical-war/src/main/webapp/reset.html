@@ -17,13 +17,20 @@
                         password: document.getElementById("password").value
                     })
                 }).then((res) => {
-                    const e = document.getElementById("login-feedback");
-                    e.innerHTML = "";
-                    e.append("Password reset completed! You will be redirected in 5 seconds.");
-                    e.setAttribute("class", "alert alert-success");
-                    setTimeout(() => {
-                        window.location.href = "/"
-                    }, 5000);
+                    if (res.ok) {
+                        const e = document.getElementById("login-feedback");
+                        e.innerHTML = "";
+                        e.append("Password reset completed! You will be redirected in 5 seconds.");
+                        e.setAttribute("class", "alert alert-success");
+                        setTimeout(() => {
+                            window.location.href = "/"
+                        }, 5000);
+                    } else {
+                        const e = document.getElementById("login-feedback");
+                        e.innerHTML = "";
+                        e.append("Password reset failed! Please return to login page and click 'Forgot Password' to generate another password reset email.");
+                        e.setAttribute("class", "alert alert-danger");
+                    }
                 });
                 return false;
             }
@@ -40,7 +47,7 @@
                         Update Password
                     </div>
                     <form action="javascript:reset()">
-                        <input class="form-control" type="password" id="password" name="password" placeholder="Enter new password"/>
+                        <input class="login-inputs form-control" type="password" id="password" name="password" placeholder="Enter new password"/>
                         <input type="submit" class="reg btn btn-primary" value="Reset" />
                     </form>
                 </div>

@@ -69,12 +69,8 @@ body {
     padding-top: 10px;
 }
 
-#login-feedback {
+#login-feedback, #registration-feedback {
     margin-top: 15px;
-}
-
-#reg-feedback {
-    margin-top: 60px;
 }
 
 .header {
@@ -92,7 +88,7 @@ body {
     position: relative;
 }
 
-.register.off, .login.off {
+.off {
     display: none;
 }
 

@@ -30,7 +30,6 @@
                             <input class="reg btn btn-primary" type="submit" value="LOGIN"/>
                         </div>
                     </form>
-                    <div id="login-feedback"></div>
                 </div>
 
                 <div class="register off" id="reg-cnt">
@@ -41,10 +40,10 @@
                     <form id="registration-form" action="javascript:register()">
                         <div>
                             <input class="login-inputs form-control" id="register-user-name" name="userName" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
-                            <input class="login-inputs form-control" type="password" name="j_password" placeholder="Password" value="" />
+                            <input class="login-inputs form-control" id="register-password" type="password" name="password" placeholder="Password" value="" />
                         </div>
                         <div class="login-btn-grp">
-                            <div style="float:left;">
+                            <div style="float:left;display:none;">
                                 <select class="btn btn-info" id="specialties" name="specialtyId"></select>
                             </div>
                             <input type="submit" class="reg btn btn-primary" value="Register" />
@@ -52,6 +51,8 @@
                     </form>
                 </div>
             </div>
+            <div id="login-feedback"></div>
+            <div id="registration-feedback"></div>
         </div>
 
         <script type="text/javascript">
@@ -78,36 +79,62 @@
                 const el = document.getElementById("login-cnt")
                 const er = document.getElementById("reg-cnt")
 
+                const fl = document.getElementById("login-feedback")
+                const fr = document.getElementById("registration-feedback")
+
                 er.setAttribute("class", "register");
+                fr.setAttribute("class", "");
                 el.setAttribute("class", "login off");
+                fl.setAttribute("class", "off");
+
+                fl.innerHTML = "";
             }
 
             function swapLogin () {
                 const el = document.getElementById("login-cnt")
                 const er = document.getElementById("reg-cnt")
 
+                const fl = document.getElementById("login-feedback")
+                const fr = document.getElementById("registration-feedback")
+
                 er.setAttribute("class", "register off");
+                fr.setAttribute("class", "off");
                 el.setAttribute("class", "login");
+                fl.setAttribute("class", "");
+
+                fr.innerHTML = "";
             }
 
             function register () {
                 const s = document.getElementById("specialties")
                 const specialtyId = s.options[s.selectedIndex].value;
                 const userName = document.getElementById("register-user-name").value;
+                const password = document.getElementById("register-password").value;
                 fetch("/api/user", {
                     method: "POST",
                     body: JSON.stringify({
                         userName: userName,
+                        password: password,
                         specialtyId: parseInt(specialtyId, 10)
                     })
                 })
                     .then(r => {
-                        const e = document.getElementById("login-feedback");
-                        e.innerHTML = "";
-                        e.append("Registration Successful. Please Login.");
-                        e.setAttribute("class", "alert alert-success");
-                        document.getElementById("j_username").value = userName;
-                        swapLogin();
+                        if (r.ok) {
+                            const e = document.getElementById("login-feedback");
+                            e.innerHTML = "";
+                            e.append("Registration Successful. Please Login.");
+                            e.setAttribute("class", "alert alert-success");
+                            document.getElementById("j_username").value = userName;
+                            swapLogin();
+                        } else {
+                            r.json().then(error => {
+                                const e = document.getElementById("registration-feedback");
+                                e.innerHTML = "";
+                                e.append("Registration Failed. " + error.error);
+                                e.setAttribute("class", "alert alert-danger");
+                            });
+
+                        }
                     })
             }
             function forgot () {

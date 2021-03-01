@@ -47,7 +47,7 @@ object UserService {
     sendResetMessage(hash, userName, baseUrl)
   }
 
-  def sendResetMessage(hash: String, userName: String, baseUrl: String): Unit = {
+  def sendResetMessage(hash: String, userName: String, baseUrl: String): Boolean = {
     val from = "Metis Medical"
     val to = userName
     val subject = "Password Reset Link"
@@ -100,7 +100,7 @@ object UserService {
       users.clear()
       populateUsersCache()
     } else {
-      throw new Exception("User Exists")
+      throw new Exception("User Already Exists.")
     }
   }
 
