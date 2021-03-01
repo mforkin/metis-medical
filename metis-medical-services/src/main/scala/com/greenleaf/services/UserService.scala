@@ -53,7 +53,7 @@ object UserService {
     val subject = "Password Reset Link"
     val content = s"$userName,\n\nFollow this link to reset your password:\n" +
     s"$baseUrl$hash" +
-    "\n\n Thank You,\n\nMetis Medical Support Team"
+    "\n\nThank You,\n\nMetis Medical Support Team"
 
     Try {
       val email = new SimpleEmail()

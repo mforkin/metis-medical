@@ -38,13 +38,18 @@
                     <div class="header">
                         User Registration
                     </div>
-                    <div class="input-group">
-                        <input class="form-control" id="register-user-name" name="userName" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
-                        <div class="input-group-btn">
-                            <select class="btn btn-info" id="specialties" name="specialtyId"></select>
+                    <form id="registration-form" action="javascript:register()">
+                        <div>
+                            <input class="login-inputs form-control" id="register-user-name" name="userName" type="text" placeholder="UVA Email (e.g. abc1d@virginia.edu)"/>
+                            <input class="login-inputs form-control" type="password" name="j_password" placeholder="Password" value="" />
                         </div>
-                    </div>
-                    <button class="reg btn btn-primary" onclick="register()">Register</button>
+                        <div class="login-btn-grp">
+                            <div style="float:left;">
+                                <select class="btn btn-info" id="specialties" name="specialtyId"></select>
+                            </div>
+                            <input type="submit" class="reg btn btn-primary" value="Register" />
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
