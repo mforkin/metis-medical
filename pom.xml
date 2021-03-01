@@ -54,6 +54,7 @@
         <scala-maven-plugin.version>3.2.1</scala-maven-plugin.version>
         <maven-jetty.version>9.4.7.RC0</maven-jetty.version>
         <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+        <jib-maven-plugin.version>2.8.0</jib-maven-plugin.version>
     </properties>
 
     <profiles>
@@ -300,6 +301,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib-maven-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
