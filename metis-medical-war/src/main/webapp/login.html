@@ -90,7 +90,7 @@
                 fl.innerHTML = "";
             }
 
-            function swapLogin () {
+            function swapLogin (classes) {
                 const el = document.getElementById("login-cnt")
                 const er = document.getElementById("reg-cnt")
 
@@ -100,7 +100,7 @@
                 er.setAttribute("class", "register off");
                 fr.setAttribute("class", "off");
                 el.setAttribute("class", "login");
-                fl.setAttribute("class", "");
+                fl.setAttribute("class", classes || "");
 
                 fr.innerHTML = "";
             }
@@ -125,7 +125,7 @@
                             e.append("Registration Successful. Please Login.");
                             e.setAttribute("class", "alert alert-success");
                             document.getElementById("j_username").value = userName;
-                            swapLogin();
+                            swapLogin("alert alert-success");
                         } else {
                             r.json().then(error => {
                                 const e = document.getElementById("registration-feedback");
