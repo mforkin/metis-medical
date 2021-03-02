@@ -3,3 +3,4 @@ target
 *.swap
 *.iml
 .idea
+*.war

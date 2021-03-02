@@ -1,6 +1,0 @@
-version: '3'
-services:
-    metis:
-        image: local/greenleaf/metis:1.0.0-SNAPSHOT
-        network_mode: 'host'
-

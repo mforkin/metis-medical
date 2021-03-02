@@ -1,0 +1,17 @@
+version: '3'
+services:
+        metis:
+                build: .
+                image: local/greenleaf/metis:0.0.1-SNAPSHOT
+                network_mode: host
+                environment:
+                        JAVA_OPTIONS: >-
+                                -Dconfig.file=/tmp/jetty/application.conf
+                                -Dorg.slf4j.simpleLogger.defaultLogLevel=info
+                                -Dorg.slf4j.simpleLogger.log.com.greenleaf=debug
+                                -Dorg.slf4j.simpleLogger.log.org.eclipse.jetty.annotations=error
+                                -Djetty.sslContext.trustStorePath=etc/truststore
+                                -Djetty.sslContext.trustStorePasword=secret
+                                -Djetty.sslContext.keyStorePassword=secret
+                                -Djetty.sslContext.keyManagerPassword=secret
+                                -Djetty.ssl.port=8449
