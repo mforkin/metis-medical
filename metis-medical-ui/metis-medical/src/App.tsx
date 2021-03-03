@@ -109,6 +109,7 @@ class App extends React.Component {
                                         <Button bsStyle="primary" onClick={this.toggleCalculatorMode}>
                                             <FontAwesomeIcon icon={_.get(this.state, 'calculatorMode') ? 'angle-double-right' : 'angle-double-left'} />
                                             <FontAwesomeIcon icon="calculator" />
+                                            MME
                                         </Button>
                                     </div>
                                 </div>

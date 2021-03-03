@@ -234,7 +234,11 @@ class Question extends React.Component {
                 }
                 response.class = _.get(answer, 'data.isCorrect') ? 'success' : 'danger';
             } else {
-                response.message = "Correct! This is not an appropriate choice of medication. "  + _.get(answer, 'data.incorrectResponse')
+                let multiPrefix = "Correct! This is not an appropriate choice of medication. ";
+                if (!isMulti) {
+                    multiPrefix = "";
+                }
+                response.message = multiPrefix + _.get(answer, 'data.incorrectResponse')
             }
         }
         return response;
