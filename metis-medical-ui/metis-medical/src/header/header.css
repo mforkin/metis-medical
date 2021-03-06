@@ -10,12 +10,26 @@ div.app > .header {
     overflow: visible;
 }
 
-.header.row .header {
-    margin-top: 11px;
+.header.row > div {
+    height: 100%;
 }
 
 .header.row .header svg {
     margin-right: 10px;
+}
+
+.header.row .header {
+    height: 100%;
+}
+
+.header.row .svg-cnt {
+    height: 100%;
+}
+
+.header.row .title-cnt {
+    height: 100%;
+    vertical-align: top;
+    padding-top: 13px;
 }
 
 .header.row .header li {
