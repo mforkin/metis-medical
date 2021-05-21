@@ -181,11 +181,12 @@ object VignetteService {
   private def generateRandomVignettes (username: String) = {
     val totalVignettes = db.selectFrom(VIGNETTE_SPECIALTY).fetch.asScala
     val vignetteBySpecialtyAll = totalVignettes.groupBy(_.getSpecialtyId)
-    val vignetteBySpecialty = vignetteBySpecialtyAll.filter(_._1 != 5) // five is prequiz
+    val vignetteBySpecialty = vignetteBySpecialtyAll.filter(s => s._1 != 5 && s._1 != 6) // five is prequiz, six is postquiz
     val prequizVignettes = vignetteBySpecialtyAll(Int.box(5))
+    val postquizVignettes = vignetteBySpecialtyAll(Int.box(6))
 
     // assuming two phases
-    val numVignettesForPhase1 = (totalVignettes.size - prequizVignettes.size) / 2
+    val numVignettesForPhase1 = (totalVignettes.size - prequizVignettes.size - postquizVignettes.size) / 2
 
     val (phase1VignettesRandom, remainingVignettes) = (0 until numVignettesForPhase1).foldLeft((Set[VignetteSpecialtyRecord](), vignetteBySpecialty.values.map(_.toArray).toList)) {
       case ((phase1, remaining), i) =>
@@ -201,7 +202,7 @@ object VignetteService {
 
     val phase1Vignettes = phase1VignettesRandom ++ prequizVignettes
 
-    val phase2Vignettes = remainingVignettes.flatten
+    val phase2Vignettes = remainingVignettes.flatten ++ postquizVignettes
 
     db.
       insertInto(USER_AVAILABLE_VIGNETTES, USER_AVAILABLE_VIGNETTES.USERNAME, USER_AVAILABLE_VIGNETTES.PHASE_1, USER_AVAILABLE_VIGNETTES.PHASE_2)

@@ -20,7 +20,7 @@ class Calculator extends React.Component {
             currentEntries: {},
             ratios: {
                 "Codeine - Oral (mg/day)": 0.15,
-                // "Fentanyl - Transdermal (mcg/hr)": 2.4,
+                "Fentanyl - Transdermal (mcg/hr)": 2.4,
                 "Hydrocodone - Oral (mg/day)": 1,
                 "Hydromorphone - Oral (mg/day)": 4,
                 "Methadone - Oral (mg/day)": 3,
