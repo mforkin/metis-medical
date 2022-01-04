@@ -2,6 +2,8 @@ package com.greenleaf.services
 
 import com.greenleaf.database.ConnectionManager
 import com.greenleaf.metis.medical.jooq.generated.Tables._
+import com.typesafe.config.ConfigFactory
+
 import collection.JavaConverters._
 
 case class Specialty (id: Int, name: String)
@@ -10,12 +12,21 @@ case class SpecialtyAgg (numCorrect: Double, numQuestions: Double, numRespondent
 
 object SpecialtyService {
   lazy val db = ConnectionManager.db
+  val conf = ConfigFactory.load()
+  val phase = conf.getInt("phase")
 
   def getSpecialities = {
-    db.selectFrom(SPECIALTY)
+    val specialties = db.selectFrom(SPECIALTY)
       .fetch
       .asScala
       .map(r => (r.getId, r.getName)).toMap
+    if (phase == 2) {
+      specialties.filter {
+        case (_, v) => !v.equalsIgnoreCase("pre-quiz")
+      }
+    } else {
+      specialties
+    }
   }
 
   def getSpecialty (id: Int) = {
