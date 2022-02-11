@@ -24,7 +24,10 @@ object SpecialtyService {
       specialties.filter {
         case (_, v) => !v.equalsIgnoreCase("pre-quiz")
       }
-    } else {
+    } else if (phase == 1) {
+      specialties.filter {
+        case (_, v) => !v.equalsIgnoreCase("post-quiz")
+      }    }  else {
       specialties
     }
   }
