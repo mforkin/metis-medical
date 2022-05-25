@@ -27,7 +27,7 @@
         <json4s.version>3.5.3</json4s.version>
 
         <springframework.version>4.3.2.RELEASE</springframework.version>
-        <springsecurity.version>4.1.3.RELEASE</springsecurity.version>
+        <springsecurity.version>5.5.7</springsecurity.version>
 
         <!-- database -->
         <postgresql.version>42.1.4</postgresql.version>
