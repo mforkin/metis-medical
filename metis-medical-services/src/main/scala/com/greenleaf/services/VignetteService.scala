@@ -200,7 +200,7 @@ object VignetteService {
         (phase1 + choices(choice), remainingSpecialtyChoices)
     }
 
-    val phase1Vignettes = phase1VignettesRandom ++ prequizVignettes
+    val phase1Vignettes = prequizVignettes ++ phase1VignettesRandom
 
     val phase2Vignettes = remainingVignettes.flatten ++ postquizVignettes
 

@@ -61,7 +61,7 @@
         <profile>
             <id>prod</id>
             <properties>
-                <db.host>metis-test.chvo2pzglzoe.us-east-2.rds.amazonaws.com</db.host>
+                <db.host>metis-test.crhog4eitgcj.us-east-1.rds.amazonaws.com</db.host>
                 <db.name>metis</db.name>
             </properties>
         </profile>
